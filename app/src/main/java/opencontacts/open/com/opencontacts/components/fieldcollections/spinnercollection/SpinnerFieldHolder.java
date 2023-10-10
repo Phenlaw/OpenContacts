@@ -41,10 +41,10 @@ public class SpinnerFieldHolder extends FieldViewHolder {
     @Override
     public String getValue() {
         return spinner.getText().toString();
-    }
+    } //da ottimizzare
 
     @Override
     public View getView() {
         return fieldView;
-    }
+    } //da ottimizzare
 }

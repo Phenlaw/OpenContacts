@@ -44,6 +44,7 @@ class CallLogDBHelper {
     private Map<String, Integer> simsInfo = null;
 
     public static void removeAllContactsLinking() {
+        //da ottimizzare FORSE
         U.forEach(getRecentCallLogEntriesFromDB(), callLogEntry -> {
             callLogEntry.name = null;
             callLogEntry.contactId = -1;
@@ -60,6 +61,7 @@ class CallLogDBHelper {
             //added permission check above using util intellij wasn't able to identify it
             @SuppressLint("MissingPermission") List<PhoneAccountHandle> callCapablePhoneAccounts = telecomManager.getCallCapablePhoneAccounts();
             if (callCapablePhoneAccounts.size() < 2) return;
+            //da ottimizzare FORSE
             U.forEachIndexed(callCapablePhoneAccounts, (index, phoneAccount) -> simsInfo.put(phoneAccount.getId(), index + 1));
             return;
         }
@@ -67,6 +69,7 @@ class CallLogDBHelper {
             @SuppressLint("MissingPermission") List<SubscriptionInfo> activeSubscriptionInfoList = ((SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE)).getActiveSubscriptionInfoList();
             if (activeSubscriptionInfoList == null)
                 return;
+            //da ottimizzare
             for (SubscriptionInfo subscriptionInfo : activeSubscriptionInfoList) {
                 simsInfo.put(subscriptionInfo.getIccId(), subscriptionInfo.getSimSlotIndex() + 1);
             }

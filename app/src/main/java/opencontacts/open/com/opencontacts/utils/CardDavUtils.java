@@ -267,6 +267,7 @@ public class CardDavUtils {
         if (response.isSuccessful()) {
             Document xmlDocument = createXMLDocument(response.body().string());
             NodeList responseNodes = xmlDocument.getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_RESPONSE);
+            //da ottimizzare forse
             U.forEach(new NodeListIterable(responseNodes), node -> {
                 String href = getText(XML_TAG_HREF, XML_NAMESPACE_DAV, node);
                 String status = getText(XML_TAG_STATUS, XML_NAMESPACE_DAV, node);
@@ -308,6 +309,7 @@ public class CardDavUtils {
         final StringBuilder hrefsInRequest = new StringBuilder();
         String hrefTagOpen = "<d:href>";
         String hrefTagClose = "</d:href>";
+        //da ottimizzare
         U.forEach(hrefs, href -> hrefsInRequest.append(hrefTagOpen + href + hrefTagClose));
         return prefix + hrefsInRequest.toString() + suffix;
     }

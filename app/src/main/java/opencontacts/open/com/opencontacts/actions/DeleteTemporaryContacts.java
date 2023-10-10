@@ -16,6 +16,8 @@ public class DeleteTemporaryContacts implements ContactsHouseKeepingAction{
 
     @Override
     public void perform(List<Contact> contacts, Context context) {
+        //Da ottimizzare FORSE
+
         U.forEach(ContactsDataStore.getTemporaryContactDetails(),
             tempContactDetails -> {
                 if(hasItBeen(30, DAY_OF_MONTH, tempContactDetails.markedTemporaryOn.getTime()))

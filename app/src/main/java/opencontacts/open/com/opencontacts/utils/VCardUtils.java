@@ -63,6 +63,7 @@ public class VCardUtils {
         String lastName = getEmptyStringIfNull(structuredName.getFamily());
         if (additionalNames.size() > 0) {
             StringBuilder nameBuffer = new StringBuilder();
+            //da ottimizzare
             for (String additionalName : additionalNames)
                 nameBuffer.append(additionalName).append(" ");
             lastName = nameBuffer.append(lastName).toString();
@@ -169,6 +170,7 @@ public class VCardUtils {
     }
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, VCard vcard) {
+        //da ottimizzare forse
         U.forEach(vcard.getTelephoneNumbers(),
             telephoneNumber -> {
                 if (contact.primaryPhoneNumber.phoneNumber.equals(telephoneNumber.getText()))
@@ -198,7 +200,7 @@ public class VCardUtils {
 
     public static void setCategories(List<String> categories, VCard vcard) {
         vcard.setCategories(categories.toArray(new String[]{}));
-    }
+    }//da ottimizzare
 
     public static boolean isEmptyAddress(Address address) {
         if (address == null) return true;
