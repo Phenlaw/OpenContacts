@@ -6,6 +6,7 @@ import static opencontacts.open.com.opencontacts.utils.DomainUtils.getNumericKey
 
 import androidx.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.github.underscore.U;
 
@@ -45,7 +46,8 @@ public class Contact implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumbers = phoneNumbers;
-        this.name = getName(firstName, lastName);
+        Log.i("S&G","Modificato");
+        this.name = getEmptyStringIfNull(firstName) + " " + getEmptyStringIfNull(lastName);
         this.lastAccessed = lastAccessed;
         this.primaryPhoneNumber = primaryPhoneNumber;
         this.pinyinName = pinyinName;
@@ -54,14 +56,16 @@ public class Contact implements Serializable {
     private Contact(String firstName, String lastName, String number) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.name = getName(firstName, lastName);
+        Log.i("S&G","Modificato");
+        this.name = getEmptyStringIfNull(firstName) + " " + getEmptyStringIfNull(lastName);
         this.primaryPhoneNumber = new PhoneNumber(number);
         id = -1;
     }
 
     public void setT9Text() {
         StringBuilder searchStringBuffer = new StringBuilder();
-        String nameForT9 = ContactsDataStore.getT9NameSupplier().apply(this);
+        Log.i("S&G","Modificato");
+        String nameForT9 = ContactsDataStore.t9NameSupplier.apply(this);
         //da ottimizzare
         for (PhoneNumber phoneNumber : phoneNumbers)
             searchStringBuffer.append(phoneNumber.numericPhoneNumber).append(' ');
@@ -85,11 +89,6 @@ public class Contact implements Serializable {
             return false;
         return id == ((Contact) obj).id;
     }
-
-    @NonNull
-    private String getName(String firstName, String lastName) {
-        return getEmptyStringIfNull(firstName) + " " + getEmptyStringIfNull(lastName);
-    }//da ottimizzare
 
     public Contact setGroups(String groups) {
         this.groups = groups;
@@ -123,31 +122,32 @@ public class Contact implements Serializable {
         return contact;
     }
 
-    public List<String> getGroupNames() {
-        if (TextUtils.isEmpty(groups)) return Collections.emptyList();
-        return Arrays.asList(groups.split(GROUPS_SEPERATOR_CHAR));
-    }//da ottimizzare
 
     public List<String> addGroup(String newGroupName) {
-        List<String> groupNames = getGroupNames();
+        Log.i("G&S","Modificato");
+        List<String> groupNamesTemp;
+        if (TextUtils.isEmpty(groups)) groupNamesTemp = Collections.emptyList();
+        else groupNamesTemp = Arrays.asList(groups.split(GROUPS_SEPERATOR_CHAR));
+        List<String> groupNames = groupNamesTemp;
         if (groupNames.contains(newGroupName)) return groupNames;
         groupNames = U.concat(groupNames, Collections.singleton(newGroupName));
-        this.groups = getGroupsNamesCSVString(groupNames);
+        Log.i("G&S","Modificato");
+        this.groups = U.join(groupNames,GROUPS_SEPERATOR_CHAR);
         return groupNames;
     }
 
     public List<String> removeGroup(String groupNameToRemove) {
-        List<String> groupNames = getGroupNames();
+        Log.i("G&S","Modificato");
+        List<String> groupNamesTemp;
+        if (TextUtils.isEmpty(groups)) groupNamesTemp = Collections.emptyList();
+        else groupNamesTemp = Arrays.asList(groups.split(GROUPS_SEPERATOR_CHAR));
+        List<String> groupNames = groupNamesTemp;
         List<String> finalGroupNames = U.reject(groupNames, groupNameToRemove::equals);
         if (finalGroupNames.size() == groupNames.size()) return groupNames;
-        this.groups = getGroupsNamesCSVString(finalGroupNames);
+        Log.i("G&S","Modificato");
+        this.groups = U.join(finalGroupNames,GROUPS_SEPERATOR_CHAR);
         return finalGroupNames;
     }
-
-    public static String getGroupsNamesCSVString(List<String> groups) {
-        return U.join(groups, GROUPS_SEPERATOR_CHAR);
-    }
-    //da ottimizzare
 
     @Override
     public int hashCode() {

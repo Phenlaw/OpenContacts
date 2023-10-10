@@ -61,17 +61,6 @@ public class TextInputAndSpinnerFieldCollection extends InputFieldCollection<Tex
             .value();
     }
 
-    public void set(String hint, int inputType, List<String> fieldTypes) {
-        this.hint = hint;
-        this.inputType = inputType;
-        this.fieldTypes = fieldTypes;
-    }
-    //DA OTTIMIZZARE
-
-    public void setFieldTypes(List<String> fieldTypes) {
-        this.fieldTypes = fieldTypes;
-    }
-
     public void addOneMoreView(String value, String type) {
         addOneMoreView().set(value, type);
     }

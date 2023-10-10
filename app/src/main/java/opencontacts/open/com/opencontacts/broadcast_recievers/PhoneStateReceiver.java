@@ -22,6 +22,7 @@ import android.provider.CallLog;
 import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +34,7 @@ import java.util.Random;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.activities.MainActivity;
 import opencontacts.open.com.opencontacts.data.datastore.CallLogDataStore;
+import opencontacts.open.com.opencontacts.data.datastore.ContactsDBHelper;
 import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
 import opencontacts.open.com.opencontacts.orm.CallLogEntry;
 import opencontacts.open.com.opencontacts.orm.Contact;
@@ -62,7 +64,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
             if (incomingNumber == null)
                 return; //in pie, two intents are launched one with number and other with not
-            callingContact = ContactsDataStore.getContact(incomingNumber);
+            Log.i("G&S","Modificato");
+            callingContact = ContactsDBHelper.getContactFromDB(incomingNumber);
             if (callingContact == null)
                 callingContact = new Contact(context.getString(R.string.unknown), incomingNumber);
             drawCallerID(context, callingContact);

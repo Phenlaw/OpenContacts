@@ -23,6 +23,7 @@ import android.provider.CallLog;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,9 +71,11 @@ import ezvcard.property.Address;
 import ezvcard.property.StructuredName;
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
 import opencontacts.open.com.opencontacts.R;
+import opencontacts.open.com.opencontacts.data.datastore.ContactsDBHelper;
 import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
 import opencontacts.open.com.opencontacts.domain.Contact;
 import opencontacts.open.com.opencontacts.orm.CallLogEntry;
+import opencontacts.open.com.opencontacts.orm.Favorite;
 import opencontacts.open.com.opencontacts.orm.PhoneNumber;
 import opencontacts.open.com.opencontacts.orm.VCardData;
 
@@ -163,8 +166,12 @@ public class DomainUtils {
             AndroidUtils.runOnMainDelayed(() -> AndroidUtils.toastFromNonUIThread(R.string.storage_not_mounted, LENGTH_LONG, context), 0);
             return;
         }
-
-        byte[] plainTextExportBytes = getVCFExportBytes(ContactsDataStore.getAllContacts(), ContactsDataStore.getFavorites());
+        Log.i("G&S","Modificato");
+        List<Contact> favorites = null;
+        if (ContactsDataStore.favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
+        else ContactsDataStore.updateFavoritesList();
+        favorites=ContactsDataStore.favorites;
+        byte[] plainTextExportBytes = getVCFExportBytes(ContactsDataStore.getAllContacts(),favorites);
         createOpenContactsDirectoryIfItDoesNotExist();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH-mm-ss");
         if (hasEncryptingContactsKey(context))
@@ -203,7 +210,8 @@ public class DomainUtils {
         StructuredName structuredName = new StructuredName();
         //da ottimizzare
         for (Contact contact : allContacts) {
-            VCardData vCardData = ContactsDataStore.getVCardData(contact.id);
+            Log.i("G&S","Modificato");
+            VCardData vCardData = ContactsDBHelper.getVCard(contact.id);
             if (vCardData == null)
                 createVCardAndWrite(vCardWriter, structuredName, contact);
             else {
@@ -514,7 +522,8 @@ public class DomainUtils {
     }
 
     public static void shareContact(long contactId, Context context) {
-        AndroidUtils.shareContact(ContactsDataStore.getVCardData(contactId).vcardDataAsString, context);
+        Log.i("G&S","Modificato");
+        AndroidUtils.shareContact(ContactsDBHelper.getVCard(contactId).vcardDataAsString, context);
     }
 
     public static String getMissedcallNotificationTitle(Context context) {

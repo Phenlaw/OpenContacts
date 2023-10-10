@@ -85,7 +85,6 @@ public class AddressFieldCollection extends TextViewFieldCollection {
 
         U.forEach(addresses, this::addOneMoreView);
     }
-    //Da ottimizzare
 
     private void addOneMoreView(Address address) {
         TextViewViewHolder textViewViewHolder = addOneMoreView();

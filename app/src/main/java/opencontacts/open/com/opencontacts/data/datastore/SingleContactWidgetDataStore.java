@@ -1,12 +1,12 @@
 package opencontacts.open.com.opencontacts.data.datastore;
 
-import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.cautiouslyGetContactFromDatabase;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getStringFromPreferences;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.updatePreference;
 import static opencontacts.open.com.opencontacts.utils.Common.checkNotNull;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SINGLE_CONTACT_WIDGET_TO_CONTACT_MAPPING;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.github.underscore.lodash.U;
 
@@ -26,7 +26,8 @@ public class SingleContactWidgetDataStore {
     public static Contact getContactForSingleContactWidget(int widgetId, Context context) throws Exception {
         Map<String, Long> singleContactWidgetToContactMapping = getSingleContactWidgetIdToContactMap(context);
         Long contactId = checkNotNull(singleContactWidgetToContactMapping.get(String.valueOf(widgetId)));
-        return cautiouslyGetContactFromDatabase(contactId);
+        Log.i("S&G","Modificato");
+        return U.checkNotNull(ContactsDBHelper.getContact(contactId));
     }
 
     public static void removeSingleContactWidgets(int[] widgetIds, Context context) {

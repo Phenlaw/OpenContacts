@@ -2,8 +2,8 @@ package opencontacts.open.com.opencontacts.data.datastore;
 
 import static android.text.TextUtils.isEmpty;
 import static opencontacts.open.com.opencontacts.data.datastore.CallLogDBHelper.getCallLogEntriesFor;
+import static opencontacts.open.com.opencontacts.domain.Contact.GROUPS_SEPERATOR_CHAR;
 import static opencontacts.open.com.opencontacts.domain.Contact.createNewDomainContact;
-import static opencontacts.open.com.opencontacts.domain.Contact.getGroupsNamesCSVString;
 import static opencontacts.open.com.opencontacts.orm.PhoneNumber.getMatchingNumbers;
 import static opencontacts.open.com.opencontacts.orm.VCardData.STATUS_CREATED;
 import static opencontacts.open.com.opencontacts.orm.VCardData.STATUS_DELETED;
@@ -18,6 +18,8 @@ import static opencontacts.open.com.opencontacts.utils.VCardUtils.isPrimaryPhone
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.markPrimaryPhoneNumberInVCard;
 
 import android.content.Context;
+import android.util.Log;
+
 import androidx.core.util.Pair;
 
 import com.github.underscore.U;
@@ -76,7 +78,7 @@ public class ContactsDBHelper {
         vCardData.save();
     }
 
-    static Contact getContactFromDB(String phoneNumber) {
+    public static Contact getContactFromDB(String phoneNumber) {
         if (isEmpty(phoneNumber)) return null;
         String searchablePhoneNumber = getSearchablePhoneNumber(phoneNumber);
         if (isEmpty(searchablePhoneNumber)) return null;
@@ -100,7 +102,8 @@ public class ContactsDBHelper {
         Pair<String, String> nameFromVCard = getNameFromVCard(vCard, context);
         dbContact.firstName = nameFromVCard.first;
         dbContact.lastName = nameFromVCard.second;
-        dbContact.groups = getGroupsNamesCSVString(getCategories(vCard));
+        Log.i("G&S","Modificato");
+        dbContact.groups = U.join(getCategories(vCard), GROUPS_SEPERATOR_CHAR);
         dbContact.pinyinName = getPinyinTextFromChinese(dbContact.getFullName());
         dbContact.save();
         replacePhoneNumbersInDB(dbContact, vCard, primaryNumber);
@@ -229,7 +232,8 @@ public class ContactsDBHelper {
     private static Contact createContactSaveInDBAndReturnIt(VCard vcard, Context context) {
         Pair<String, String> name = getNameFromVCard(vcard, context);
         Contact contact = new Contact(name.first, name.second);
-        contact.groups = getGroupsNamesCSVString(getCategories(vcard));
+        Log.i("G&S","Modificato");
+        contact.groups = U.join(getCategories(vcard),GROUPS_SEPERATOR_CHAR);
         contact.pinyinName = getPinyinTextFromChinese(contact.getFullName());
         contact.save();
         return contact;

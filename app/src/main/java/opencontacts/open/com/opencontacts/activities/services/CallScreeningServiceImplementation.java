@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import android.telecom.Call;
 import android.telecom.CallScreeningService;
+import android.util.Log;
 
+import opencontacts.open.com.opencontacts.data.datastore.ContactsDBHelper;
 import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
 import opencontacts.open.com.opencontacts.orm.Contact;
 
@@ -40,7 +42,8 @@ public class CallScreeningServiceImplementation extends CallScreeningService {
             return;
         }
         String callingPhonenumber = callDetails.getHandle().getSchemeSpecificPart();
-        Contact probableContact = ContactsDataStore.getContact(callingPhonenumber);
+        Log.i("G&S","Modificato");
+        Contact probableContact = ContactsDBHelper.getContactFromDB(callingPhonenumber);
         if (probableContact == null)
             respondToCall(callDetails, shouldBlockCalls(this) ? reject : silence);
         else respondToCall(callDetails, allow);

@@ -24,6 +24,7 @@ import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
+import android.util.Log;
 
 import com.github.underscore.U;
 
@@ -113,7 +114,8 @@ class CallLogDBHelper {
                 subscriptionIdForCall = c.getString(columnIndexForSubscriptionId);
 
                 if(mobileNumberInvolvedInCall == null) continue;
-                opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDataStore.getContact(mobileNumberInvolvedInCall);
+                Log.i("G&S","Modificato");
+                opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getContactFromDB(mobileNumberInvolvedInCall);
                 if (contact == null)
                     callLogEntries.add(new CallLogEntry(null, (long) -1, mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, getSimIdOrDefault(subscriptionIdForCall)));
                 else
@@ -137,7 +139,8 @@ class CallLogDBHelper {
                 callType = c.getString(columnIndexForCallType);// for call type, Incoming or out going
 
                 if(mobileNumberInvolvedInCall == null) continue;
-                opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDataStore.getContact(mobileNumberInvolvedInCall);
+                Log.i("G&S","Modificato");
+                opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getContactFromDB(mobileNumberInvolvedInCall);
                 if (contact == null)
                     callLogEntries.add(new CallLogEntry(null, (long) -1, mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, 1));
                 else

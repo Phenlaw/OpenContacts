@@ -12,6 +12,8 @@ import static opencontacts.open.com.opencontacts.utils.DomainUtils.getSearchable
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.matchesNumber;
 
 import android.content.Context;
+import android.util.Log;
+
 import androidx.collection.ArrayMap;
 
 import com.github.underscore.U;
@@ -224,7 +226,8 @@ public class CallLogDataStore {
     }
 
     public static List<CallLogEntry> getCallLogEntriesForContactWith(String phoneNumber, int offset) {
-        opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDataStore.getContact(phoneNumber);
+        Log.i("G&S","Modificato");
+        opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getContactFromDB(phoneNumber);
         if (contact == null) return CallLogDBHelper.getCallLogEntriesFor(phoneNumber);
         return getCallLogEntriesFor(contact.getId(), offset);
     }

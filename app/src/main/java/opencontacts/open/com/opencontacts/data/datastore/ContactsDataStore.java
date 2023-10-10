@@ -23,6 +23,7 @@ import static opencontacts.open.com.opencontacts.utils.VCardUtils.mergeVCardStri
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,12 +50,12 @@ import opencontacts.open.com.opencontacts.utils.DomainUtils;
 public class ContactsDataStore {
     private static List<Contact> contacts = null;
     private static final List<DataStoreChangeListener<Contact>> dataChangeListeners = Collections.synchronizedList(new ArrayList<>(3));
-    private static List<Contact> favorites = new ArrayList<>(0);
+    public static List<Contact> favorites = new ArrayList<>(0);
     private static boolean pauseUpdates;
     private static int currentState;
     private static Function<Contact, String> pinyinName = contact -> TextUtils.isEmpty(contact.pinyinName) ? contact.name : contact.pinyinName;
     private static Function<Contact, String> defaultName = contact -> contact.name;
-    private static Function<Contact, String> t9NameSupplier = defaultName; //will be dealt in init
+    public static Function<Contact, String> t9NameSupplier = defaultName; //will be dealt in init
 
     public synchronized static List<Contact> getAllContacts() {
         if (currentState == LOADING) {
@@ -135,14 +136,6 @@ public class ContactsDataStore {
                 dataChangeListeners.remove(changeListener);
             }
         });
-    }
-
-    public static opencontacts.open.com.opencontacts.orm.Contact getContact(@NonNull String phoneNumber) {
-        return ContactsDBHelper.getContactFromDB(phoneNumber);
-    }
-
-    public static Contact cautiouslyGetContactFromDatabase(long contactId) throws Exception {
-        return U.checkNotNull(ContactsDBHelper.getContact(contactId));
     }
 
     public static Contact getContactWithId(long contactId) {
@@ -229,17 +222,10 @@ public class ContactsDataStore {
         });
     }
 
-    public static VCardData getVCardData(long contactId) {
-        return ContactsDBHelper.getVCard(contactId);
-    }//da ottimizzare
 
     public static void init(Context context) {
         updateT9Supplier(context);
         refreshStoreAsync();
-    }
-
-    public static Function<Contact, String> getT9NameSupplier() {
-        return t9NameSupplier;
     }
 
     public static void updateT9Supplier(Context context) {
@@ -265,15 +251,12 @@ public class ContactsDataStore {
             .value();
     }
 
-    public static List<Contact> getFavorites() {
-        if (favorites.size() != 0 || Favorite.count(Favorite.class) == 0)
-            return favorites;
-        updateFavoritesList();
-        return favorites;
-    }//da ottimizzare FORSE
 
     public static void addFavorite(Contact contact) {
-        if (getFavorites().contains(contact)) return;
+        Log.i("G&S","Modificato");
+        if (favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
+        else ContactsDataStore.updateFavoritesList();
+        if (favorites.contains(contact)) return;
         new Favorite(ContactsDBHelper.getDBContactWithId(contact.id)).save();
         favorites.add(contact);
         markAsFavoriteInVCard(contact.id);
@@ -290,7 +273,10 @@ public class ContactsDataStore {
 
     public static void addFavorite(opencontacts.open.com.opencontacts.orm.Contact contact) {
         Contact dummyContactMatchingId = createDummyContact(contact.getId());
-        if (getFavorites().contains(dummyContactMatchingId)) return;
+        Log.i("G&S","Modificato");
+        if (favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
+        else ContactsDataStore.updateFavoritesList();
+        if (favorites.contains(dummyContactMatchingId)) return;
         new Favorite(ContactsDBHelper.getDBContactWithId(dummyContactMatchingId.id)).save();
         favorites.add(ContactsDBHelper.getContact(dummyContactMatchingId.id));
         markAsFavoriteInVCard(dummyContactMatchingId.id);
@@ -303,10 +289,6 @@ public class ContactsDataStore {
         notifyListenersAsync(REFRESH, null);
     }
 
-    public static boolean isFavorite(Contact contact) {
-        return getFavorites().contains(contact);
-    }
-    //da ottimizzare
     public static void mergeContacts(Contact primaryContact, Contact secondaryContact, Context context) throws IOException {
         VCardData primaryVCardData = VCardData.getVCardData(primaryContact.id);
         VCardData secondaryVCardData = VCardData.getVCardData(secondaryContact.id);
@@ -341,14 +323,4 @@ public class ContactsDataStore {
         if(markAsTemporary) markContactAsTemporary(id);
         else unmarkContactAsTemporary(id);
     }
-
-    public static List<TemporaryContact> getTemporaryContactDetails() {
-        return ContactsDBHelper.getTemporaryContactDetails();
-    }//da ottimizzare
-
-    public static boolean isTemporary(long id) {
-        return ContactsDBHelper.isTemporary(id);
-    }
-    //da ottimizzare
-
 }

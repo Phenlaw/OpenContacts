@@ -2,7 +2,6 @@ package opencontacts.open.com.opencontacts.activities;
 
 import static opencontacts.open.com.opencontacts.components.TintedDrawablesStore.setDrawableForFAB;
 import static opencontacts.open.com.opencontacts.data.datastore.CallLogDataStore.getCallLogEntriesForContactWith;
-import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.getContact;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getIntentToShowContactDetails;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getFullDateTimestampPattern;
 
@@ -17,6 +16,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 import opencontacts.open.com.opencontacts.R;
+import opencontacts.open.com.opencontacts.data.datastore.ContactsDBHelper;
 import opencontacts.open.com.opencontacts.orm.CallLogEntry;
 import opencontacts.open.com.opencontacts.orm.Contact;
 import opencontacts.open.com.opencontacts.utils.Common;
@@ -68,7 +70,8 @@ public class CallLogGroupDetailsActivity extends AppBaseActivity {
         }
         setupCallLogAdapter(callLogEntries);
         addAddMoreButton();
-        Contact contact = getContact(phoneNumber);
+        Log.i("G&S","Modificato");
+        Contact contact = ContactsDBHelper.getContactFromDB(phoneNumber);;
         if (contact == null) {
             getSupportActionBar().setTitle(getString(R.string.unknown));
             infoButton.hide();

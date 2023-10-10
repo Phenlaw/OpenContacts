@@ -7,6 +7,8 @@ import static opencontacts.open.com.opencontacts.utils.DomainUtils.sortContactsB
 
 import android.content.Context;
 import androidx.appcompat.widget.AppCompatTextView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
@@ -19,9 +21,11 @@ import java.util.Collections;
 import java.util.List;
 
 import opencontacts.open.com.opencontacts.actions.DefaultContactsListActions;
+import opencontacts.open.com.opencontacts.data.datastore.ContactsDBHelper;
 import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
 import opencontacts.open.com.opencontacts.domain.Contact;
 import opencontacts.open.com.opencontacts.interfaces.DataStoreChangeListener;
+import opencontacts.open.com.opencontacts.orm.Favorite;
 
 /**
  * Created by sultanm on 3/25/17.
@@ -114,7 +118,12 @@ public class ContactsListView extends ListView implements DataStoreChangeListene
     }
 
     private void moveFavoritesToTop() {
-        List<Contact> favorites = ContactsDataStore.getFavorites();
+        Log.i("G&S","Modificato");
+        List<Contact> favorites = null;
+        if (ContactsDataStore.favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
+        else ContactsDataStore.updateFavoritesList();
+        favorites=ContactsDataStore.favorites;
+
         Collections.sort(favorites, getContactComparatorBasedOnName(context));
         //Da ottimizzare FORSE
 

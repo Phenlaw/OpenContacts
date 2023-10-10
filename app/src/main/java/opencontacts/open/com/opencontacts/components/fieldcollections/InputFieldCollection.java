@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -62,15 +63,14 @@ public abstract class InputFieldCollection<H extends FieldViewHolder> extends Li
     private void consumeAttributes(Context context, @Nullable AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.InputFieldCollection);
         String title = typedArray.getString(R.styleable.InputFieldCollection_android_title);
-        if (!TextUtils.isEmpty(title)) setupTitle(title);
+        Log.i("G&S","Modificato");
+        if (!TextUtils.isEmpty(title)) {
+            AppCompatTextView titleTextView = findViewById(R.id.title);
+            titleTextView.setText(title);
+            titleTextView.setVisibility(VISIBLE);
+        };
         typedArray.recycle();
     }
-
-    protected void setupTitle(String title) {
-        AppCompatTextView titleTextView = findViewById(R.id.title);
-        titleTextView.setText(title);
-        titleTextView.setVisibility(VISIBLE);
-    }//da ottimizzare FORSE
 
     public H addOneMoreView() {
         H newField = createNewField();
@@ -90,10 +90,5 @@ public abstract class InputFieldCollection<H extends FieldViewHolder> extends Li
 
     public void setOnAddMoreClick(Runnable onAddMoreClick) {
         this.onAddMoreClick = onAddMoreClick;
-    } //da ottimizzare
-
-    public H getFieldAt(int index) {
-        return fieldViewHoldersList.get(index);
     }
-
 }

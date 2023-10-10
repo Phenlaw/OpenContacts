@@ -2,20 +2,22 @@ package opencontacts.open.com.opencontacts.actions;
 
 import static opencontacts.open.com.opencontacts.activities.CallLogGroupDetailsActivity.getIntentToShowCallLogEntries;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.addFavorite;
-import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.isFavorite;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.removeFavorite;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.onSocialLongPress;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.shareContact;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.shareContactAsText;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import opencontacts.open.com.opencontacts.ContactsListViewAdapter;
 import opencontacts.open.com.opencontacts.R;
+import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
 import opencontacts.open.com.opencontacts.domain.Contact;
+import opencontacts.open.com.opencontacts.orm.Favorite;
 import opencontacts.open.com.opencontacts.utils.AndroidUtils;
 import opencontacts.open.com.opencontacts.utils.DomainUtils;
 
@@ -55,7 +57,11 @@ public class DefaultContactsListActions implements ContactsListViewAdapter.Conta
 
     @Override
     public void onLongClick(Contact contact) {
-        int favoritesResource = isFavorite(contact) ? R.string.remove_favorite : R.string.add_to_favorites;
+        Log.i("G&S","Modificato");
+        if (ContactsDataStore.favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
+        else ContactsDataStore.updateFavoritesList();
+
+        int favoritesResource = ContactsDataStore.favorites.contains(contact) ? R.string.remove_favorite : R.string.add_to_favorites;
         new AlertDialog.Builder(context)
             .setItems(new String[]{
                 context.getString(favoritesResource),

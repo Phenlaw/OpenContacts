@@ -13,6 +13,8 @@ import static opencontacts.open.com.opencontacts.utils.Common.getEmptyStringIfNu
 import android.os.Bundle;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -43,7 +45,8 @@ public class ContactGroupEditActivity extends ContactChooserActivityBase {
     }
 
     private void preselectContactsFromGroup() {
-        ContactGroup group = ContactGroupsDataStore.getGroup(groupNameFromPrevScreen);
+        Log.i("G&S","Modificato");
+        ContactGroup group = ContactGroupsDataStore.groupsMap.get(groupNameFromPrevScreen);
         if (group == null) return;
         setSelectedContacts(group.contacts);
     }
@@ -78,7 +81,8 @@ public class ContactGroupEditActivity extends ContactChooserActivityBase {
             return;
         }
         List<Contact> selectedContacts = getSelectedContacts();
-        ContactGroup group = ContactGroupsDataStore.getGroup(groupNameFromPrevScreen);
+        Log.i("G&S","Modificato");
+        ContactGroup group = ContactGroupsDataStore.groupsMap.get(groupNameFromPrevScreen);
         if (group == null) createNewGroup(selectedContacts, groupName);
         else updateGroup(selectedContacts, groupName, group);
         finish();

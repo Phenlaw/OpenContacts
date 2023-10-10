@@ -4,8 +4,8 @@ import static android.view.MenuItem.SHOW_AS_ACTION_ALWAYS;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.addFavorite;
-import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.isFavorite;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.removeFavorite;
+import static opencontacts.open.com.opencontacts.domain.Contact.GROUPS_SEPERATOR_CHAR;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.copyToClipboard;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getFormattedDate;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getIntentToAddFullDayEventOnCalendar;
@@ -23,6 +23,8 @@ import android.os.Bundle;
 import androidx.core.util.Pair;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -45,8 +47,10 @@ import ezvcard.property.Url;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.components.ExpandedList;
 import opencontacts.open.com.opencontacts.components.TintedDrawablesStore;
+import opencontacts.open.com.opencontacts.data.datastore.ContactsDBHelper;
 import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
 import opencontacts.open.com.opencontacts.domain.Contact;
+import opencontacts.open.com.opencontacts.orm.Favorite;
 import opencontacts.open.com.opencontacts.orm.VCardData;
 import opencontacts.open.com.opencontacts.utils.AndroidUtils;
 import opencontacts.open.com.opencontacts.utils.DomainUtils;
@@ -106,7 +110,8 @@ public class ContactDetailsActivity extends AppBaseActivity {
         super.onResume();
         invalidateOptionsMenu();
         contact = ContactsDataStore.getContactWithId(contactId);
-        VCardData vcardData = ContactsDataStore.getVCardData(contactId);
+        Log.i("G&S","Modificato");
+        VCardData vcardData = ContactsDBHelper.getVCard(contactId);
         if (contact == null) {
             showInvalidContactErrorAndExit();
             return;
@@ -154,7 +159,8 @@ public class ContactDetailsActivity extends AppBaseActivity {
         }
         groupsCard.setVisibility(VISIBLE);
         AppCompatTextView groupsTextView = groupsCard.findViewById(R.id.text_view);
-        groupsTextView.setText(Contact.getGroupsNamesCSVString(categories).replaceAll(",", ", "));
+        Log.i("G&S","Modificato");
+        groupsTextView.setText(U.join(categories, GROUPS_SEPERATOR_CHAR).replaceAll(",", ", "));
         groupsTextView.setOnClickListener(v -> startActivity(new Intent(this, GroupsActivity.class)));
     }
 
@@ -282,7 +288,10 @@ public class ContactDetailsActivity extends AppBaseActivity {
             return true;
         });
         menu.findItem(R.id.image_button_delete_contact).setOnMenuItemClickListener(getMenuItemClickHandlerFor(this::deleteContactAfterConfirmation));
-        boolean isFavorite = isFavorite(contact);
+        Log.i("G&S","Modificato");
+        if (ContactsDataStore.favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
+        else ContactsDataStore.updateFavoritesList();
+        boolean isFavorite = ContactsDataStore.favorites.contains(contact);
         menu.add(isFavorite ? R.string.remove_favorite : R.string.add_to_favorites)
             .setIcon(TintedDrawablesStore.getTintedDrawable(isFavorite ? R.drawable.ic_favorite_solid_24dp : R.drawable.ic_favorite_hollow_black_24dp, this))
             .setShowAsActionFlags(SHOW_AS_ACTION_ALWAYS)

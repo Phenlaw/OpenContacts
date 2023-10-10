@@ -1,12 +1,15 @@
 package opencontacts.open.com.opencontacts.data.datastore;
 
 
+import static opencontacts.open.com.opencontacts.domain.Contact.GROUPS_SEPERATOR_CHAR;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.processAsync;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.toastFromNonUIThread;
 import static opencontacts.open.com.opencontacts.utils.Common.getOrDefault;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.writeVCardToString;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.github.underscore.lodash.U;
@@ -15,7 +18,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +34,7 @@ import opencontacts.open.com.opencontacts.utils.VCardUtils;
 
 public class ContactGroupsDataStore {
 
-    private static Map<String, ContactGroup> groupsMap = new HashMap<>();
+    public static Map<String, ContactGroup> groupsMap = new HashMap<>();
     private static boolean init = false;
 
     public static void COMPUTE_INTENSIVE_computeGroups() {
@@ -37,7 +42,11 @@ public class ContactGroupsDataStore {
         groupsMap = new HashMap<>();
         //da ottimizzare
         for (Contact contact : allContacts) {
-            U.chain(contact.getGroupNames())
+            Log.i("G&S","Modificato");
+            List<String> groupNames;
+            if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
+            else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
+            U.chain(groupNames)
                 .map(groupName -> getOrDefault(groupsMap, groupName, new ContactGroup(groupName)))
                 .map(group -> group.addContact(contact))
                 //da ottimizzare FORSE
@@ -45,12 +54,6 @@ public class ContactGroupsDataStore {
         }
     }
 
-    public static List<ContactGroup> getGroupsOf(Contact contact) {
-        return U.chain(contact.getGroupNames())
-            .map(groupsMap::get)
-            .reject(U::isNull)
-            .value();
-    }
 
     public static void initInCaseHasNot() {
         if (init) return;
@@ -137,11 +140,6 @@ public class ContactGroupsDataStore {
         dbContact.save();
     }
 
-    @Nullable
-    public static ContactGroup getGroup(String name) {
-        return groupsMap.get(name);
-    }
-    //da ottimizzare
 
     public static void handleContactDeletion(Contact contact) {
         U.chain(groupsMap.values())
@@ -151,7 +149,11 @@ public class ContactGroupsDataStore {
     }
 
     public static void handleContactUpdate(Contact contact) {
-        List<String> newGroupAssociations = contact.getGroupNames();
+        Log.i("G&S","Modificato");
+        List<String> groupNames;
+        if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
+        else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
+        List<String> newGroupAssociations = groupNames;
         //da ottimizzare FORSE
         U.forEach(groupsMap.values(), group -> {
             if (newGroupAssociations.contains(group.getName())) group.addContact(contact);
@@ -160,7 +162,11 @@ public class ContactGroupsDataStore {
     }
 
     public static void handleNewContactAddition(Contact contact) {
-        List<String> groupAssociations = contact.getGroupNames();
+        Log.i("G&S","Modificato");
+        List<String> groupNames;
+        if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
+        else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
+        List<String> groupAssociations = groupNames;
         if (groupAssociations.isEmpty()) return;
         U.chain(groupsMap.values())
             .filter(group -> groupAssociations.contains(group.getName()))

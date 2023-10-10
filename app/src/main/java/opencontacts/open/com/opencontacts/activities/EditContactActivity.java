@@ -6,6 +6,7 @@ import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.*;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.addTemporaryContact;
+import static opencontacts.open.com.opencontacts.domain.Contact.GROUPS_SEPERATOR_CHAR;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.wrapInConfirmation;
 import static opencontacts.open.com.opencontacts.utils.Common.getCalendarInstanceAt;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.defaultPhoneNumberTypeTranslatedText;
@@ -22,6 +23,7 @@ import androidx.core.util.Pair;
 
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +35,9 @@ import com.github.underscore.U;
 import com.thomashaertel.widget.MultiSpinner;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -50,6 +54,7 @@ import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.components.fieldcollections.addressfieldcollection.AddressFieldCollection;
 import opencontacts.open.com.opencontacts.components.fieldcollections.textinputspinnerfieldcollection.TextInputAndSpinnerFieldCollection;
 import opencontacts.open.com.opencontacts.data.datastore.ContactGroupsDataStore;
+import opencontacts.open.com.opencontacts.data.datastore.ContactsDBHelper;
 import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
 import opencontacts.open.com.opencontacts.domain.Contact;
 import opencontacts.open.com.opencontacts.domain.ContactGroup;
@@ -101,9 +106,11 @@ public class EditContactActivity extends AppBaseActivity {
                 finish();
             }
             toolbar.setTitle(contact.firstName);
-            isTemporaryContactBefore = ContactsDataStore.isTemporary(contact.id);
+            Log.i("G&S","Modificato");
+            isTemporaryContactBefore = ContactsDBHelper.isTemporary(contact.id);
             try {
-                vcardBeforeEdit = new VCardReader(getVCardData(contact.id).vcardDataAsString).readNext();
+                Log.i("G&S","Modificato");
+                vcardBeforeEdit = new VCardReader(ContactsDBHelper.getVCard(contact.id).vcardDataAsString).readNext();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -169,17 +176,20 @@ public class EditContactActivity extends AppBaseActivity {
         ArrayAdapter<String> groupsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         groupsSpinner.setAdapter(groupsAdapter, false, selected -> {
         });
-        List<String> allGroups = getAllGroupNames();
-        groupsAdapter.addAll(allGroups);
-        if (contact == null) return;
-        SpinnerUtil.setSelection(contact.getGroupNames(), allGroups, groupsSpinner);
-    }
-
-    private List<String> getAllGroupNames() {
-        return U.chain(ContactGroupsDataStore.getAllGroups())
+        Log.i("G&S","Modificato");
+        List<String> allGroups = U.chain(ContactGroupsDataStore.getAllGroups())
             .map(ContactGroup::getName)
             .value();
+        groupsAdapter.addAll(allGroups);
+        if (contact == null) return;
+
+        Log.i("G&S","Modificato");
+        List<String> groupNames;
+        if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
+        else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
+        SpinnerUtil.setSelection(groupNames, allGroups, groupsSpinner);
     }
+
 
     private void fillDateOfBirth() {
         Birthday birthday = vcardBeforeEdit.getBirthday();
@@ -272,7 +282,10 @@ public class EditContactActivity extends AppBaseActivity {
     }
 
     private void addGroupsToNewVCard(VCard newVCard) {
-        List<String> newGroupNames = SpinnerUtil.getSelectedItems(groupsSpinner, getAllGroupNames());
+        Log.i("G&S","Modificato");
+        List<String> newGroupNames = SpinnerUtil.getSelectedItems(groupsSpinner, U.chain(ContactGroupsDataStore.getAllGroups())
+            .map(ContactGroup::getName)
+            .value());
         if (newGroupNames.isEmpty()) return;
         VCardUtils.setCategories(newGroupNames, newVCard);
     }
