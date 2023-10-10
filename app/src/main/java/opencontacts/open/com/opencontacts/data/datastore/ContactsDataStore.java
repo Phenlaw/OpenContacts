@@ -153,10 +153,12 @@ public class ContactsDataStore {
             protected Void doInBackground(Void... params) {
                 //da ottimizzare
                 for (CallLogEntry callLogEntry : newCallLogEntries) {
-                    long contactId = callLogEntry.getContactId();
+                    Log.i("G&S","Modificato");
+                    long contactId = callLogEntry.contactId;
                     if (getContactWithId(contactId) == null)
                         continue;
-                    ContactsDBHelper.updateLastAccessed(contactId, callLogEntry.getDate());
+                    Log.i("G&S","Modificato");
+                    ContactsDBHelper.updateLastAccessed(contactId, callLogEntry.date);
                 }
                 refreshStoreAsync();
                 return null;

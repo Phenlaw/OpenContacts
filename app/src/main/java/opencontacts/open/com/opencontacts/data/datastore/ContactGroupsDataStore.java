@@ -30,6 +30,7 @@ import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.domain.Contact;
 import opencontacts.open.com.opencontacts.domain.ContactGroup;
 import opencontacts.open.com.opencontacts.orm.VCardData;
+import opencontacts.open.com.opencontacts.utils.DomainUtils;
 import opencontacts.open.com.opencontacts.utils.VCardUtils;
 
 public class ContactGroupsDataStore {
@@ -50,7 +51,10 @@ public class ContactGroupsDataStore {
                 .map(groupName -> getOrDefault(groupsMap, groupName, new ContactGroup(groupName)))
                 .map(group -> group.addContact(contact))
                 //da ottimizzare FORSE
-                .forEach(group -> groupsMap.put(group.getName(), group));
+                .forEach(group -> {
+                    Log.i("G&S","Modificato");
+                    groupsMap.put(group.name, group);
+                });
         }
     }
 
@@ -83,7 +87,8 @@ public class ContactGroupsDataStore {
     }
 
     public static void updateGroup(List<Contact> newContacts, String newGroupName, ContactGroup group) {
-        if (!newGroupName.equals(group.getName())) {
+        Log.i("G&S","Modificato");
+        if (!newGroupName.equals(group.name)) {
             destroyGroup(group);
             createNewGroup(newContacts, newGroupName);
             return;
@@ -93,7 +98,10 @@ public class ContactGroupsDataStore {
         U.forEach(removedContacts, removedContact -> removeContactFromGroup(group, removedContact));
 
         //removing based on group name hence it should happen first
-        group.updateName(newGroupName);
+        Log.i("G&S","Modificato");
+        group.name = newGroupName;
+        group.t9Name = DomainUtils.getNumericKeyPadNumberForString(newGroupName);
+
 
         Collection<Contact> onlyNewContacts = U.reject(newContacts, group.contacts::contains);
         //da ottimizzare FORSE
@@ -105,19 +113,22 @@ public class ContactGroupsDataStore {
         //da ottimizzare FORSE
         U.chain(group.contacts)
             .forEach(contact -> removeContactFromGroup(group, contact));
-        groupsMap.remove(group.getName());
+        Log.i("G&S","Modificato");
+        groupsMap.remove(group.name);
     }
 
     private static void addContactToGroup(ContactGroup group, Contact contact) {
         group.addContact(contact);
-        List<String> allGroupsOfContact = contact.addGroup(group.getName());
+        Log.i("G&S","Modificato");
+        List<String> allGroupsOfContact = contact.addGroup(group.name);
         updateContactTable(contact);
         updateVCardTable(contact, allGroupsOfContact);
     }
 
     private static void removeContactFromGroup(ContactGroup group, Contact contact) {
         group.removeContact(contact);
-        List<String> allGroupsOfContact = contact.removeGroup(group.getName());
+        Log.i("G&S","Modificato");
+        List<String> allGroupsOfContact = contact.removeGroup(group.name);
         updateContactTable(contact);
         updateVCardTable(contact, allGroupsOfContact);
     }
@@ -156,7 +167,8 @@ public class ContactGroupsDataStore {
         List<String> newGroupAssociations = groupNames;
         //da ottimizzare FORSE
         U.forEach(groupsMap.values(), group -> {
-            if (newGroupAssociations.contains(group.getName())) group.addContact(contact);
+            Log.i("G&S","Modificato");
+            if (newGroupAssociations.contains(group.name)) group.addContact(contact);
             else group.removeContact(contact);
         });
     }
@@ -168,8 +180,9 @@ public class ContactGroupsDataStore {
         else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
         List<String> groupAssociations = groupNames;
         if (groupAssociations.isEmpty()) return;
+        Log.i("G&S","Modificato");
         U.chain(groupsMap.values())
-            .filter(group -> groupAssociations.contains(group.getName()))
+            .filter(group -> groupAssociations.contains(group.name))
             //da ottimizzare FORSE
             .forEach(group -> group.addContact(contact));
     }
@@ -177,7 +190,8 @@ public class ContactGroupsDataStore {
     public static void PROCESS_INTENSIVE_delete(ContactGroup selectedGroup, Context context) {
         //da ottimizzare FORSE
         U.forEach(new ArrayList<>(selectedGroup.contacts), contact -> removeContactFromGroup(selectedGroup, contact));
-        groupsMap.remove(selectedGroup.getName());
+        Log.i("G&S","Modificato");
+        groupsMap.remove(selectedGroup.name);
         toastFromNonUIThread(R.string.group_deleted, Toast.LENGTH_SHORT, context);
     }
 }

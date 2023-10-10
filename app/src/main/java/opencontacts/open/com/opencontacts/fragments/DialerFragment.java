@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,8 +91,10 @@ public class DialerFragment extends AppBaseFragment implements SelectableTab {
                     hideSearchListAndUpdateUIForRest();
                     return;
                 }
+                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato");
                 List<Contact> unLabelledCallLogEntriesMatchingText = new U<>(getUnLabelledCallLogEntriesMatching(t9Text))
-                    .map(callLogEntry -> createDummyContact(unknownContactString, "", callLogEntry.getPhoneNumber(), callLogEntry.getDate()));
+                    .map(callLogEntry -> createDummyContact(unknownContactString, "", callLogEntry.phoneNumber, callLogEntry.date));
                 List<Contact> contactsMatchingT9 = getContactsMatchingT9(t9Text);
                 if (contactsMatchingT9.isEmpty() && unLabelledCallLogEntriesMatchingText.isEmpty())
                     hideSearchListAndUpdateUIForRest();
@@ -197,16 +200,13 @@ public class DialerFragment extends AppBaseFragment implements SelectableTab {
 
     private boolean performActionIfPhoneNumberIsValidElseShowError(Consumer<String> action) {
         String phoneNumber = dialPadEditText.getText().toString();
-        if (isInvalid(phoneNumber))
+        Log.i("G&S","Modificato");
+        if (TextUtils.isEmpty(phoneNumber) || TextUtils.getTrimmedLength(phoneNumber) == 0)
             dialPadEditText.setError(getString(R.string.invalid_number));
         else
             action.accept(phoneNumber);
         return true;
     }
-
-    private boolean isInvalid(String phoneNumber) {
-        return TextUtils.isEmpty(phoneNumber) || TextUtils.getTrimmedLength(phoneNumber) == 0;
-    }//da ottimizzare
 
 
     @Override

@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.SearchView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,7 +66,8 @@ public class GroupsActivity extends AppBaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ContactGroup selectedItem = (ContactGroup) groupNameSpinner.getSelectedItem();
                 if (selectedItem == null) return;
-                setLastVisistedGroup(selectedItem.getName(), GroupsActivity.this);
+                Log.i("G&S","Modificato");
+                setLastVisistedGroup(selectedItem.name, GroupsActivity.this);
                 showContactsListOfSelectedGroup(position);
             }
 
@@ -99,7 +101,8 @@ public class GroupsActivity extends AppBaseActivity {
     private int getSelectedGroupIndex() {
         String lastVisitedGroupName = getLastVisistedGroup(this);
         if (isEmpty(lastVisitedGroupName)) return 0;
-        int selectedGroupIndex = U.findIndex(allGroups, group -> group.getName().equals(lastVisitedGroupName));
+        Log.i("G&S","Modificato");
+        int selectedGroupIndex = U.findIndex(allGroups, group -> group.name.equals(lastVisitedGroupName));
         return selectedGroupIndex == -1 ? 0 : selectedGroupIndex;
     }
 
@@ -174,9 +177,10 @@ public class GroupsActivity extends AppBaseActivity {
             .setIcon(R.drawable.edit)
             .setOnMenuItemClickListener(item -> {
                 ContactGroup selectedGroup = (ContactGroup) groupNameSpinner.getSelectedItem();
+                Log.i("G&S","Modificato");
                 startActivity(
                     new Intent(GroupsActivity.this, ContactGroupEditActivity.class)
-                        .putExtra(GROUP_NAME_INTENT_EXTRA, selectedGroup == null ? "" : selectedGroup.getName())
+                        .putExtra(GROUP_NAME_INTENT_EXTRA, selectedGroup == null ? "" : selectedGroup.name)
                 );
                 return true;
             });

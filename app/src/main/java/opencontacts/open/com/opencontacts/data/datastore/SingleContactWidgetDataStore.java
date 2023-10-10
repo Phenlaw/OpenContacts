@@ -26,7 +26,7 @@ public class SingleContactWidgetDataStore {
     public static Contact getContactForSingleContactWidget(int widgetId, Context context) throws Exception {
         Map<String, Long> singleContactWidgetToContactMapping = getSingleContactWidgetIdToContactMap(context);
         Long contactId = checkNotNull(singleContactWidgetToContactMapping.get(String.valueOf(widgetId)));
-        Log.i("S&G","Modificato");
+        Log.i("G&S","Modificato");
         return U.checkNotNull(ContactsDBHelper.getContact(contactId));
     }
 

@@ -105,17 +105,23 @@ public class CallLogGroupDetailsActivity extends AppBaseActivity {
                 if (callLogEntryView == null)
                     callLogEntryView = layoutInflater.inflate(R.layout.call_log_entry, parent, false);
 
-                ((AppCompatTextView) callLogEntryView.findViewById(R.id.text_view_sim)).setText(String.valueOf(callLogEntry.getSimId()));
-                ((AppCompatTextView) callLogEntryView.findViewById(R.id.textview_phone_number)).setText(callLogEntry.getPhoneNumber());
-                if (callLogEntry.getCallType().equals(String.valueOf(CallLog.Calls.INCOMING_TYPE)))
+                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato");
+                ((AppCompatTextView) callLogEntryView.findViewById(R.id.text_view_sim)).setText(String.valueOf(callLogEntry.simId));
+                ((AppCompatTextView) callLogEntryView.findViewById(R.id.textview_phone_number)).setText(callLogEntry.phoneNumber);
+                Log.i("G&S","Modificato");
+                if (callLogEntry.callType.equals(String.valueOf(CallLog.Calls.INCOMING_TYPE)))
                     ((ImageView) callLogEntryView.findViewById(R.id.image_view_call_type)).setImageResource(R.drawable.ic_call_received_black_24dp);
-                else if (callLogEntry.getCallType().equals(String.valueOf(CallLog.Calls.OUTGOING_TYPE)))
+                else if (callLogEntry.callType.equals(String.valueOf(CallLog.Calls.OUTGOING_TYPE)))
                     ((ImageView) callLogEntryView.findViewById(R.id.image_view_call_type)).setImageResource(R.drawable.ic_call_made_black_24dp);
-                else if (callLogEntry.getCallType().equals(String.valueOf(CallLog.Calls.MISSED_TYPE)))
+                else if (callLogEntry.callType.equals(String.valueOf(CallLog.Calls.MISSED_TYPE)))
                     ((ImageView) callLogEntryView.findViewById(R.id.image_view_call_type)).setImageResource(R.drawable.ic_call_missed_outgoing_black_24dp);
-                ((TextView) callLogEntryView.findViewById(R.id.text_view_duration)).setText(Common.getDurationInMinsAndSecs(Integer.valueOf(callLogEntry.getDuration())));
-                ((TextView) callLogEntryView.findViewById(R.id.text_view_sim)).setText(String.valueOf(callLogEntry.getSimId()));
-                String timeStampOfCall = timeStampFormat.format(new Date(Long.parseLong(callLogEntry.getDate())));
+                Log.i("G&S","Modificato");
+                ((TextView) callLogEntryView.findViewById(R.id.text_view_duration)).setText(Common.getDurationInMinsAndSecs(Integer.valueOf(callLogEntry.duration)));
+                Log.i("G&S","Modificato");
+                ((TextView) callLogEntryView.findViewById(R.id.text_view_sim)).setText(String.valueOf(callLogEntry.simId));
+                Log.i("G&S","Modificato");
+                String timeStampOfCall = timeStampFormat.format(new Date(Long.parseLong(callLogEntry.date)));
                 ((TextView) callLogEntryView.findViewById(R.id.text_view_timestamp)).setText(timeStampOfCall);
 
                 return callLogEntryView;

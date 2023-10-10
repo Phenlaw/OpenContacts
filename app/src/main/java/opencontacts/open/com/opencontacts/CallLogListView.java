@@ -25,6 +25,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,26 +103,30 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
         final OnClickListener callContact = v -> {
             if (inSelectionMode) return;
             CallLogEntry callLogEntry = getLatestCallLogEntry((View) v.getParent());
-            AndroidUtils.call(callLogEntry.getPhoneNumber(), context);
+            Log.i("G&S","Modificato");
+            AndroidUtils.call(callLogEntry.phoneNumber, context);
         };
 
         final OnClickListener socialAppContact = v -> {
             if (inSelectionMode) return;
             CallLogEntry callLogEntry = getLatestCallLogEntry((View) v.getParent());
-            AndroidUtils.openSocialApp(callLogEntry.getPhoneNumber(), context);
+            Log.i("G&S","Modificato");
+            AndroidUtils.openSocialApp(callLogEntry.phoneNumber, context);
         };
 
         final OnLongClickListener socialAppLongClick = v -> {
             if (inSelectionMode) return false;
             CallLogEntry callLogEntry = getLatestCallLogEntry((View) v.getParent());
-            AndroidUtils.onSocialLongPress(callLogEntry.getPhoneNumber(), context);
+            Log.i("G&S","Modificato");
+            AndroidUtils.onSocialLongPress(callLogEntry.phoneNumber, context);
             return true;
         };
 
         final OnClickListener messageContact = v -> {
             if (inSelectionMode) return;
             CallLogEntry callLogEntry = getLatestCallLogEntry((View) v.getParent());
-            AndroidUtils.message(callLogEntry.getPhoneNumber(), context);
+            Log.i("G&S","Modificato");
+            AndroidUtils.message(callLogEntry.phoneNumber, context);
         };
 
         final OnClickListener selectionModeTap = v -> {
@@ -134,7 +140,8 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
 
         final OnClickListener showContactDetails = v -> {
             CallLogEntry callLogEntry = getLatestCallLogEntry(v);
-            long contactId = callLogEntry.getContactId();
+            Log.i("G&S","Modificato");
+            long contactId = callLogEntry.contactId;
             if (contactId == -1)
                 return;
             Contact contact = ContactsDataStore.getContactWithId(contactId);
@@ -170,8 +177,11 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
                 CallLogEntry callLogEntry = groupedCallLogEntry.latestCallLogEntry;
                 if (reusableView == null)
                     reusableView = layoutInflater.inflate(R.layout.grouped_call_log_entry, parent, false);
-                ((TextView) reusableView.findViewById(R.id.textview_full_name)).setText(callLogEntry.getContactId() == -1 ? UNKNOWN : callLogEntry.getName());
-                ((TextView) reusableView.findViewById(R.id.textview_phone_number)).setText(callLogEntry.getPhoneNumber());
+                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato");
+                ((TextView) reusableView.findViewById(R.id.textview_full_name)).setText(callLogEntry.contactId == -1 ? UNKNOWN : callLogEntry.name);
+                ((TextView) reusableView.findViewById(R.id.textview_phone_number)).setText(callLogEntry.phoneNumber);
                 setCallAndMessageActions(reusableView);
 
                 View socialAppIcon = reusableView.findViewById(R.id.button_social);
@@ -180,15 +190,19 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
                     socialAppIcon.setOnLongClickListener(socialAppLongClick);
                     socialAppIcon.setVisibility(VISIBLE);
                 } else socialAppIcon.setVisibility(GONE);
-                if (callLogEntry.getCallType().equals(String.valueOf(CallLog.Calls.INCOMING_TYPE)))
+                Log.i("G&S","Modificato");
+                if (callLogEntry.callType.equals(String.valueOf(CallLog.Calls.INCOMING_TYPE)))
                     ((ImageView) reusableView.findViewById(R.id.image_view_call_type)).setImageResource(R.drawable.ic_call_received_black_24dp);
-                else if (callLogEntry.getCallType().equals(String.valueOf(CallLog.Calls.OUTGOING_TYPE)))
+                else if (callLogEntry.callType.equals(String.valueOf(CallLog.Calls.OUTGOING_TYPE)))
                     ((ImageView) reusableView.findViewById(R.id.image_view_call_type)).setImageResource(R.drawable.ic_call_made_black_24dp);
-                else if (callLogEntry.getCallType().equals(String.valueOf(CallLog.Calls.MISSED_TYPE)))
+                else if (callLogEntry.callType.equals(String.valueOf(CallLog.Calls.MISSED_TYPE)))
                     ((ImageView) reusableView.findViewById(R.id.image_view_call_type)).setImageResource(R.drawable.ic_call_missed_outgoing_black_24dp);
-                ((TextView) reusableView.findViewById(R.id.text_view_duration)).setText(Common.getDurationInMinsAndSecs(Integer.valueOf(callLogEntry.getDuration())));
-                ((TextView) reusableView.findViewById(R.id.text_view_sim)).setText(String.valueOf(callLogEntry.getSimId()));
-                String timeStampOfCall = timeStampFormat.format(new Date(Long.parseLong(callLogEntry.getDate())));
+                Log.i("G&S","Modificato");
+                ((TextView) reusableView.findViewById(R.id.text_view_duration)).setText(Common.getDurationInMinsAndSecs(Integer.valueOf(callLogEntry.duration)));
+                Log.i("G&S","Modificato");
+                ((TextView) reusableView.findViewById(R.id.text_view_sim)).setText(String.valueOf(callLogEntry.simId));
+                Log.i("G&S","Modificato");
+                String timeStampOfCall = timeStampFormat.format(new Date(Long.parseLong(callLogEntry.date)));
                 ((TextView) reusableView.findViewById(R.id.text_view_timestamp)).setText(timeStampOfCall);
 
                 List<CallLogEntry> callLogEntriesInGroup = groupedCallLogEntry.callLogEntries;
@@ -284,21 +298,25 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
             selectedEntries.add(groupedCallLogEntry);
             adapter.notifyDataSetChanged();
         });
+        Log.i("G&S","Modificato");
         longClickOptionsAndTheirActions.put(context.getString(R.string.copy_to_clipboard), groupedCallLogEntry -> {
-            AndroidUtils.copyToClipboard(groupedCallLogEntry.latestCallLogEntry.getPhoneNumber(), context);
+            AndroidUtils.copyToClipboard(groupedCallLogEntry.latestCallLogEntry.phoneNumber, context);
             Toast.makeText(context, R.string.copied_phonenumber_to_clipboard, Toast.LENGTH_SHORT).show();
         });
+        Log.i("G&S","Modificato");
         longClickOptionsAndTheirActions.put(context.getString(R.string.add_contact), groupedCallLogEntry -> {
-            AndroidUtils.getAlertDialogToAddContact(groupedCallLogEntry.latestCallLogEntry.getPhoneNumber(), context).show();
+            AndroidUtils.getAlertDialogToAddContact(groupedCallLogEntry.latestCallLogEntry.phoneNumber, context).show();
         });
+        Log.i("G&S","Modificato");
         longClickOptionsAndTheirActions.put(context.getString(R.string.edit_before_call), groupedCallLogEntry -> {
-            this.editNumberBeforeCallHandler.setNumber(groupedCallLogEntry.latestCallLogEntry.getPhoneNumber());
+            this.editNumberBeforeCallHandler.setNumber(groupedCallLogEntry.latestCallLogEntry.phoneNumber);
         });
         longClickOptionsAndTheirActions.put(context.getString(R.string.delete), groupedCallLogEntry -> {
             CallLogDataStore.delete(groupedCallLogEntry.latestCallLogEntry.getId());
         });
+        Log.i("G&S","Modificato");
         longClickOptionsAndTheirActions.put(context.getString(R.string.show_details), groupedCallLogEntry -> {
-            context.startActivity(getIntentToShowCallLogEntries(groupedCallLogEntry.latestCallLogEntry.getPhoneNumber(), context));
+            context.startActivity(getIntentToShowCallLogEntries(groupedCallLogEntry.latestCallLogEntry.phoneNumber, context));
         });
         longClickOptionsAndTheirActions.put(context.getString(R.string.share_menu_item), groupedCallLogEntry -> {
             shareContact(groupedCallLogEntry.latestCallLogEntry.contactId, context);

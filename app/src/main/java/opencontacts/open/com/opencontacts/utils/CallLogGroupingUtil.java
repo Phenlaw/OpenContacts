@@ -2,6 +2,8 @@ package opencontacts.open.com.opencontacts.utils;
 
 import static java.util.Calendar.MINUTE;
 
+import android.util.Log;
+
 import androidx.core.util.Pair;
 
 import com.github.underscore.U;
@@ -44,14 +46,18 @@ public class CallLogGroupingUtil {
     private static boolean canBeGrouped(GroupedCallLogEntryWithCache groupedCallLogEntryWithCache, CallLogEntry callLogEntry) {
         if (callLogEntry.contactId != -1 && groupedCallLogEntryWithCache.groupedCallLogEntry.latestCallLogEntry.contactId != callLogEntry.contactId)
             return false;
-        if (callLogEntry.contactId == -1 && !U.isEqual(groupedCallLogEntryWithCache.groupedCallLogEntry.latestCallLogEntry.getPhoneNumber(), callLogEntry.getPhoneNumber()))
+        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
+        if (callLogEntry.contactId == -1 && !U.isEqual(groupedCallLogEntryWithCache.groupedCallLogEntry.latestCallLogEntry.phoneNumber, callLogEntry.phoneNumber))
             return false;
-        return (Common.getCalendarInstanceAt(Long.parseLong(callLogEntry.getDate())).after(groupedCallLogEntryWithCache.groupingTimeOffsetCalendarInstance));
+        Log.i("G&S","Modificato");
+        return (Common.getCalendarInstanceAt(Long.parseLong(callLogEntry.date)).after(groupedCallLogEntryWithCache.groupingTimeOffsetCalendarInstance));
     }
 
     private static GroupedCallLogEntryWithCache createGroupedCallLogEntryWithCache(CallLogEntry callLogEntry) {
         GroupedCallLogEntry groupedCallLogEntry = new GroupedCallLogEntry(Collections.singletonList(callLogEntry), callLogEntry);
-        Calendar hourOffsetCalendarInstance = Common.getCalendarOffset(-OFFSET_TIME_IN_MINUTES_FOR_GROUPING, MINUTE, new Date(Long.parseLong(callLogEntry.getDate())));
+        Log.i("G&S","Modificato");
+        Calendar hourOffsetCalendarInstance = Common.getCalendarOffset(-OFFSET_TIME_IN_MINUTES_FOR_GROUPING, MINUTE, new Date(Long.parseLong(callLogEntry.date)));
 
         return new GroupedCallLogEntryWithCache(groupedCallLogEntry, hourOffsetCalendarInstance);
     }

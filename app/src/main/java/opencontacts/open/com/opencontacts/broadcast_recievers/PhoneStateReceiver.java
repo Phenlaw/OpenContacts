@@ -87,7 +87,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         if (callingContact == null) return; //#98 issue with marshmallow.
         try {
             CallLogEntry callLogEntry = CallLogDataStore.getMostRecentCallLogEntry(context);
-            if (callLogEntry == null || !callLogEntry.getCallType().equals(String.valueOf(CallLog.Calls.MISSED_TYPE)))
+            Log.i("G&S","Modificato");
+            if (callLogEntry == null || !callLogEntry.callType.equals(String.valueOf(CallLog.Calls.MISSED_TYPE)))
                 return;
         } catch (Exception e) {
         }

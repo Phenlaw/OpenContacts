@@ -438,12 +438,18 @@ public class DomainUtils {
     }
 
     private static void writeCallLogEntryToFile(CallLogEntry callLogEntry, SimpleDateFormat callTimeStampFormat, ICSVWriter writer) {
+        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
         writer.writeNext(new String[]{
-            callLogEntry.name, callLogEntry.getPhoneNumber(),
-            getOrDefault(stringValueOfCallTypeIntToTextMapping, callLogEntry.getCallType(), callLogEntry.getCallType()),
-            callTimeStampFormat.format(new Date(Long.parseLong(callLogEntry.getDate()))),
-            Common.getDurationInMinsAndSecs(Integer.valueOf(callLogEntry.getDuration())),
-            String.valueOf(callLogEntry.getSimId())
+            callLogEntry.name, callLogEntry.phoneNumber,
+            getOrDefault(stringValueOfCallTypeIntToTextMapping, callLogEntry.callType, callLogEntry.callType),
+            callTimeStampFormat.format(new Date(Long.parseLong(callLogEntry.date))),
+            Common.getDurationInMinsAndSecs(Integer.valueOf(callLogEntry.duration)),
+            String.valueOf(callLogEntry.simId)
         });
     }
 

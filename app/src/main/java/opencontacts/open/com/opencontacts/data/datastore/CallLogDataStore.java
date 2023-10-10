@@ -114,12 +114,16 @@ public class CallLogDataStore {
                         continue;
                     //da ottimizzare
                     for (CallLogEntry callLogEntry : callLogEntriesToWorkWith) {
-                        if (callLogEntry.getContactId() != -1)
+                        Log.i("G&S","Modificato");
+                        if (callLogEntry.contactId != -1)
                             continue;
-                        String allNumericPhoneNumberOfCallLogEntry = getAllNumericPhoneNumber(callLogEntry.getPhoneNumber());
+                        Log.i("G&S","Modificato");
+                        String allNumericPhoneNumberOfCallLogEntry = getAllNumericPhoneNumber(callLogEntry.phoneNumber);
                         if (matchesNumber(allNumericPhoneNumberOfCallLogEntry, searchablePhoneNumber)) {
-                            callLogEntry.setContactId(newContact.id);
-                            callLogEntry.setName(newContact.name);
+                            Log.i("G&S","Modificato");
+                            callLogEntry.contactId = newContact.id;
+                            Log.i("G&S","Modificato");
+                            callLogEntry.name = newContact.name;
                             callLogEntry.save();
                             numberOfEntriesUpdated++;
                             break;
@@ -147,13 +151,17 @@ public class CallLogDataStore {
         int numberOfEntriesUpdated = 0;
         //da ottimizzare
         for (CallLogEntry callLogEntry : callLogEntries) {
-            if (callLogEntry.getContactId() != -1)
+            Log.i("G&S","Modificato");
+            if (callLogEntry.contactId != -1)
                 continue;
-            opencontacts.open.com.opencontacts.orm.Contact contactFromDB = ContactsDBHelper.getContactFromDB(callLogEntry.getPhoneNumber());
+            Log.i("G&S","Modificato");
+            opencontacts.open.com.opencontacts.orm.Contact contactFromDB = ContactsDBHelper.getContactFromDB(callLogEntry.phoneNumber);
             if (contactFromDB == null)
                 continue;
-            callLogEntry.setName(contactFromDB.firstName + " " + contactFromDB.lastName);
-            callLogEntry.setContactId(contactFromDB.getId());
+            Log.i("G&S","Modificato");
+            callLogEntry.name= contactFromDB.firstName + " " + contactFromDB.lastName;
+            Log.i("G&S","Modificato");
+            callLogEntry.contactId = contactFromDB.getId();
             callLogEntry.save();
             numberOfEntriesUpdated++;
         }
@@ -202,7 +210,8 @@ public class CallLogDataStore {
         //da ottimizzare FORSE
         U.forEach(callLogEntries, entry -> {
             if (entry.name != null) return;
-            String phoneNumber = entry.getPhoneNumber();
+            Log.i("G&S","Modificato");
+            String phoneNumber = entry.phoneNumber;
             if (matchedEntries.containsKey(phoneNumber))
                 return; // making sure only recent entries make it so that sorting based on last called will not be impacted
             if (!phoneNumber.contains(number)) return;

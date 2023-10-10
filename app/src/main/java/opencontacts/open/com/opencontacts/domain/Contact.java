@@ -46,7 +46,7 @@ public class Contact implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumbers = phoneNumbers;
-        Log.i("S&G","Modificato");
+        Log.i("G&S","Modificato");
         this.name = getEmptyStringIfNull(firstName) + " " + getEmptyStringIfNull(lastName);
         this.lastAccessed = lastAccessed;
         this.primaryPhoneNumber = primaryPhoneNumber;
@@ -56,7 +56,7 @@ public class Contact implements Serializable {
     private Contact(String firstName, String lastName, String number) {
         this.firstName = firstName;
         this.lastName = lastName;
-        Log.i("S&G","Modificato");
+        Log.i("G&S","Modificato");
         this.name = getEmptyStringIfNull(firstName) + " " + getEmptyStringIfNull(lastName);
         this.primaryPhoneNumber = new PhoneNumber(number);
         id = -1;
@@ -64,7 +64,7 @@ public class Contact implements Serializable {
 
     public void setT9Text() {
         StringBuilder searchStringBuffer = new StringBuilder();
-        Log.i("S&G","Modificato");
+        Log.i("G&S","Modificato");
         String nameForT9 = ContactsDataStore.t9NameSupplier.apply(this);
         //da ottimizzare
         for (PhoneNumber phoneNumber : phoneNumbers)

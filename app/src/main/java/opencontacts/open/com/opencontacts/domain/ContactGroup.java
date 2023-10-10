@@ -1,23 +1,21 @@
 package opencontacts.open.com.opencontacts.domain;
 
+import android.util.Log;
+
 import java.util.HashSet;
 
 import opencontacts.open.com.opencontacts.utils.DomainUtils;
 
 public class ContactGroup {
     public HashSet<Contact> contacts = new HashSet<>(0);
-    private String name;
+    public String name;
     public String t9Name;
 
     public ContactGroup(String name) {
-        updateName(name);
-    }
-
-    public void updateName(String name) {
+        Log.i("G&S","Modificato");
         this.name = name;
         this.t9Name = DomainUtils.getNumericKeyPadNumberForString(name);
     }
-    //da ottimizzare
 
     public ContactGroup addContact(Contact contact) {
         contacts.add(contact);
@@ -32,11 +30,12 @@ public class ContactGroup {
     public String getName() {
         return name; // added this to make sure no one updates the name directly and leaves behind T9 text
     }
-    //da ottimizzare
+    //ottimizzata tranne 2 che non si capiscono
 
     @Override
     public String toString() {
         return name;
     }
 }
-//da ottiimizzare
+
+
