@@ -70,7 +70,7 @@ public abstract class InputFieldCollection<H extends FieldViewHolder> extends Li
         AppCompatTextView titleTextView = findViewById(R.id.title);
         titleTextView.setText(title);
         titleTextView.setVisibility(VISIBLE);
-    }
+    }//da ottimizzare FORSE
 
     public H addOneMoreView() {
         H newField = createNewField();
@@ -90,7 +90,7 @@ public abstract class InputFieldCollection<H extends FieldViewHolder> extends Li
 
     public void setOnAddMoreClick(Runnable onAddMoreClick) {
         this.onAddMoreClick = onAddMoreClick;
-    }
+    } //da ottimizzare
 
     public H getFieldAt(int index) {
         return fieldViewHoldersList.get(index);

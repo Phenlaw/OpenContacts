@@ -12,4 +12,5 @@ public class GroupedCallLogEntry {
         this.callLogEntries = callLogEntries;
         this.latestCallLogEntry = latestCallLogEntry;
     }
+    //da ottimizzare
 }

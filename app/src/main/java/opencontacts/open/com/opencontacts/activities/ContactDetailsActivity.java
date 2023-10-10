@@ -243,6 +243,7 @@ public class ContactDetailsActivity extends AppBaseActivity {
         }
         findViewById(R.id.phone_card).setVisibility(VISIBLE);
         phoneNumbersLinearLayout.removeAllViews();
+        //Da ottimizzare FORSE
         U.forEach(vcard.getTelephoneNumbers(), telephone -> {
             View inflatedView = layoutInflater.inflate(R.layout.contact_details_row, phoneNumbersLinearLayout, false);
             String telephoneText = getMobileNumber(telephone);

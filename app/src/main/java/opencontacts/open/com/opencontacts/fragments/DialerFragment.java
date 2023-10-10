@@ -206,7 +206,7 @@ public class DialerFragment extends AppBaseFragment implements SelectableTab {
 
     private boolean isInvalid(String phoneNumber) {
         return TextUtils.isEmpty(phoneNumber) || TextUtils.getTrimmedLength(phoneNumber) == 0;
-    }
+    }//da ottimizzare
 
 
     @Override

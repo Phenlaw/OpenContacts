@@ -20,6 +20,7 @@ public class ContactsListTextFilter extends ContactsListFilter {
     @Override
     public void createDataMapping(List<Contact> contacts) {
         List<Contact> threadSafeContacts = new ArrayList<>(contacts);
+        //Da ottimizzare
         for (Contact contact : threadSafeContacts) {
             contact.setTextSearchTarget();
         }
@@ -28,6 +29,7 @@ public class ContactsListTextFilter extends ContactsListFilter {
     @Override
     public List<Contact> filter(CharSequence searchText, List<Contact> contacts) {
         ArrayList<Contact> filteredContacts = new ArrayList<>();
+        //Da ottimizzare
         for (Contact contact : contacts) {
             if (contact.textSearchTarget == null) {
                 contact.setTextSearchTarget();

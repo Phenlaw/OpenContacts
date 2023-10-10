@@ -43,6 +43,7 @@ public class ExpandedList extends LinearLayout {
         this.onItemClickListener = onItemClickListener;
         if (getChildCount() == 0)
             return;
+        //da ottimizzare FORSE
         Common.forEachIndex(getChildCount(), index -> getChildAt(index).setOnClickListener(this::onClick));
     }
 
@@ -50,6 +51,7 @@ public class ExpandedList extends LinearLayout {
         this.onItemLongClickListener = onItemLongClickListener;
         if (getChildCount() == 0)
             return;
+        //da ottimizzare FORSE
         Common.forEachIndex(getChildCount(), index -> getChildAt(index).setOnLongClickListener(this::onLongClick));
     }
 
@@ -60,6 +62,7 @@ public class ExpandedList extends LinearLayout {
 
     public void setItems(List<Pair<String, String>> items) {
         removeAllViews();
+        //da ottimizzare FORSE
         U.forEachIndexed(items, (index, item) -> {
             View inflatedView = layoutInflater.inflate(R.layout.layout_item_title_and_type, this, false);
             ((AppCompatTextView) inflatedView.findViewById(R.id.textview_content)).setText(item.first);

@@ -17,6 +17,7 @@ public class ContactGroup {
         this.name = name;
         this.t9Name = DomainUtils.getNumericKeyPadNumberForString(name);
     }
+    //da ottimizzare
 
     public ContactGroup addContact(Contact contact) {
         contacts.add(contact);
@@ -31,9 +32,11 @@ public class ContactGroup {
     public String getName() {
         return name; // added this to make sure no one updates the name directly and leaves behind T9 text
     }
+    //da ottimizzare
 
     @Override
     public String toString() {
         return name;
     }
 }
+//da ottiimizzare

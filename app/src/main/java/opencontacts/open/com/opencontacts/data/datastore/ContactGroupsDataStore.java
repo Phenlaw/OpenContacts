@@ -35,10 +35,12 @@ public class ContactGroupsDataStore {
     public static void COMPUTE_INTENSIVE_computeGroups() {
         List<Contact> allContacts = ContactsDataStore.getAllContacts();
         groupsMap = new HashMap<>();
+        //da ottimizzare
         for (Contact contact : allContacts) {
             U.chain(contact.getGroupNames())
                 .map(groupName -> getOrDefault(groupsMap, groupName, new ContactGroup(groupName)))
                 .map(group -> group.addContact(contact))
+                //da ottimizzare FORSE
                 .forEach(group -> groupsMap.put(group.getName(), group));
         }
     }
@@ -73,6 +75,7 @@ public class ContactGroupsDataStore {
     public static void createNewGroup(List<Contact> contacts, String groupName) {
         ContactGroup newContactGroup = new ContactGroup(groupName);
         groupsMap.put(groupName, newContactGroup);
+        //da ottimizzare FORSE
         U.forEach(contacts, contact -> addContactToGroup(newContactGroup, contact));
     }
 
@@ -83,17 +86,20 @@ public class ContactGroupsDataStore {
             return;
         }
         Collection<Contact> removedContacts = U.reject(group.contacts, newContacts::contains);
+        //da ottimizzare FORSE
         U.forEach(removedContacts, removedContact -> removeContactFromGroup(group, removedContact));
 
         //removing based on group name hence it should happen first
         group.updateName(newGroupName);
 
         Collection<Contact> onlyNewContacts = U.reject(newContacts, group.contacts::contains);
+        //da ottimizzare FORSE
         U.forEach(onlyNewContacts, newContact -> addContactToGroup(group, newContact));
     }
 
     private static void destroyGroup(ContactGroup group) {
         //new array list coz of concurrent modification of same array group.contacts
+        //da ottimizzare FORSE
         U.chain(group.contacts)
             .forEach(contact -> removeContactFromGroup(group, contact));
         groupsMap.remove(group.getName());
@@ -135,15 +141,18 @@ public class ContactGroupsDataStore {
     public static ContactGroup getGroup(String name) {
         return groupsMap.get(name);
     }
+    //da ottimizzare
 
     public static void handleContactDeletion(Contact contact) {
         U.chain(groupsMap.values())
             .map(group -> group.contacts)
+            //da ottimizzare FORSE
             .forEach(contactsList -> contactsList.remove(contact));
     }
 
     public static void handleContactUpdate(Contact contact) {
         List<String> newGroupAssociations = contact.getGroupNames();
+        //da ottimizzare FORSE
         U.forEach(groupsMap.values(), group -> {
             if (newGroupAssociations.contains(group.getName())) group.addContact(contact);
             else group.removeContact(contact);
@@ -155,10 +164,12 @@ public class ContactGroupsDataStore {
         if (groupAssociations.isEmpty()) return;
         U.chain(groupsMap.values())
             .filter(group -> groupAssociations.contains(group.getName()))
+            //da ottimizzare FORSE
             .forEach(group -> group.addContact(contact));
     }
 
     public static void PROCESS_INTENSIVE_delete(ContactGroup selectedGroup, Context context) {
+        //da ottimizzare FORSE
         U.forEach(new ArrayList<>(selectedGroup.contacts), contact -> removeContactFromGroup(selectedGroup, contact));
         groupsMap.remove(selectedGroup.getName());
         toastFromNonUIThread(R.string.group_deleted, Toast.LENGTH_SHORT, context);

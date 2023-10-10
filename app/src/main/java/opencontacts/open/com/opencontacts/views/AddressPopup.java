@@ -117,5 +117,5 @@ public class AddressPopup {
     private void setupAddressTypeSpinner() {
         types = asList(context.getResources().getStringArray(R.array.address_types));
         setupSpinner(types, addressTypeSpinner, context);
-    }
+    }//da ottimizzare forse
 }

@@ -15,13 +15,12 @@ public class CheekyCarddavServerStuff {
         this.defaultUrl = defaultUrl;
         this.addressBookUrlSuffix = addressBookUrlSuffix;
         this.validateServerUrlSuffix = validateServerUrlSuffix;
-    }
-
+    }//da ottimizzare
     public String getAddressBookUrl(String baseUrl, String username) {
         return baseUrl + addressBookUrlSuffix;
-    }
+    } //da ottimizzare
 
     public String getValidateServerUrl(String baseUrl, String username) {
         return baseUrl + validateServerUrlSuffix;
-    }
+    }//da ottimizzare
 }

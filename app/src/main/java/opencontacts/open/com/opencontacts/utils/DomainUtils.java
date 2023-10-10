@@ -125,6 +125,7 @@ public class DomainUtils {
     private static String computeDateFormat(Context context) {
         char[] dateFormatOrder = DateFormat.getDateFormatOrder(context);
         char dateChar = 'd', monthChar = 'M';
+        //da ottimizzare
         for (char c : dateFormatOrder) {
             if (c == dateChar) return "dd/MM";
             else if (c == monthChar) return "MM/dd";
@@ -200,6 +201,7 @@ public class DomainUtils {
         VCardWriter vCardWriter = new VCardWriter(contactsPlainTextExportStream, VCardVersion.V4_0);
         vCardWriter.setCaretEncodingEnabled(true);
         StructuredName structuredName = new StructuredName();
+        //da ottimizzare
         for (Contact contact : allContacts) {
             VCardData vCardData = ContactsDataStore.getVCardData(contact.id);
             if (vCardData == null)
@@ -224,6 +226,7 @@ public class DomainUtils {
         structuredName.setGiven(contact.firstName);
         structuredName.setFamily(contact.lastName);
         vcard.setStructuredName(structuredName);
+        //da ottimizzare
         for (PhoneNumber phoneNumber : contact.phoneNumbers)
             vcard.addTelephoneNumber(phoneNumber.phoneNumber, TelephoneType.CELL);
         vCardWriter.write(vcard);
@@ -256,7 +259,7 @@ public class DomainUtils {
 
     public static String getSearchablePhoneNumber(String phoneNumber) {
         return getPhoneNumberWithoutCountryCodeAndFormatting(phoneNumber);
-    }
+    }//da ottimizzare
 
     public static List<String> cross(List<String> firstSetOfWords, Set<String> secondSetOfWords) {
         return U.flatten(
@@ -292,6 +295,7 @@ public class DomainUtils {
         String nonAccentedCharacters = replaceAccentedCharactersWithEnglish(string);
         String finalString = nonAccentedCharacters + " " + getInitialsOfEachWord(nonAccentedCharacters);
         StringBuffer numericString = new StringBuffer();
+        //da ottimizzare
         for (char c : finalString.toCharArray()) {
             if (Character.isSpaceChar(c)) {
                 numericString.append(0);
@@ -307,7 +311,7 @@ public class DomainUtils {
     private static String getInitialsOfEachWord(String text) {
         if (TextUtils.isEmpty(text)) return "";
         return U.join(Common.map(text.split(" "), word -> TextUtils.isEmpty(word) ? "" : word.charAt(0)), "");
-    }
+    }//da ottimizzare
 
     private static Map<TelephoneType, String> getMobileNumberTypeToTranslatedTextMap(Context context) {
         if (mobileNumberTypeToTranslatedText != null)
@@ -335,7 +339,7 @@ public class DomainUtils {
         if (translatedTextToMobileNumberType == null)
             translatedTextToMobileNumberType = U.toMap(U.invert(getMobileNumberTypeToTranslatedTextMap(context)));
         return getOrDefault(translatedTextToMobileNumberType, translatedText, TelephoneType.get(translatedText));
-    }
+    }//da ottimizzare
 
     private static Map<AddressType, String> getAddressTypeToTranslatedTextMap(Context context) {
         if (addressTypeToTranslatedText != null)
@@ -344,7 +348,7 @@ public class DomainUtils {
         addressTypeToTranslatedText.put(AddressType.HOME, context.getString(R.string.home));
         addressTypeToTranslatedText.put(AddressType.WORK, context.getString(R.string.work));
         return addressTypeToTranslatedText;
-    }
+    }//da ottimizzare
 
     public static String getAddressTypeTranslatedText(Address address, Context context) {
         if (defaultAddressTypeTranslatedText == null)
@@ -358,7 +362,7 @@ public class DomainUtils {
         if (translatedTextToAddressType == null)
             translatedTextToAddressType = U.toMap(U.invert(getAddressTypeToTranslatedTextMap(context)));
         return getOrDefault(translatedTextToAddressType, translatedText, AddressType.get(translatedText));
-    }
+    }//da ottimizzare
 
 
     private static Map<EmailType, String> getEmailTypeToTranslatedTextMap(Context context) {
@@ -368,30 +372,30 @@ public class DomainUtils {
         emailTypeToTranslatedText.put(EmailType.HOME, context.getString(R.string.home));
         emailTypeToTranslatedText.put(EmailType.WORK, context.getString(R.string.work));
         return emailTypeToTranslatedText;
-    }
+    }//da ottimizzare
 
     public static String getEmailTypeTranslatedText(List<EmailType> types, Context context) {
         if (defaultEmailType == null)
             defaultEmailTypeTranslatedText = getEmailTypeToTranslatedTextMap(context).get(defaultEmailType);
         if (types.isEmpty()) return defaultEmailTypeTranslatedText;
         return getOrDefault(getEmailTypeToTranslatedTextMap(context), U.first(types), U.first(types).getValue());
-    }
+    }//da ottimizzare
 
     public static EmailType getEmailType(String translatedText, Context context) {
         if (translatedTextToEmailType == null)
             translatedTextToEmailType = U.toMap(U.invert(getEmailTypeToTranslatedTextMap(context)));
         return getOrDefault(translatedTextToEmailType, translatedText, EmailType.get(translatedText));
-    }
+    }//da ottimizzare
 
     @NonNull
     public static SimpleDateFormat getTimestampPattern(Context context) {
         return new SimpleDateFormat(dateFormatOnlyMonthAndDatePerLocale + (is12HourFormatEnabled(context) ? "  hh:mm a" : " HH:mm"), Locale.getDefault());
-    }
+    } //da ottimizzare
 
     @NonNull
     public static SimpleDateFormat getFullDateTimestampPattern(Context context) {
         return new SimpleDateFormat(dateFormatOnlyMonthAndDatePerLocale + (is12HourFormatEnabled(context) ? "/yyyy  hh:mm a" : "/yyyy HH:mm"), Locale.getDefault());
-    }
+    }//da ottimizzare
 
     public static void exportCallLog(Context context) throws Exception {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -411,6 +415,7 @@ public class DomainUtils {
             SimpleDateFormat callTimeStampFormat = getFullDateTimestampPattern(context);
             List<CallLogEntry> entireCallLog = CallLogEntry.listAll(CallLogEntry.class);
             writeCallLogCSVHeader(csvWriter);
+            //da ottimizzare forse
             U.forEach(entireCallLog, callLogEntry -> writeCallLogEntryToFile(callLogEntry, callTimeStampFormat, finalCsvWriter));
         } finally {
             if (csvWriter != null) csvWriter.flushQuietly();
@@ -451,7 +456,7 @@ public class DomainUtils {
 
     public static String getLastNameOrFullInCaseEmpty(Contact contact) {
         return contact.lastName == null || isEmpty(contact.lastName.trim()) ? contact.name : contact.lastName;
-    }
+    } //da ottimizzare
 
     @NonNull
     public static Comparator<Contact> getContactComparatorBasedOnName(Context context) {
@@ -479,6 +484,7 @@ public class DomainUtils {
 
     public static List<Contact> filterContactsBasedOnT9Text(CharSequence t9Text, List<Contact> contacts) {
         ArrayList<Contact> filteredContacts = new ArrayList<>();
+        //da ottimizzare
         for (Contact contact : contacts) {
             if (contact.t9Text == null) {
                 contact.setT9Text();
@@ -513,13 +519,14 @@ public class DomainUtils {
 
     public static String getMissedcallNotificationTitle(Context context) {
         return context.getString(R.string.missed_call);
-    }
+    } //da ottimizzare
 
     public static void removeAnyMissedCallNotifications(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         U.chain(notificationManager.getActiveNotifications())
             .filter(notification -> isMissedCallNotification(context, notification))
+            //da ottimizzare forse
             .forEach(notification -> notificationManager.cancel(notification.getId()));
     }
 

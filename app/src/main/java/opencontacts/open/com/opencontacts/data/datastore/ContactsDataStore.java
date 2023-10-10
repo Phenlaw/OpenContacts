@@ -158,6 +158,7 @@ public class ContactsDataStore {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                //da ottimizzare
                 for (CallLogEntry callLogEntry : newCallLogEntries) {
                     long contactId = callLogEntry.getContactId();
                     if (getContactWithId(contactId) == null)
@@ -198,6 +199,7 @@ public class ContactsDataStore {
         if (dataChangeListeners.isEmpty() || pauseUpdates)
             return;
         synchronized (dataChangeListeners) {
+            //da ottimizzare FORSE
             U.forEach(dataChangeListeners, listener -> {
                 if (listener == null) return;
                 if (type == ADDITION)
@@ -229,7 +231,7 @@ public class ContactsDataStore {
 
     public static VCardData getVCardData(long contactId) {
         return ContactsDBHelper.getVCard(contactId);
-    }
+    }//da ottimizzare
 
     public static void init(Context context) {
         updateT9Supplier(context);
@@ -247,6 +249,7 @@ public class ContactsDataStore {
 
     public static void writePinyinToDb(Context context) {
         List<opencontacts.open.com.opencontacts.orm.Contact> dbContacts = opencontacts.open.com.opencontacts.orm.Contact.listAll(opencontacts.open.com.opencontacts.orm.Contact.class);
+        //da ottimizzare FORSE
         U.forEach(dbContacts, dbContact -> {
             dbContact.pinyinName = getPinyinTextFromChinese(dbContact.getFullName());
             dbContact.save();
@@ -267,7 +270,7 @@ public class ContactsDataStore {
             return favorites;
         updateFavoritesList();
         return favorites;
-    }
+    }//da ottimizzare FORSE
 
     public static void addFavorite(Contact contact) {
         if (getFavorites().contains(contact)) return;
@@ -303,7 +306,7 @@ public class ContactsDataStore {
     public static boolean isFavorite(Contact contact) {
         return getFavorites().contains(contact);
     }
-
+    //da ottimizzare
     public static void mergeContacts(Contact primaryContact, Contact secondaryContact, Context context) throws IOException {
         VCardData primaryVCardData = VCardData.getVCardData(primaryContact.id);
         VCardData secondaryVCardData = VCardData.getVCardData(secondaryContact.id);
@@ -317,6 +320,7 @@ public class ContactsDataStore {
         final Contact firstContact = U.first(contactsToMerge);
         U.chain(contactsToMerge)
             .rest()
+            //da ottimizzare FORSE
             .forEach(contactToMerge -> {
                 try {
                     mergeContacts(firstContact, contactToMerge, context);
@@ -340,10 +344,11 @@ public class ContactsDataStore {
 
     public static List<TemporaryContact> getTemporaryContactDetails() {
         return ContactsDBHelper.getTemporaryContactDetails();
-    }
+    }//da ottimizzare
 
     public static boolean isTemporary(long id) {
         return ContactsDBHelper.isTemporary(id);
     }
+    //da ottimizzare
 
 }
