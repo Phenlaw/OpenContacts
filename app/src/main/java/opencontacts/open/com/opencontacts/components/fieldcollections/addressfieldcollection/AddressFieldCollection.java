@@ -19,7 +19,6 @@ import opencontacts.open.com.opencontacts.components.fieldcollections.textviewco
 import opencontacts.open.com.opencontacts.views.AddressPopup;
 
 public class AddressFieldCollection extends TextViewFieldCollection {
-    //Da modificare
     private List<Address> addresses = new ArrayList<>(1);
 
     public AddressFieldCollection(Context context) {
@@ -74,18 +73,13 @@ public class AddressFieldCollection extends TextViewFieldCollection {
     }
 
     public void setAddresses(List<Address> addresses) {
-        //Da ottimizzare FORSE
-
         U.forEach(fieldViewHoldersList, address -> fieldsHolderLayout.removeView(fieldsHolderLayout));
         if (addresses.isEmpty()) {
             addOneMoreView();
             return;
         }
-        //Da ottimizzare FORSE
-
         U.forEach(addresses, this::addOneMoreView);
     }
-    //Da ottimizzare
 
     private void addOneMoreView(Address address) {
         TextViewViewHolder textViewViewHolder = addOneMoreView();
@@ -102,5 +96,5 @@ public class AddressFieldCollection extends TextViewFieldCollection {
 
     public Collection<Address> getAllAddresses() {
         return addresses;
-    } //Da modificare
+    }
 }

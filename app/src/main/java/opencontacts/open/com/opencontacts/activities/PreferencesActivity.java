@@ -156,8 +156,6 @@ public class PreferencesActivity extends AppBaseActivity {
 
         private void handlePreferenceUpdates() {
             HashMap<String, Preference.OnPreferenceChangeListener> onPreferenceChangeHandlersMap = getIndividualPreferenceHandlersMap();
-            //Da ottimizzare FORSE
-
             U.forEach(onPreferenceChangeHandlersMap.keySet(),
                 preferenceKey -> findPreference(preferenceKey)
                     .setOnPreferenceChangeListener(

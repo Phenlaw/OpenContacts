@@ -66,7 +66,6 @@ public class TextInputAndSpinnerFieldCollection extends InputFieldCollection<Tex
         this.inputType = inputType;
         this.fieldTypes = fieldTypes;
     }
-    //DA OTTIMIZZARE
 
     public void setFieldTypes(List<String> fieldTypes) {
         this.fieldTypes = fieldTypes;

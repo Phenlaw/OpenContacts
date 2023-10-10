@@ -161,7 +161,6 @@ public class CardDavSyncActivity extends AppCompatActivity {
         List<VCardData> allVCardDataList = VCardData.listAll(VCardData.class);
         Map<String, VCardData> allVCardsAsHREFMap = getAllVCardsAsHREFMap(allVCardDataList);
 
-        //Da ottimizzare FORSE
         U.forEach(hrefsDeleted, href -> {
             VCardData vCardData = allVCardsAsHREFMap.get(href);
             if (vCardData == null) return;
@@ -184,8 +183,6 @@ public class CardDavSyncActivity extends AppCompatActivity {
 
     private void updateLocal(List<Triplet<String, String, VCard>> hrefEtagAndVCardList, List<VCardData> allVCardDataList) {
         Map<String, VCardData> allVCardsAsHREFMap = getAllVCardsAsHREFMap(allVCardDataList);
-
-        //Da ottimizzare FORSE
         U.forEach(hrefEtagAndVCardList, hrefEtagAndVCard -> {
             String href = hrefEtagAndVCard.x;
             if (allVCardsAsHREFMap.containsKey(href)) {
@@ -205,8 +202,6 @@ public class CardDavSyncActivity extends AppCompatActivity {
 
     private void updateServer(List<VCardData> allVCardDataList, boolean syncFromLastCheckPoint, String username, String password, String addressBookUrl) {
         String baseUrl = getStringFromPreferences(BASE_SYNC_URL_SHARED_PREFS_KEY, this);
-        //Da ottimizzare FORSE
-
         U.forEach(allVCardDataList, vcardData -> {
             switch (vcardData.status) {
                 case STATUS_NONE:

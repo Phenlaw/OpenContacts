@@ -51,7 +51,6 @@ public class CallLogDataStore {
             CallLogEntry callLogEntry = recentCallLogEntries.get(0);
             callLogEntries.add(0, callLogEntry);
             processAsync(() -> {
-                //da ottimizzare
                 for (DataStoreChangeListener<CallLogEntry> dataStoreChangeListener : dataChangeListeners) {
                     dataStoreChangeListener.onAdd(callLogEntry);
                 }
@@ -69,7 +68,6 @@ public class CallLogDataStore {
     }
 
     private static void notifyRefreshStore() {
-        //da ottimizzare
         for (DataStoreChangeListener<CallLogEntry> dataStoreChangeListener : dataChangeListeners) {
             dataStoreChangeListener.onStoreRefreshed();
         }
@@ -105,12 +103,10 @@ public class CallLogDataStore {
                 if (callLogEntriesToWorkWith.isEmpty())
                     return;
                 int numberOfEntriesUpdated = 0;
-                //da ottimizzare
                 for (PhoneNumber phoneNumber : newContact.phoneNumbers) {
                     String searchablePhoneNumber = getSearchablePhoneNumber(phoneNumber.phoneNumber);
                     if (searchablePhoneNumber == null)
                         continue;
-                    //da ottimizzare
                     for (CallLogEntry callLogEntry : callLogEntriesToWorkWith) {
                         if (callLogEntry.getContactId() != -1)
                             continue;
@@ -143,7 +139,6 @@ public class CallLogDataStore {
         if (callLogEntries == null)
             callLogEntries = getRecentCallLogEntries(context);
         int numberOfEntriesUpdated = 0;
-        //da ottimizzare
         for (CallLogEntry callLogEntry : callLogEntries) {
             if (callLogEntry.getContactId() != -1)
                 continue;
@@ -164,13 +159,11 @@ public class CallLogDataStore {
         boolean hasBeenDeleted = CallLogDBHelper.delete(id);
         if (!hasBeenDeleted)
             return;
-        //da ottimizzare
         for (CallLogEntry callLogEntryToBeRemoved : callLogEntries) {
             if (!callLogEntryToBeRemoved.getId().equals(id))
                 continue;
             callLogEntries.remove(callLogEntryToBeRemoved);
             processAsync(() -> {
-                //da ottimizzare
                 for (DataStoreChangeListener<CallLogEntry> dataStoreChangeListener : dataChangeListeners) {
                     dataStoreChangeListener.onRemove(callLogEntryToBeRemoved);
                 }
@@ -197,7 +190,6 @@ public class CallLogDataStore {
 
     public static Collection<CallLogEntry> getUnLabelledCallLogEntriesMatching(String number) {
         ArrayMap<String, CallLogEntry> matchedEntries = new ArrayMap<>();
-        //da ottimizzare FORSE
         U.forEach(callLogEntries, entry -> {
             if (entry.name != null) return;
             String phoneNumber = entry.getPhoneNumber();

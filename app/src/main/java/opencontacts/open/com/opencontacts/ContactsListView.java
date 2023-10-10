@@ -116,8 +116,6 @@ public class ContactsListView extends ListView implements DataStoreChangeListene
     private void moveFavoritesToTop() {
         List<Contact> favorites = ContactsDataStore.getFavorites();
         Collections.sort(favorites, getContactComparatorBasedOnName(context));
-        //Da ottimizzare FORSE
-
         U.forEach(favorites, contacts::remove);
         contacts.addAll(0, favorites);
     }

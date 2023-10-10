@@ -77,7 +77,6 @@ public abstract class ContactChooserActivityBase extends AppBaseActivity {
             @Override
             public SparseBooleanArray getCheckedItemPositions() {
                 SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
-
                 Common.forEachIndex(getCount(), index -> sparseBooleanArray.put(index, isItemChecked(index)));
                 return sparseBooleanArray;
             }

@@ -301,7 +301,6 @@ public class AndroidUtils {
         Intent exportToContactsAppIntent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
 
         ArrayList<ContentValues> data = new ArrayList<>();
-        //da ottimizzare
         for (PhoneNumber phoneNumber : contact.phoneNumbers) {
             ContentValues row = new ContentValues();
             row.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);

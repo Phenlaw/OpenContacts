@@ -30,12 +30,11 @@ public class Contact extends SugarRecord implements Serializable {
             firstName = lastName;
         this.firstName = firstName;
         this.lastName = lastName;
-    }//da ottimizzare
+    }
 
     public String getFullName() {
         return firstName + " " + lastName;
     }
-    //da ottimizzare
 
     public List<PhoneNumber> getAllPhoneNumbers() {
         return PhoneNumber.find(PhoneNumber.class, "contact = ?", "" + this.getId());

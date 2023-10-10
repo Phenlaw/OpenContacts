@@ -64,11 +64,8 @@ public class SpinnerFieldCollection extends InputFieldCollection<SpinnerFieldHol
     public void set(List<String> options) {
         this.options = options;
     }
-    //DA OTTIMIZZARE
 
     public void addFields(List<String> values) {
-        //Da ottimizzare FORSE
-
         U.forEach(values, this::addOneMoreView);
     }
 

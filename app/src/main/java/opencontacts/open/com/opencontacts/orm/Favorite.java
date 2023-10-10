@@ -11,5 +11,4 @@ public class Favorite extends SugarRecord {
     public Favorite(Contact contact) {
         this.contact = contact;
     }
-    //da ottimizzare
 }

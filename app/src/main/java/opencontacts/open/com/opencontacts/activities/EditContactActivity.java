@@ -209,8 +209,6 @@ public class EditContactActivity extends AppBaseActivity {
             emailsInputCollection.addOneMoreView();
             return;
         }
-        //Da ottimizzare FORSE
-
         U.forEach(emails, email -> emailsInputCollection.addOneMoreView(email.getValue(), DomainUtils.getEmailTypeTranslatedText(email.getTypes(), EditContactActivity.this)));
     }
 
@@ -221,8 +219,6 @@ public class EditContactActivity extends AppBaseActivity {
             phoneNumbersInputCollection.addOneMoreView(newPhoneNumberToBeAdded, defaultPhoneNumberTypeTranslatedText);
             return;
         }
-        //Da ottimizzare FORSE
-
         U.forEach(telephoneNumbers, telephoneNumber -> phoneNumbersInputCollection.addOneMoreView(getMobileNumber(telephoneNumber), DomainUtils.getMobileNumberTypeTranslatedText(telephoneNumber.getTypes(), EditContactActivity.this)));
         if (newPhoneNumberToBeAdded != null)
             phoneNumbersInputCollection.addOneMoreView(newPhoneNumberToBeAdded, defaultPhoneNumberTypeTranslatedText);
@@ -299,14 +295,12 @@ public class EditContactActivity extends AppBaseActivity {
 
     private void addAddressFromFieldsToNewVCard(VCard newVCard) {
         if (addressesInputCollection.isEmpty()) return;
-        //Da ottimizzare FORSE
         U.chain(addressesInputCollection.getAllAddresses())
             .forEach(newVCard::addAddress);
     }
 
     private void addEmailsFromFieldsToNewVCard(VCard newVCard) {
         if (emailsInputCollection.isEmpty()) return;
-        //Da ottimizzare FORSe
         U.chain(emailsInputCollection.getValuesAndTypes())
             .map(this::createEmail)
             .forEach(newVCard::addEmail);
@@ -314,8 +308,6 @@ public class EditContactActivity extends AppBaseActivity {
 
     private void addTelephoneNumbersFromFieldsToNewVCard(VCard newVCard) {
         if (phoneNumbersInputCollection.isEmpty()) return;
-        //Da ottimizzare FORSE
-
         U.chain(phoneNumbersInputCollection.getValuesAndTypes())
             .map(this::createTelephone)
             .forEach(newVCard::addTelephoneNumber);

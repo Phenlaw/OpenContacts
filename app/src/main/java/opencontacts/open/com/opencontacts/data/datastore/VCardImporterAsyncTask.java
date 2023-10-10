@@ -50,7 +50,6 @@ public class VCardImporterAsyncTask extends AsyncTask<Void, Object, List<Pair<VC
             publishProgress(PROGRESS_TOTAL_NUMBER_OF_VCARDS, vCards.size());
             int numberOfvCardsImported = 0, numberOfCardsIgnored = 0;
             ContactsDataStore.requestPauseOnUpdates();
-            //da ottimizzare
             for (VCard vcard : vCards) {
                 try {
                     if (processVCard(vcard)) ++numberOfvCardsImported;
