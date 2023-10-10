@@ -23,6 +23,7 @@ public class OpenContactsApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        //CIAOOO
         SugarContext.init(this);
         ContactsDataStore.init(getApplicationContext());
         CallLogDataStore.init(getApplicationContext());
