@@ -117,7 +117,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         LayoutInflater layoutinflater = LayoutInflater.from(context);
         drawOverIncomingCallLayout = layoutinflater.inflate(R.layout.draw_over_incoming_call, null);
         TextView contactName = drawOverIncomingCallLayout.findViewById(R.id.name_of_contact);
-        contactName.setText(context.getString(R.string.caller_id_text, callingContact.getFullName()));
+        Log.i("G&S","Modificato");
+        contactName.setText(context.getString(R.string.caller_id_text, callingContact.firstName + " " + callingContact.lastName));
         int typeOfWindow;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             typeOfWindow = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;

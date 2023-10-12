@@ -239,7 +239,8 @@ public class ContactsDataStore {
         List<opencontacts.open.com.opencontacts.orm.Contact> dbContacts = opencontacts.open.com.opencontacts.orm.Contact.listAll(opencontacts.open.com.opencontacts.orm.Contact.class);
         //da ottimizzare FORSE
         U.forEach(dbContacts, dbContact -> {
-            dbContact.pinyinName = getPinyinTextFromChinese(dbContact.getFullName());
+            Log.i("G&S", "Modificato");
+            dbContact.pinyinName = getPinyinTextFromChinese(dbContact.firstName + " " + dbContact.lastName);
             dbContact.save();
         });
         refreshStoreAsync();

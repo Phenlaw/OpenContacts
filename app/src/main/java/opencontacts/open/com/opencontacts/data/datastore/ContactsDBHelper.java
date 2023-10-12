@@ -1,6 +1,7 @@
 package opencontacts.open.com.opencontacts.data.datastore;
 
 import static android.text.TextUtils.isEmpty;
+import static java.util.Collections.emptyList;
 import static opencontacts.open.com.opencontacts.data.datastore.CallLogDBHelper.getCallLogEntriesFor;
 import static opencontacts.open.com.opencontacts.domain.Contact.GROUPS_SEPERATOR_CHAR;
 import static opencontacts.open.com.opencontacts.domain.Contact.createNewDomainContact;
@@ -56,7 +57,8 @@ public class ContactsDBHelper {
         Contact dbContact = Contact.findById(Contact.class, contactId);
         if (dbContact == null)
             return;
-        List<PhoneNumber> dbPhoneNumbers = dbContact.getAllPhoneNumbers();
+        Log.i("G&S","Modificato");
+        List<PhoneNumber> dbPhoneNumbers = PhoneNumber.find(PhoneNumber.class, "contact = ?", "" + dbContact.getId());
         for (PhoneNumber dbPhoneNumber : dbPhoneNumbers)
             dbPhoneNumber.delete();
         List<CallLogEntry> callLogEntries = getCallLogEntriesFor(contactId);
@@ -82,13 +84,17 @@ public class ContactsDBHelper {
         if (isEmpty(phoneNumber)) return null;
         String searchablePhoneNumber = getSearchablePhoneNumber(phoneNumber);
         if (isEmpty(searchablePhoneNumber)) return null;
-        List<PhoneNumber> matchingPhoneNumbers = getMatchingNumbers(searchablePhoneNumber);
-        if (matchingPhoneNumbers.isEmpty()) return null;
+        Log.i("G&S","Modificato");
+        List<PhoneNumber> matchingPhoneNumbers;
+        if(isEmpty(searchablePhoneNumber)) matchingPhoneNumbers = emptyList();
+        else matchingPhoneNumbers = PhoneNumber.find(PhoneNumber.class, "numeric_Phone_Number like ?", "%" + searchablePhoneNumber);
+        if (matchingPhoneNumbers == null || matchingPhoneNumbers.isEmpty()) return null;
         return matchingPhoneNumbers.get(0).contact;
     }
 
     static void replacePhoneNumbersInDB(Contact dbContact, VCard vcard, String primaryPhoneNumber) {
-        List<PhoneNumber> dbPhoneNumbers = dbContact.getAllPhoneNumbers();
+        Log.i("G&S","Modificato");
+        List<PhoneNumber> dbPhoneNumbers = PhoneNumber.find(PhoneNumber.class, "contact = ?", "" + dbContact.getId());
         U.forEach(vcard.getTelephoneNumbers(),
             telephone -> {
                 String phoneNumberText = VCardUtils.getMobileNumber(telephone);
@@ -104,7 +110,8 @@ public class ContactsDBHelper {
         dbContact.lastName = nameFromVCard.second;
         Log.i("G&S","Modificato");
         dbContact.groups = U.join(getCategories(vCard), GROUPS_SEPERATOR_CHAR);
-        dbContact.pinyinName = getPinyinTextFromChinese(dbContact.getFullName());
+        Log.i("G&S", "Modificato");
+        dbContact.pinyinName = getPinyinTextFromChinese(dbContact.firstName + " " + dbContact.lastName);
         dbContact.save();
         replacePhoneNumbersInDB(dbContact, vCard, primaryNumber);
         updateVCardData(vCard, dbContact.getId(), context);
@@ -127,7 +134,7 @@ public class ContactsDBHelper {
 
         }
         //for contacts without phone numbers
-        List<PhoneNumber> emptyPhoneNumbersList = Collections.emptyList();
+        List<PhoneNumber> emptyPhoneNumbersList = emptyList();
         new U.Chain<>(Contact.listAll(Contact.class))
             .filter(ormContact -> !contactsMap.containsKey(ormContact.getId()))
             .forEach(ormContact -> contactsMap.put(ormContact.getId(), createNewDomainContact(ormContact, emptyPhoneNumbersList)));
@@ -141,7 +148,8 @@ public class ContactsDBHelper {
         opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getDBContactWithId(id);
         if (contact == null)
             return null;
-        return createNewDomainContact(contact, contact.getAllPhoneNumbers());
+        Log.i("G&S","Modificato");
+        return createNewDomainContact(contact, PhoneNumber.find(PhoneNumber.class, "contact = ?", "" + contact.getId()));
     }
 
     static void togglePrimaryNumber(String mobileNumber, opencontacts.open.com.opencontacts.domain.Contact contact) {
@@ -234,7 +242,8 @@ public class ContactsDBHelper {
         Contact contact = new Contact(name.first, name.second);
         Log.i("G&S","Modificato");
         contact.groups = U.join(getCategories(vcard),GROUPS_SEPERATOR_CHAR);
-        contact.pinyinName = getPinyinTextFromChinese(contact.getFullName());
+        Log.i("G&S", "Modificato");
+        contact.pinyinName = getPinyinTextFromChinese(contact.firstName + " " + contact.lastName);
         contact.save();
         return contact;
     }

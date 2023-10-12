@@ -118,8 +118,10 @@ class CallLogDBHelper {
                 opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getContactFromDB(mobileNumberInvolvedInCall);
                 if (contact == null)
                     callLogEntries.add(new CallLogEntry(null, (long) -1, mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, getSimIdOrDefault(subscriptionIdForCall)));
-                else
-                    callLogEntries.add(new CallLogEntry(contact.getFullName(), contact.getId(), mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, getSimIdOrDefault(subscriptionIdForCall)));
+                else {
+                    Log.i("G&S", "Modificato");
+                    callLogEntries.add(new CallLogEntry(contact.firstName + " " + contact.lastName, contact.getId(), mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, getSimIdOrDefault(subscriptionIdForCall)));
+                }
             }
             c.moveToFirst();
             setLastSavedCallLogDate(c.getString(columnIndexForDate), context);
@@ -143,8 +145,10 @@ class CallLogDBHelper {
                 opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getContactFromDB(mobileNumberInvolvedInCall);
                 if (contact == null)
                     callLogEntries.add(new CallLogEntry(null, (long) -1, mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, 1));
-                else
-                    callLogEntries.add(new CallLogEntry(contact.getFullName(), contact.getId(), mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, 1));
+                else {
+                    Log.i("G&S", "Modificato");
+                    callLogEntries.add(new CallLogEntry(contact.firstName + " " + contact.lastName, contact.getId(), mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, 1));
+                }
             }
             c.moveToFirst();
             setLastSavedCallLogDate(c.getString(columnIndexForDate), context);

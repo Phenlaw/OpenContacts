@@ -11,6 +11,8 @@ import static opencontacts.open.com.opencontacts.utils.VCardUtils.getNameFromVCa
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.writeVCardToString;
 
 import android.content.Context;
+import android.util.Log;
+
 import androidx.core.util.Pair;
 
 import java.io.IOException;
@@ -44,7 +46,8 @@ public class ContactsSyncHelper {
         Pair<String, String> nameFromVCard = getNameFromVCard(mergedCard, context);
         dbContact.firstName = nameFromVCard.first;
         dbContact.lastName = nameFromVCard.second;
-        dbContact.pinyinName = getPinyinTextFromChinese(dbContact.getFullName());
+        Log.i("G&S", "Modificato");
+        dbContact.pinyinName = getPinyinTextFromChinese(dbContact.firstName + " " + dbContact.lastName);
         dbContact.save();
         replacePhoneNumbersInDB(dbContact, hrefEtagAndVCard.z, getContact(vCardData.contact.getId()).primaryPhoneNumber.phoneNumber);
         vCardData.vcardDataAsString = writeVCardToString(mergedCard);
