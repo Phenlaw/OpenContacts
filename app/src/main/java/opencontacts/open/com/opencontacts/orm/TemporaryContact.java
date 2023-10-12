@@ -14,5 +14,5 @@ public class TemporaryContact extends SugarRecord {
     public TemporaryContact(Contact contact, Date markedTemporaryOn) {
         this.contact = contact;
         this.markedTemporaryOn = markedTemporaryOn;
-    }//da ottimizzare
+    }
 }

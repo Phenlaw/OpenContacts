@@ -20,6 +20,8 @@ import static opencontacts.open.com.opencontacts.utils.XMLParsingUtils.getText;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
@@ -194,7 +196,16 @@ public class CardDavUtils {
 
     public static boolean areNotValidDetails(String url, String username, String password, boolean shouldIgnoreSSL, CheekyCarddavServerStuff carddavServerType, String addressBookUrl) {
         String addressBookBasedUrl = addressBookUrl == null ? "" : url + addressBookUrl;
-        String urlToTest = getBaseURL(addressBookBasedUrl).equals(url) ? addressBookBasedUrl : carddavServerType.getValidateServerUrl(url, username);
+        Log.i("G&S","Modificato");
+        String baseURL;
+        String path = null;
+        try {
+            path = Uri.parse(addressBookBasedUrl).getPath();
+        } catch (Exception e) {
+        }
+        if (path == null) baseURL = addressBookBasedUrl;
+        else baseURL = addressBookBasedUrl.replace(path, "");
+        String urlToTest = baseURL.equals(url) ? addressBookBasedUrl : carddavServerType.getValidateServerUrl(url, username);
         OkHttpClient httpClientWithBasicAuth = getHttpClientWithBasicAuth(username, password, shouldIgnoreSSL);
         try {
             Response response = httpClientWithBasicAuth.newCall(new Request.Builder()
@@ -210,15 +221,6 @@ public class CardDavUtils {
         return true;
     }
 
-    public static String getBaseURL(String url) {
-        String path = null;
-        try {
-            path = Uri.parse(url).getPath();
-        } catch (Exception e) {
-        }
-        if (path == null) return url;
-        return url.replace(path, "");
-    }
 
     public static String getSyncToken(String baseUrl, String addressBookUrl) {
         OkHttpClient httpClientWithBasicAuth = getHttpClientWithBasicAuth();

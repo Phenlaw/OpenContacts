@@ -91,11 +91,11 @@ public class DomainUtils {
 
     private static Map<Character, Integer> characterToIntegerMappingForKeyboardLayout;
     private static Map<TelephoneType, String> mobileNumberTypeToTranslatedText;
-    private static Map<String, TelephoneType> translatedTextToMobileNumberType;
+    public static Map<String, TelephoneType> translatedTextToMobileNumberType;
     private static Map<AddressType, String> addressTypeToTranslatedText;
-    private static Map<String, AddressType> translatedTextToAddressType;
+    public static Map<String, AddressType> translatedTextToAddressType;
     private static Map<EmailType, String> emailTypeToTranslatedText;
-    private static Map<String, EmailType> translatedTextToEmailType;
+    public static Map<String, EmailType> translatedTextToEmailType;
     private static Map<String, String> stringValueOfCallTypeIntToTextMapping;
     private static HanyuPinyinOutputFormat hanyuPinyinOutputFormat = new HanyuPinyinOutputFormat();
     private static PhoneNumberUtil phoneNumberUtil;
@@ -251,7 +251,7 @@ public class DomainUtils {
       return numericNumber1.contains(numericNumber2) || numericNumber2.contains(numericNumber1);
     }
 
-    private static String getPhoneNumberWithoutCountryCodeAndFormatting(String phoneNumber) {
+    public static String getPhoneNumberWithoutCountryCodeAndFormatting(String phoneNumber) {
         try {
             return String.valueOf(U.first(phoneNumberUtil.findNumbers(phoneNumber, countryCodeInUpperCase)).number().getNationalNumber());
         }
@@ -265,9 +265,6 @@ public class DomainUtils {
         }
     }
 
-    public static String getSearchablePhoneNumber(String phoneNumber) {
-        return getPhoneNumberWithoutCountryCodeAndFormatting(phoneNumber);
-    }//da ottimizzare
 
     public static List<String> cross(List<String> firstSetOfWords, Set<String> secondSetOfWords) {
         return U.flatten(
@@ -301,7 +298,10 @@ public class DomainUtils {
 
     public static String getNumericKeyPadNumberForString(String string) {
         String nonAccentedCharacters = replaceAccentedCharactersWithEnglish(string);
-        String finalString = nonAccentedCharacters + " " + getInitialsOfEachWord(nonAccentedCharacters);
+        Log.i("G&S","Modificato");
+        String text="";
+        if (!TextUtils.isEmpty(nonAccentedCharacters)) text = U.join(Common.map(text.split(" "), word -> TextUtils.isEmpty(word) ? "" : word.charAt(0)), "");
+        String finalString = nonAccentedCharacters + " " + text;
         StringBuffer numericString = new StringBuffer();
         //da ottimizzare
         for (char c : finalString.toCharArray()) {
@@ -316,12 +316,8 @@ public class DomainUtils {
         return numericString.toString();
     }
 
-    private static String getInitialsOfEachWord(String text) {
-        if (TextUtils.isEmpty(text)) return "";
-        return U.join(Common.map(text.split(" "), word -> TextUtils.isEmpty(word) ? "" : word.charAt(0)), "");
-    }//da ottimizzare
 
-    private static Map<TelephoneType, String> getMobileNumberTypeToTranslatedTextMap(Context context) {
+    public static Map<TelephoneType, String> getMobileNumberTypeToTranslatedTextMap(Context context) {
         if (mobileNumberTypeToTranslatedText != null)
             return mobileNumberTypeToTranslatedText;
         mobileNumberTypeToTranslatedText = new HashMap<>(4);
@@ -343,13 +339,7 @@ public class DomainUtils {
         return getOrDefault(mobileNumberTypeToTranslatedTextMap, U.first(telephoneTypes), U.first(telephoneTypes).getValue());
     }
 
-    public static TelephoneType getMobileNumberType(String translatedText, Context context) {
-        if (translatedTextToMobileNumberType == null)
-            translatedTextToMobileNumberType = U.toMap(U.invert(getMobileNumberTypeToTranslatedTextMap(context)));
-        return getOrDefault(translatedTextToMobileNumberType, translatedText, TelephoneType.get(translatedText));
-    }//da ottimizzare
-
-    private static Map<AddressType, String> getAddressTypeToTranslatedTextMap(Context context) {
+    public static Map<AddressType, String> getAddressTypeToTranslatedTextMap(Context context) {
         if (addressTypeToTranslatedText != null)
             return addressTypeToTranslatedText;
         addressTypeToTranslatedText = new HashMap<>(2);
@@ -366,14 +356,8 @@ public class DomainUtils {
         return getOrDefault(getAddressTypeToTranslatedTextMap(context), U.first(types), U.first(types).getValue());
     }
 
-    public static AddressType getAddressType(String translatedText, Context context) {
-        if (translatedTextToAddressType == null)
-            translatedTextToAddressType = U.toMap(U.invert(getAddressTypeToTranslatedTextMap(context)));
-        return getOrDefault(translatedTextToAddressType, translatedText, AddressType.get(translatedText));
-    }//da ottimizzare
 
-
-    private static Map<EmailType, String> getEmailTypeToTranslatedTextMap(Context context) {
+    public static Map<EmailType, String> getEmailTypeToTranslatedTextMap(Context context) {
         if (emailTypeToTranslatedText != null)
             return emailTypeToTranslatedText;
         emailTypeToTranslatedText = new HashMap<>(2);
@@ -387,12 +371,6 @@ public class DomainUtils {
             defaultEmailTypeTranslatedText = getEmailTypeToTranslatedTextMap(context).get(defaultEmailType);
         if (types.isEmpty()) return defaultEmailTypeTranslatedText;
         return getOrDefault(getEmailTypeToTranslatedTextMap(context), U.first(types), U.first(types).getValue());
-    }//da ottimizzare
-
-    public static EmailType getEmailType(String translatedText, Context context) {
-        if (translatedTextToEmailType == null)
-            translatedTextToEmailType = U.toMap(U.invert(getEmailTypeToTranslatedTextMap(context)));
-        return getOrDefault(translatedTextToEmailType, translatedText, EmailType.get(translatedText));
     }//da ottimizzare
 
     @NonNull
@@ -470,7 +448,7 @@ public class DomainUtils {
 
     public static String getLastNameOrFullInCaseEmpty(Contact contact) {
         return contact.lastName == null || isEmpty(contact.lastName.trim()) ? contact.name : contact.lastName;
-    } //da ottimizzare
+    }
 
     @NonNull
     public static Comparator<Contact> getContactComparatorBasedOnName(Context context) {
@@ -532,9 +510,6 @@ public class DomainUtils {
         AndroidUtils.shareContact(ContactsDBHelper.getVCard(contactId).vcardDataAsString, context);
     }
 
-    public static String getMissedcallNotificationTitle(Context context) {
-        return context.getString(R.string.missed_call);
-    } //da ottimizzare
 
     public static void removeAnyMissedCallNotifications(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
@@ -547,7 +522,8 @@ public class DomainUtils {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private static boolean isMissedCallNotification(Context context, StatusBarNotification notification) {
-        return getMissedcallNotificationTitle(context).equals(notification.getNotification().extras.getString(EXTRA_TITLE));
+        Log.i("G&S","Modificato");
+        return context.getString(R.string.missed_call).equals(notification.getNotification().extras.getString(EXTRA_TITLE));
     }
 
     public static void shareContactAsText(long contactId, Context context) {

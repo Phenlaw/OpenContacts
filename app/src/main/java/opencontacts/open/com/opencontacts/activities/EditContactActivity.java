@@ -9,6 +9,7 @@ import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStor
 import static opencontacts.open.com.opencontacts.domain.Contact.GROUPS_SEPERATOR_CHAR;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.wrapInConfirmation;
 import static opencontacts.open.com.opencontacts.utils.Common.getCalendarInstanceAt;
+import static opencontacts.open.com.opencontacts.utils.Common.getOrDefault;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.defaultPhoneNumberTypeTranslatedText;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.getMobileNumber;
 
@@ -43,6 +44,9 @@ import java.util.List;
 
 import ezvcard.VCard;
 import ezvcard.io.text.VCardReader;
+import ezvcard.parameter.AddressType;
+import ezvcard.parameter.EmailType;
+import ezvcard.parameter.TelephoneType;
 import ezvcard.property.Address;
 import ezvcard.property.Birthday;
 import ezvcard.property.Email;
@@ -50,6 +54,7 @@ import ezvcard.property.Note;
 import ezvcard.property.StructuredName;
 import ezvcard.property.Telephone;
 import ezvcard.property.Url;
+import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.components.fieldcollections.addressfieldcollection.AddressFieldCollection;
 import opencontacts.open.com.opencontacts.components.fieldcollections.textinputspinnerfieldcollection.TextInputAndSpinnerFieldCollection;
@@ -345,19 +350,31 @@ public class EditContactActivity extends AppBaseActivity {
     private Address createAddress(int index, Pair<String, String> addressAndTypePair) {
         Address address = U.elementAtOrElse(vcardBeforeEdit.getAddresses(), index, new Address());
         address.setStreetAddress(addressAndTypePair.first);
-        address.getTypes().add(DomainUtils.getAddressType(addressAndTypePair.second, this));
+        Log.i("G&S","Modificato");
+        if (DomainUtils.translatedTextToAddressType == null)
+            DomainUtils.translatedTextToAddressType = U.toMap(U.invert(DomainUtils.getAddressTypeToTranslatedTextMap(this)));
+        AddressType at = getOrDefault(DomainUtils.translatedTextToAddressType, addressAndTypePair.second, AddressType.get(addressAndTypePair.second));
+        address.getTypes().add(at);
         return address;
     }
 
     private Email createEmail(Pair<String, String> emailAndTypePair) {
         Email email = new Email(emailAndTypePair.first);
-        email.getTypes().add(DomainUtils.getEmailType(emailAndTypePair.second, this));
+        Log.i("G&S","Modificato");
+        if (DomainUtils.translatedTextToEmailType == null)
+            DomainUtils.translatedTextToEmailType = U.toMap(U.invert(DomainUtils.getEmailTypeToTranslatedTextMap(this)));
+        EmailType et = getOrDefault(DomainUtils.translatedTextToEmailType, emailAndTypePair.second, EmailType.get(emailAndTypePair.second));
+        email.getTypes().add(et);
         return email;
     }
 
     private Telephone createTelephone(Pair<String, String> phoneNumberAndTypePair) {
         Telephone telephone = new Telephone(phoneNumberAndTypePair.first);
-        telephone.getTypes().add(DomainUtils.getMobileNumberType(phoneNumberAndTypePair.second, this));
+        Log.i("G&S","Modificato");
+        if (DomainUtils.translatedTextToMobileNumberType == null)
+            DomainUtils.translatedTextToMobileNumberType = U.toMap(U.invert(DomainUtils.getMobileNumberTypeToTranslatedTextMap(this)));
+        TelephoneType mobileNumberType = getOrDefault(DomainUtils.translatedTextToMobileNumberType, phoneNumberAndTypePair.second, TelephoneType.get(phoneNumberAndTypePair.second));
+        telephone.getTypes().add(mobileNumberType);
         return telephone;
     }
 

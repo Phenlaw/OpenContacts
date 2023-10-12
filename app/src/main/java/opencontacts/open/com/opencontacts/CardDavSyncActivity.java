@@ -17,13 +17,13 @@ import static opencontacts.open.com.opencontacts.utils.CARDDAVConstants.otherSer
 import static opencontacts.open.com.opencontacts.utils.CardDavUtils.areNotValidDetails;
 import static opencontacts.open.com.opencontacts.utils.CardDavUtils.downloadAddressBook;
 import static opencontacts.open.com.opencontacts.utils.CardDavUtils.figureOutAddressBookUrl;
-import static opencontacts.open.com.opencontacts.utils.CardDavUtils.getBaseURL;
 import static opencontacts.open.com.opencontacts.utils.CardDavUtils.getChangesSinceSyncToken;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.ADDRESSBOOK_URL_SHARED_PREFS_KEY;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.BASE_SYNC_URL_SHARED_PREFS_KEY;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.CARD_DAV_SERVER_TYPE_SHARED_PREFS_KEY;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SYNC_TOKEN_SHARED_PREF_KEY;
 
+import android.net.Uri;
 import android.os.Bundle;
 import com.google.android.material.textfield.TextInputEditText;
 import androidx.core.util.Pair;
@@ -33,6 +33,7 @@ import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SwitchCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -129,7 +130,15 @@ public class CardDavSyncActivity extends AppCompatActivity {
             return;
         }
         updatePreference(ADDRESSBOOK_URL_SHARED_PREFS_KEY, addressBookUrl, this);
-        String baseURL = getBaseURL(urlFromView);
+        Log.i("G&S","Modificato");
+        String baseURL;
+        String path = null;
+        try {
+            path = Uri.parse(urlFromView).getPath();
+        } catch (Exception e) {
+        }
+        if (path == null) baseURL = urlFromView;
+        else baseURL = urlFromView.replace(path, "");
         updatePreference(BASE_SYNC_URL_SHARED_PREFS_KEY, baseURL, this);
         updatePreference(CARD_DAV_SERVER_TYPE_SHARED_PREFS_KEY, carddavServerType.name, this);
         String syncToken = getStringFromPreferences(SYNC_TOKEN_SHARED_PREF_KEY, this);

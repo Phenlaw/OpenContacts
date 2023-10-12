@@ -14,7 +14,6 @@ import static android.provider.CalendarContract.Events.CONTENT_URI;
 import static android.provider.CalendarContract.Events.TITLE;
 import static android.text.TextUtils.isEmpty;
 import static java.lang.Math.round;
-import static opencontacts.open.com.opencontacts.utils.Common.removeSpacesIfAny;
 import static opencontacts.open.com.opencontacts.utils.PhoneCallUtils.handleMultiSimCalling;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SIGNAL;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.TELEGRAM;
@@ -55,6 +54,7 @@ import androidx.core.content.FileProvider;
 
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
@@ -213,23 +213,26 @@ public class AndroidUtils {
     @NonNull
     private static Intent getSignalIntent(String number, Context context) {
         String numberWithCountryCode = number.contains("+") ? number : getDefaultSocialCountryCode(context) + number;
+        Log.i("G&S","Modificato");
         return new Intent(ACTION_VIEW, Uri.parse(
-            context.getString(R.string.signal_uri_with_phone_number_placeholder, removeSpacesIfAny(numberWithCountryCode))
+            context.getString(R.string.signal_uri_with_phone_number_placeholder, numberWithCountryCode.replaceAll(" ", ""))
         ));
     }
 
     @NonNull
     private static Intent getTelegramIntent(String number, Context context) {
         String numberWithCountryCode = number.contains("+") ? number : getDefaultSocialCountryCode(context) + number;
+        Log.i("G&S","Modificato");
         return new Intent(ACTION_VIEW, Uri.parse(
-            context.getString(R.string.telegram_uri_with_phone_number_placeholder, removeSpacesIfAny(numberWithCountryCode))
+            context.getString(R.string.telegram_uri_with_phone_number_placeholder, numberWithCountryCode.replaceAll(" ", ""))
         ));
     }
     @NonNull
     private static Intent getWhatsappIntent(String number, Context context) {
         String numberWithCountryCode = number.contains("+") ? number : getDefaultSocialCountryCode(context) + number;
+        Log.i("G&S","Modificato");
         return new Intent(ACTION_VIEW, Uri.parse(
-            context.getString(R.string.whatsapp_uri_with_phone_number_placeholder, removeSpacesIfAny(numberWithCountryCode))
+            context.getString(R.string.whatsapp_uri_with_phone_number_placeholder, numberWithCountryCode.replaceAll(" ", ""))
         ));
     }
 

@@ -1,15 +1,19 @@
 package opencontacts.open.com.opencontacts.views;
 
 import static java.util.Arrays.asList;
-import static opencontacts.open.com.opencontacts.utils.DomainUtils.getAddressType;
+import static opencontacts.open.com.opencontacts.utils.Common.getOrDefault;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getAddressTypeTranslatedText;
 import static opencontacts.open.com.opencontacts.utils.SpinnerUtil.setItem;
 import static opencontacts.open.com.opencontacts.utils.SpinnerUtil.setupSpinner;
 
 import android.content.Context;
+
+import com.github.underscore.U;
 import com.google.android.material.textfield.TextInputEditText;
 import androidx.core.util.Consumer;
 import androidx.appcompat.app.AlertDialog;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -20,6 +24,7 @@ import java.util.List;
 import ezvcard.parameter.AddressType;
 import ezvcard.property.Address;
 import opencontacts.open.com.opencontacts.R;
+import opencontacts.open.com.opencontacts.utils.DomainUtils;
 
 public class AddressPopup {
 
@@ -85,7 +90,11 @@ public class AddressPopup {
     }
 
     private void updateAddressType() {
-        AddressType addressType = getAddressType(addressTypeSpinner.getText().toString(), context);
+        Log.i("G&S","Modificato");
+        if (DomainUtils.translatedTextToAddressType == null)
+            DomainUtils.translatedTextToAddressType = U.toMap(U.invert(DomainUtils.getAddressTypeToTranslatedTextMap(context)));
+        AddressType at = getOrDefault(DomainUtils.translatedTextToAddressType, addressTypeSpinner.getText().toString(), AddressType.get(addressTypeSpinner.getText().toString()));
+        AddressType addressType = at;
         List<AddressType> existingAddressTypes = address.getTypes();
         if (existingAddressTypes.isEmpty()) existingAddressTypes.add(addressType);
         else existingAddressTypes.set(0, addressType);

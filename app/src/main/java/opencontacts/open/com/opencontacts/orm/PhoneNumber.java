@@ -37,14 +37,10 @@ public class PhoneNumber extends SugarRecord implements Serializable {
         this.contact = contact;
         this.isPrimaryNumber = isPrimaryNumber;
         this.numericPhoneNumber = DomainUtils.getAllNumericPhoneNumber(mobileNumber);
-    }//da ottimizzare
+    }
 
     public PhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     } //da ottimizzare
 
-    public static List<PhoneNumber> getMatchingNumbers(String numericPhoneNumber) {
-        if(isEmpty(numericPhoneNumber)) return emptyList();
-        return PhoneNumber.find(PhoneNumber.class, "numeric_Phone_Number like ?", "%" + numericPhoneNumber);
-    }
 }

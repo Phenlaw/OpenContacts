@@ -8,7 +8,6 @@ import static opencontacts.open.com.opencontacts.data.datastore.DataStoreState.N
 import static opencontacts.open.com.opencontacts.data.datastore.DataStoreState.REFRESHING;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.processAsync;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getAllNumericPhoneNumber;
-import static opencontacts.open.com.opencontacts.utils.DomainUtils.getSearchablePhoneNumber;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.matchesNumber;
 
 import android.content.Context;
@@ -26,6 +25,7 @@ import opencontacts.open.com.opencontacts.domain.Contact;
 import opencontacts.open.com.opencontacts.interfaces.DataStoreChangeListener;
 import opencontacts.open.com.opencontacts.orm.CallLogEntry;
 import opencontacts.open.com.opencontacts.orm.PhoneNumber;
+import opencontacts.open.com.opencontacts.utils.DomainUtils;
 
 public class CallLogDataStore {
     public static final int CALL_LOG_ENTRIES_CHUNK_SIZE = 100;
@@ -109,7 +109,8 @@ public class CallLogDataStore {
                 int numberOfEntriesUpdated = 0;
                 //da ottimizzare
                 for (PhoneNumber phoneNumber : newContact.phoneNumbers) {
-                    String searchablePhoneNumber = getSearchablePhoneNumber(phoneNumber.phoneNumber);
+                    Log.i("G&S","Modificato");
+                    String searchablePhoneNumber = DomainUtils.getPhoneNumberWithoutCountryCodeAndFormatting(phoneNumber.phoneNumber);
                     if (searchablePhoneNumber == null)
                         continue;
                     //da ottimizzare

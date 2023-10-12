@@ -4,7 +4,6 @@ import static android.view.WindowManager.LayoutParams.TYPE_PHONE;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
 import static opencontacts.open.com.opencontacts.OpenContactsApplication.MISSED_CALLS_CHANEL_ID;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.isScreenLocked;
-import static opencontacts.open.com.opencontacts.utils.DomainUtils.getMissedcallNotificationTitle;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getCallerIdLocationOnScreen;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.saveCallerIdLocationOnScreen;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldAutoCancelMissedCallNotification;
@@ -95,10 +94,11 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         PendingIntent pendingIntentToLaunchApp = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent pendingIntentToCall = PendingIntent.getActivity(context, 0, AndroidUtils.getIntentToCall(incomingNumber, context), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent pendingIntentToMessage = PendingIntent.getActivity(context, 0, AndroidUtils.getIntentToMessage(incomingNumber), PendingIntent.FLAG_UPDATE_CURRENT);
+        Log.i("G&S","Modificato");
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(context, MISSED_CALLS_CHANEL_ID)
                 .setSmallIcon(R.drawable.ic_phone_missed_black_24dp)
-                .setContentTitle(getMissedcallNotificationTitle(context))
+                .setContentTitle(context.getString(R.string.missed_call))
                 .setAutoCancel(shouldAutoCancelMissedCallNotification(context))
                 .setTicker(context.getString(R.string.missed_call_from, callingContact.firstName, callingContact.lastName))
                 .setContentText(callingContact.firstName + " " + callingContact.lastName)

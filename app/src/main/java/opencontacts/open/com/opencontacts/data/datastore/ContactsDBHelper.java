@@ -5,12 +5,10 @@ import static java.util.Collections.emptyList;
 import static opencontacts.open.com.opencontacts.data.datastore.CallLogDBHelper.getCallLogEntriesFor;
 import static opencontacts.open.com.opencontacts.domain.Contact.GROUPS_SEPERATOR_CHAR;
 import static opencontacts.open.com.opencontacts.domain.Contact.createNewDomainContact;
-import static opencontacts.open.com.opencontacts.orm.PhoneNumber.getMatchingNumbers;
 import static opencontacts.open.com.opencontacts.orm.VCardData.STATUS_CREATED;
 import static opencontacts.open.com.opencontacts.orm.VCardData.STATUS_DELETED;
 import static opencontacts.open.com.opencontacts.orm.VCardData.updateVCardData;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getPinyinTextFromChinese;
-import static opencontacts.open.com.opencontacts.utils.DomainUtils.getSearchablePhoneNumber;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.getCategories;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.getMobileNumber;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.getNameFromVCard;
@@ -40,6 +38,7 @@ import opencontacts.open.com.opencontacts.orm.Favorite;
 import opencontacts.open.com.opencontacts.orm.PhoneNumber;
 import opencontacts.open.com.opencontacts.orm.TemporaryContact;
 import opencontacts.open.com.opencontacts.orm.VCardData;
+import opencontacts.open.com.opencontacts.utils.DomainUtils;
 import opencontacts.open.com.opencontacts.utils.Triplet;
 import opencontacts.open.com.opencontacts.utils.VCardUtils;
 
@@ -82,7 +81,8 @@ public class ContactsDBHelper {
 
     public static Contact getContactFromDB(String phoneNumber) {
         if (isEmpty(phoneNumber)) return null;
-        String searchablePhoneNumber = getSearchablePhoneNumber(phoneNumber);
+        Log.i("G&S","Modificato");
+        String searchablePhoneNumber = DomainUtils.getPhoneNumberWithoutCountryCodeAndFormatting(phoneNumber);
         if (isEmpty(searchablePhoneNumber)) return null;
         Log.i("G&S","Modificato");
         List<PhoneNumber> matchingPhoneNumbers;
