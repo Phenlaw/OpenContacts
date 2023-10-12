@@ -2,9 +2,9 @@ package opencontacts.open.com.opencontacts.activities;
 
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.getAllContacts;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.removeDataChangeListener;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.sortContactsBasedOnName;
 import static opencontacts.open.com.opencontacts.utils.PrimitiveDataTypeUtils.toPrimitiveLongs;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.isT9SearchEnabled;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -14,6 +14,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +42,7 @@ import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
 import opencontacts.open.com.opencontacts.domain.Contact;
 import opencontacts.open.com.opencontacts.interfaces.SampleDataStoreChangeListener;
 import opencontacts.open.com.opencontacts.utils.Common;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 public abstract class ContactChooserActivityBase extends AppBaseActivity {
     protected ListView contactsListView;
@@ -99,7 +101,8 @@ public abstract class ContactChooserActivityBase extends AppBaseActivity {
             @NonNull
             @Override
             public Filter getFilter() {
-                return isT9SearchEnabled(getContext()) ?
+                Log.i("G&S","Modificato");
+                return getBoolean(SharedPreferencesUtils.T9_SEARCH_ENABLED_SHARED_PREF_KEY, true, getContext()) ?
                     new ContactsListT9Filter(this, () -> contacts)
                     : new ContactsListTextFilter(this, () -> contacts);
             }
@@ -227,7 +230,8 @@ public abstract class ContactChooserActivityBase extends AppBaseActivity {
     }
 
     private void bindSearchViewToContacts(SearchView searchView) {
-        searchView.setInputType(isT9SearchEnabled(this) ? InputType.TYPE_CLASS_PHONE : InputType.TYPE_CLASS_TEXT);
+        Log.i("G&S","Modificato");
+        searchView.setInputType(getBoolean(SharedPreferencesUtils.T9_SEARCH_ENABLED_SHARED_PREF_KEY, true, this) ? InputType.TYPE_CLASS_PHONE : InputType.TYPE_CLASS_TEXT);
         searchView.setOnCloseListener(() -> {
             contactsListView.clearTextFilter();
             return false;

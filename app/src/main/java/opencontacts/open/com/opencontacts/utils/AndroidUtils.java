@@ -4,6 +4,7 @@ import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.READ_CALL_LOG;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.content.Context.MODE_PRIVATE;
 import static android.content.Intent.ACTION_SENDTO;
 import static android.content.Intent.ACTION_VIEW;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -17,9 +18,6 @@ import static java.lang.Math.round;
 import static opencontacts.open.com.opencontacts.utils.PhoneCallUtils.handleMultiSimCalling;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SIGNAL;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.TELEGRAM;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.defaultSocialAppEnabled;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getAppsSharedPreferences;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getDefaultSocialCountryCode;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldUseSystemCallingApp;
 import static opencontacts.open.com.opencontacts.utils.ThemeUtils.getPrimaryColor;
 
@@ -167,7 +165,9 @@ public class AndroidUtils {
     }
 
     public static void openSocialApp(String number, Context context) {
-        String socialApp = defaultSocialAppEnabled(context);
+        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        String socialApp = context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+            .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_APP, TELEGRAM);;
         if(socialApp.equals(TELEGRAM)) telegram(number, context);
         else if(socialApp.equals(SIGNAL)) signal(number, context);
         else whatsapp(number, context);
@@ -212,7 +212,10 @@ public class AndroidUtils {
 
     @NonNull
     private static Intent getSignalIntent(String number, Context context) {
-        String numberWithCountryCode = number.contains("+") ? number : getDefaultSocialCountryCode(context) + number;
+        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
+        String numberWithCountryCode = number.contains("+") ? number : context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+            .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_COUNTRY_CODE_PREFERENCES_KEY, "") + number;
         Log.i("G&S","Modificato");
         return new Intent(ACTION_VIEW, Uri.parse(
             context.getString(R.string.signal_uri_with_phone_number_placeholder, numberWithCountryCode.replaceAll(" ", ""))
@@ -221,7 +224,10 @@ public class AndroidUtils {
 
     @NonNull
     private static Intent getTelegramIntent(String number, Context context) {
-        String numberWithCountryCode = number.contains("+") ? number : getDefaultSocialCountryCode(context) + number;
+        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
+        String numberWithCountryCode = number.contains("+") ? number : context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+            .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_COUNTRY_CODE_PREFERENCES_KEY, "") + number;
         Log.i("G&S","Modificato");
         return new Intent(ACTION_VIEW, Uri.parse(
             context.getString(R.string.telegram_uri_with_phone_number_placeholder, numberWithCountryCode.replaceAll(" ", ""))
@@ -229,7 +235,10 @@ public class AndroidUtils {
     }
     @NonNull
     private static Intent getWhatsappIntent(String number, Context context) {
-        String numberWithCountryCode = number.contains("+") ? number : getDefaultSocialCountryCode(context) + number;
+        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
+        String numberWithCountryCode = number.contains("+") ? number : context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+            .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_COUNTRY_CODE_PREFERENCES_KEY, "") + number;
         Log.i("G&S","Modificato");
         return new Intent(ACTION_VIEW, Uri.parse(
             context.getString(R.string.whatsapp_uri_with_phone_number_placeholder, numberWithCountryCode.replaceAll(" ", ""))
@@ -494,52 +503,61 @@ public class AndroidUtils {
     }
 
     public static String getStringFromPreferences(String key, String defaultValue, Context context) {
-        return getAppsSharedPreferences(context).getString(key, defaultValue);
+        Log.i("G&S","Modificato");
+        return context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getString(key, defaultValue);
     }
 
     public static float getFloatFromPreferences(String key, float defaultValue, Context context) {
-        return getAppsSharedPreferences(context).getFloat(key, defaultValue);
+        Log.i("G&S","Modificato");
+        return context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getFloat(key, defaultValue);
     }
 
     public static void updatePreference(String key, String value, Context context) {
-        getAppsSharedPreferences(context)
+        Log.i("G&S","Modificato");
+        context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putString(key, value)
             .apply();
     }
 
     public static void updatePreference(String key, boolean value, Context context) {
-        getAppsSharedPreferences(context)
+        Log.i("G&S","Modificato");
+        context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putBoolean(key, value)
             .apply();
     }
 
     public static void updatePreference(String key, long value, Context context) {
-        getAppsSharedPreferences(context)
+        Log.i("G&S","Modificato");
+        context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putLong(key, value)
             .apply();
     }
 
     public static void updatePreference(String key, float value, Context context) {
-        getAppsSharedPreferences(context)
+        Log.i("G&S","Modificato");
+        context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putFloat(key, value)
             .apply();
     }
 
     public static boolean getBoolean(String key, boolean defaultValue, Context context) {
-        return getAppsSharedPreferences(context).getBoolean(key, defaultValue);
+        Log.i("G&S","Modificato");
+        return context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getBoolean(key, defaultValue);
     }
 
     public static long getLong(String key, long defaultValue, Context context) {
-        return getAppsSharedPreferences(context).getLong(key, defaultValue);
+        Log.i("G&S","Modificato");
+        return context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getLong(key, defaultValue);
     }
 
     public static void toggleBoolean(String key, boolean defaultValue, Context context) {
+        Log.i("G&S","Modificato");
         updatePreference(key
-            , !getAppsSharedPreferences(context).getBoolean(key, defaultValue)
+            , !context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getBoolean(key, defaultValue)
             , context);
 
     }

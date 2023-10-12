@@ -5,6 +5,7 @@ import static android.app.role.RoleManager.ROLE_CALL_SCREENING;
 import static android.widget.Toast.LENGTH_SHORT;
 import static open.fontscaling.SharePrefUtil.TEXT_SIZE_SCALING_SHARED_PREF_KEY;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.blockUIUntil;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getStringFromPreferences;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.runOnMainDelayed;
 import static opencontacts.open.com.opencontacts.utils.PhoneCallUtils.getSimNames;
 import static opencontacts.open.com.opencontacts.utils.PhoneCallUtils.hasMultipleSims;
@@ -22,9 +23,6 @@ import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SO
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.disableSocialIntegration;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.enableCallFiltering;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.enableSocialappIntegration;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getDefaultSocialCountryCode;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getPreferredSim;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.isSocialIntegrationEnabled;
 
 import android.app.Activity;
 import android.app.role.RoleManager;
@@ -45,6 +43,7 @@ import androidx.preference.PreferenceGroup;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatEditText;
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Toast;
 
@@ -58,6 +57,7 @@ import open.fontscaling.FontScalePreferenceHandler;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.components.TintedDrawablesStore;
 import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 public class PreferencesActivity extends AppBaseActivity {
 
@@ -104,7 +104,9 @@ public class PreferencesActivity extends AppBaseActivity {
             if (hasMultipleSims(getContext())) addSimPreference();
             enablePreferenceIf(SHOULD_USE_SYSTEM_PHONE_APP, () -> android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N);
             enablePreferenceIf(CALL_FILTERING_PREF_GROUP, () -> android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q);
-            enablePreferenceIf(DEFAULT_SOCIAL_APP, () -> isSocialIntegrationEnabled(getContext()));
+            Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+            enablePreferenceIf(DEFAULT_SOCIAL_APP, () -> getContext().getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+                .getBoolean(SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY, false));
             handlePreferenceUpdates();
         }
 
@@ -125,7 +127,8 @@ public class PreferencesActivity extends AppBaseActivity {
         }
 
         private boolean hasNoPreferredSim() {
-            return U.contains(Arrays.asList(DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT, DEFAULT_SIM_SELECTION_ALWAYS_ASK), getPreferredSim(getContext()));
+            Log.i("G&S","Modificato");
+            return U.contains(Arrays.asList(DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT, DEFAULT_SIM_SELECTION_ALWAYS_ASK),getStringFromPreferences(SIM_PREFERENCE_SHARED_PREF_KEY, DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT, getContext()));
         }
 
         private void addSimPreference() {
@@ -136,7 +139,8 @@ public class PreferencesActivity extends AppBaseActivity {
             String[] simNames = getSimNames(getContext());
             simSelectionTitles[2] = simNames[0];
             simSelectionTitles[3] = simNames[1];
-            String simSelectionSummary = hasNoPreferredSim() ? "%s" : simNames[Integer.valueOf(getPreferredSim(getContext()))];
+            Log.i("G&S","Modificato");
+            String simSelectionSummary = hasNoPreferredSim() ? "%s" : simNames[Integer.valueOf(getStringFromPreferences(SIM_PREFERENCE_SHARED_PREF_KEY, DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT, getContext()))];
             listPreference.setEntries(simSelectionTitles);
             listPreference.setTitle(R.string.default_sim_calls_preference_title);
             listPreference.setSummary(simSelectionSummary);
@@ -242,7 +246,10 @@ public class PreferencesActivity extends AppBaseActivity {
 
         private void showSetDefaultCountryCodeDialog(Context context) {
             AppCompatEditText countryCodeEditText = new AppCompatEditText(context);
-            countryCodeEditText.setText(getDefaultSocialCountryCode(context));
+            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato");
+            countryCodeEditText.setText(context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+                .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_COUNTRY_CODE_PREFERENCES_KEY, ""));
             countryCodeEditText.setInputType(InputType.TYPE_CLASS_PHONE);
             new AlertDialog.Builder(context)
                 .setView(countryCodeEditText)

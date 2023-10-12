@@ -7,10 +7,10 @@ import static com.orm.SugarRecord.find;
 import static com.orm.SugarRecord.findWithQuery;
 import static java.util.Collections.emptyList;
 import static opencontacts.open.com.opencontacts.data.datastore.CallLogDataStore.CALL_LOG_ENTRIES_CHUNK_SIZE;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getStringFromPreferences;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.hasPermission;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.toastFromNonUIThread;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getLastSavedCallLogDate;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.setLastSavedCallLogDate;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.updatePreference;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -35,6 +35,7 @@ import java.util.Map;
 
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.orm.CallLogEntry;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 
 /**
@@ -98,7 +99,8 @@ class CallLogDBHelper {
         ArrayList<CallLogEntry> callLogEntries = new ArrayList<>();
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {//TODO: refactor below two if else blocks 90% same
             createSimsInfo(context);
-            c = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DURATION, CallLog.Calls.TYPE, CallLog.Calls.DATE, CallLog.Calls.PHONE_ACCOUNT_ID}, CallLog.Calls.DATE + " > ?", new String[]{getLastSavedCallLogDate(context)}, CallLog.Calls.DATE + " DESC");
+            Log.i("G&S","Modificato");
+            c = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DURATION, CallLog.Calls.TYPE, CallLog.Calls.DATE, CallLog.Calls.PHONE_ACCOUNT_ID}, CallLog.Calls.DATE + " > ?", new String[]{getStringFromPreferences(SharedPreferencesUtils.LAST_CALL_LOG_READ_TIMESTAMP_SHARED_PREF_KEY, "0", context)}, CallLog.Calls.DATE + " DESC");
             if (c.getCount() == 0)
                 return callLogEntries;
             int columnIndexForNumber = c.getColumnIndex(CallLog.Calls.NUMBER);
@@ -124,10 +126,12 @@ class CallLogDBHelper {
                 }
             }
             c.moveToFirst();
-            setLastSavedCallLogDate(c.getString(columnIndexForDate), context);
+            Log.i("G&S","Modificato");
+            updatePreference(SharedPreferencesUtils.LAST_CALL_LOG_READ_TIMESTAMP_SHARED_PREF_KEY, c.getString(columnIndexForDate), context);
             c.close();
         } else {
-            c = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DURATION, CallLog.Calls.TYPE, CallLog.Calls.DATE}, CallLog.Calls.DATE + " > ?", new String[]{getLastSavedCallLogDate(context)}, CallLog.Calls.DATE + " DESC");
+            Log.i("G&S","Modificato");
+            c = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DURATION, CallLog.Calls.TYPE, CallLog.Calls.DATE}, CallLog.Calls.DATE + " > ?", new String[]{getStringFromPreferences(SharedPreferencesUtils.LAST_CALL_LOG_READ_TIMESTAMP_SHARED_PREF_KEY, "0", context)}, CallLog.Calls.DATE + " DESC");
             if (c.getCount() == 0)
                 return callLogEntries;
             int columnIndexForNumber = c.getColumnIndex(CallLog.Calls.NUMBER);
@@ -151,7 +155,8 @@ class CallLogDBHelper {
                 }
             }
             c.moveToFirst();
-            setLastSavedCallLogDate(c.getString(columnIndexForDate), context);
+            Log.i("G&S","Modificato");
+            updatePreference(SharedPreferencesUtils.LAST_CALL_LOG_READ_TIMESTAMP_SHARED_PREF_KEY, c.getString(columnIndexForDate), context);
             c.close();
         }
         return callLogEntries;

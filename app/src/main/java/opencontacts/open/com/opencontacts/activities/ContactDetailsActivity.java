@@ -15,7 +15,7 @@ import static opencontacts.open.com.opencontacts.utils.AndroidUtils.wrapInConfir
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.formatAddressToAMultiLineString;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getAddressTypeTranslatedText;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getMobileNumberTypeTranslatedText;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.isSocialIntegrationEnabled;
+import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.getMobileNumber;
 
 import android.content.Intent;
@@ -54,6 +54,7 @@ import opencontacts.open.com.opencontacts.orm.Favorite;
 import opencontacts.open.com.opencontacts.orm.VCardData;
 import opencontacts.open.com.opencontacts.utils.AndroidUtils;
 import opencontacts.open.com.opencontacts.utils.DomainUtils;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 import opencontacts.open.com.opencontacts.utils.VCardUtils;
 
 
@@ -97,7 +98,9 @@ public class ContactDetailsActivity extends AppBaseActivity {
         contactId = intent.getLongExtra(MainActivity.INTENT_EXTRA_LONG_CONTACT_ID, -1);
         if (contactId == -1) showInvalidContactErrorAndExit();
         contact = ContactsDataStore.getContactWithId(contactId);
-        shouldShowSocialAppIcon = isSocialIntegrationEnabled(this);
+        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        shouldShowSocialAppIcon = this.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+            .getBoolean(SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY, false);
     }
 
     @Override

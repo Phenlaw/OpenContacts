@@ -1,10 +1,10 @@
 package opencontacts.open.com.opencontacts.broadcast_recievers;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.view.WindowManager.LayoutParams.TYPE_PHONE;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
 import static opencontacts.open.com.opencontacts.OpenContactsApplication.MISSED_CALLS_CHANEL_ID;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.isScreenLocked;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getCallerIdLocationOnScreen;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.saveCallerIdLocationOnScreen;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldAutoCancelMissedCallNotification;
 
@@ -38,6 +38,7 @@ import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
 import opencontacts.open.com.opencontacts.orm.CallLogEntry;
 import opencontacts.open.com.opencontacts.orm.Contact;
 import opencontacts.open.com.opencontacts.utils.AndroidUtils;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 /**
  * Created by sultanm on 7/30/17.
@@ -134,8 +135,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
             PixelFormat.TRANSLUCENT);
-
-        Point callerIdLocationOnScreen = getCallerIdLocationOnScreen(context);
+        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        Point callerIdLocationOnScreen = new Point(context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getInt(SharedPreferencesUtils.CALLER_ID_X_POSITION_ON_SCREEN_PREFERENCE_KEY, 0), context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getInt(SharedPreferencesUtils.CALLER_ID_Y_POSITION_ON_SCREEN_PREFERENCE_KEY, 100));
         layoutParams.x = callerIdLocationOnScreen.x;
         layoutParams.y = callerIdLocationOnScreen.y;
         layoutParams.verticalWeight = 0;

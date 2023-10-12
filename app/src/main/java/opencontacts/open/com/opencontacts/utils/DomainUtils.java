@@ -4,6 +4,7 @@ import static android.app.Notification.EXTRA_TITLE;
 import static android.text.TextUtils.isEmpty;
 import static android.widget.Toast.LENGTH_LONG;
 import static opencontacts.open.com.opencontacts.BuildConfig.DEBUG;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.processAsync;
 import static opencontacts.open.com.opencontacts.utils.Common.appendNewLineIfNotEmpty;
 import static opencontacts.open.com.opencontacts.utils.Common.getOrDefault;
@@ -11,7 +12,6 @@ import static opencontacts.open.com.opencontacts.utils.Common.mapIndexes;
 import static opencontacts.open.com.opencontacts.utils.Common.replaceAccentedCharactersWithEnglish;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getEncryptingContactsKey;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.hasEncryptingContactsKey;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.is12HourFormatEnabled;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldSortUsingFirstName;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.getVCardFromString;
 
@@ -110,9 +110,19 @@ public class DomainUtils {
     public static String STORAGE_DIRECTORY_NAME = DEBUG ? "DOpenContacts" : "OpenContacts";
 
     static {
-        initializeT9Mapping();
-        initPinyinOutputFormat();
-
+        Log.i("G&S","Modificato");
+        characterToIntegerMappingForKeyboardLayout = new HashMap<>();
+        int[] numericsMappingForAlphabetsInNumberKeypad = {2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 9, 9, 9, 9};
+        for (int i = 0, charCodeForA = 65; i < 26; i++) {
+            characterToIntegerMappingForKeyboardLayout.put((char) (charCodeForA + i), numericsMappingForAlphabetsInNumberKeypad[i]);
+        }
+        characterToIntegerMappingForKeyboardLayout.put('.', 1);
+        characterToIntegerMappingForKeyboardLayout.put(' ', 0);
+        for (int i = 0, numericAsciiCodeStartingCode = 48; i < 10; i++)
+            characterToIntegerMappingForKeyboardLayout.put((char) (numericAsciiCodeStartingCode + i), i);
+        Log.i("G&S","Modificato");
+        hanyuPinyinOutputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        hanyuPinyinOutputFormat.setVCharType(HanyuPinyinVCharType.WITH_V);
     }
 
 
@@ -136,30 +146,6 @@ public class DomainUtils {
         return "dd/MM";
     }
 
-    private static void initPinyinOutputFormat() {
-        hanyuPinyinOutputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-        hanyuPinyinOutputFormat.setVCharType(HanyuPinyinVCharType.WITH_V);
-    }
-
-    private static void initializeT9Mapping() {
-        characterToIntegerMappingForKeyboardLayout = new HashMap<>();
-        int[] numericsMappingForAlphabetsInNumberKeypad = {2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 9, 9, 9, 9};
-        for (int i = 0, charCodeForA = 65; i < 26; i++) {
-            characterToIntegerMappingForKeyboardLayout.put((char) (charCodeForA + i), numericsMappingForAlphabetsInNumberKeypad[i]);
-        }
-        characterToIntegerMappingForKeyboardLayout.put('.', 1);
-        characterToIntegerMappingForKeyboardLayout.put(' ', 0);
-        for (int i = 0, numericAsciiCodeStartingCode = 48; i < 10; i++)
-            characterToIntegerMappingForKeyboardLayout.put((char) (numericAsciiCodeStartingCode + i), i);
-    }
-
-    private static void createCallTypeIntToTextMapping(Context context) {
-        stringValueOfCallTypeIntToTextMapping = new HashMap<>(3);
-        stringValueOfCallTypeIntToTextMapping.put(String.valueOf(CallLog.Calls.INCOMING_TYPE), context.getString(R.string.incoming_call));
-        stringValueOfCallTypeIntToTextMapping.put(String.valueOf(CallLog.Calls.MISSED_TYPE), context.getString(R.string.missed_call));
-        stringValueOfCallTypeIntToTextMapping.put(String.valueOf(CallLog.Calls.OUTGOING_TYPE), context.getString(R.string.outgoing_call));
-        stringValueOfCallTypeIntToTextMapping.put(String.valueOf(CallLog.Calls.REJECTED_TYPE), context.getString(R.string.rejected_call));
-    }
 
     public static void exportAllContacts(Context context) throws Exception {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -364,31 +350,39 @@ public class DomainUtils {
         emailTypeToTranslatedText.put(EmailType.HOME, context.getString(R.string.home));
         emailTypeToTranslatedText.put(EmailType.WORK, context.getString(R.string.work));
         return emailTypeToTranslatedText;
-    }//da ottimizzare
+    }
 
     public static String getEmailTypeTranslatedText(List<EmailType> types, Context context) {
         if (defaultEmailType == null)
             defaultEmailTypeTranslatedText = getEmailTypeToTranslatedTextMap(context).get(defaultEmailType);
         if (types.isEmpty()) return defaultEmailTypeTranslatedText;
         return getOrDefault(getEmailTypeToTranslatedTextMap(context), U.first(types), U.first(types).getValue());
-    }//da ottimizzare
+    }
 
     @NonNull
     public static SimpleDateFormat getTimestampPattern(Context context) {
-        return new SimpleDateFormat(dateFormatOnlyMonthAndDatePerLocale + (is12HourFormatEnabled(context) ? "  hh:mm a" : " HH:mm"), Locale.getDefault());
-    } //da ottimizzare
+        Log.i("G&S","Modificato");
+        return new SimpleDateFormat(dateFormatOnlyMonthAndDatePerLocale + (getBoolean(SharedPreferencesUtils.PREFTIMEFORMAT_12_HOURS_SHARED_PREF_KEY, true, context) ? "  hh:mm a" : " HH:mm"), Locale.getDefault());
+    }
 
     @NonNull
     public static SimpleDateFormat getFullDateTimestampPattern(Context context) {
-        return new SimpleDateFormat(dateFormatOnlyMonthAndDatePerLocale + (is12HourFormatEnabled(context) ? "/yyyy  hh:mm a" : "/yyyy HH:mm"), Locale.getDefault());
-    }//da ottimizzare
+        Log.i("G&S","Modificato");
+        return new SimpleDateFormat(dateFormatOnlyMonthAndDatePerLocale + (getBoolean(SharedPreferencesUtils.PREFTIMEFORMAT_12_HOURS_SHARED_PREF_KEY, true, context) ? "/yyyy  hh:mm a" : "/yyyy HH:mm"), Locale.getDefault());
+    }
 
     public static void exportCallLog(Context context) throws Exception {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             AndroidUtils.showAlert(context, context.getString(R.string.error), context.getString(R.string.storage_not_mounted));
             return;
         }
-        createCallTypeIntToTextMapping(context);
+        Log.i("G&S","Modificato");
+        stringValueOfCallTypeIntToTextMapping = new HashMap<>(3);
+        stringValueOfCallTypeIntToTextMapping.put(String.valueOf(CallLog.Calls.INCOMING_TYPE), context.getString(R.string.incoming_call));
+        stringValueOfCallTypeIntToTextMapping.put(String.valueOf(CallLog.Calls.MISSED_TYPE), context.getString(R.string.missed_call));
+        stringValueOfCallTypeIntToTextMapping.put(String.valueOf(CallLog.Calls.OUTGOING_TYPE), context.getString(R.string.outgoing_call));
+        stringValueOfCallTypeIntToTextMapping.put(String.valueOf(CallLog.Calls.REJECTED_TYPE), context.getString(R.string.rejected_call));
+
         createOpenContactsDirectoryIfItDoesNotExist();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH-mm-ss");
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + STORAGE_DIRECTORY_NAME, "/CallLog_" + simpleDateFormat.format(new Date()) + ".csv");

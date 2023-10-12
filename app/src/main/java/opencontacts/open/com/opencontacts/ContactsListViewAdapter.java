@@ -1,15 +1,18 @@
 package opencontacts.open.com.opencontacts;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.GONE;
 import static android.view.View.OnClickListener;
 import static android.view.View.OnLongClickListener;
 import static android.view.View.VISIBLE;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.isT9SearchEnabled;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.isSocialIntegrationEnabled;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
+import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldToggleContactActions;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 
 import opencontacts.open.com.opencontacts.components.ImageButtonWithTint;
 import opencontacts.open.com.opencontacts.domain.Contact;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 public class ContactsListViewAdapter extends ArrayAdapter<Contact> {
     private boolean shouldToggleContactActions;
@@ -42,12 +46,15 @@ public class ContactsListViewAdapter extends ArrayAdapter<Contact> {
 
     private void init(@NonNull Context context) {
         layoutInflater = LayoutInflater.from(context);
-        socialAppIntegrationEnabled = isSocialIntegrationEnabled(context);
+        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        socialAppIntegrationEnabled = context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+            .getBoolean(SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY, false);
         shouldToggleContactActions = shouldToggleContactActions(context);
     }
 
     public void createContactsListFilter(ContactsListFilter.AllContactsHolder allContactsHolder) {
-        contactsListFilter = isT9SearchEnabled(getContext()) ? new ContactsListT9Filter(this, allContactsHolder)
+        Log.i("G&S","Modificato");
+        contactsListFilter = getBoolean(SharedPreferencesUtils.T9_SEARCH_ENABLED_SHARED_PREF_KEY, true, getContext()) ? new ContactsListT9Filter(this, allContactsHolder)
             : new ContactsListTextFilter(this, allContactsHolder);
     }
 

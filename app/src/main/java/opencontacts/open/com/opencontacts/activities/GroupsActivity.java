@@ -8,12 +8,12 @@ import static android.view.View.VISIBLE;
 import static opencontacts.open.com.opencontacts.activities.ContactGroupEditActivity.GROUP_NAME_INTENT_EXTRA;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactGroupsDataStore.PROCESS_INTENSIVE_delete;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.blockUIUntil;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getMenuItemClickHandlerFor;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.message;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.wrapInConfirmation;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.sortContactsBasedOnName;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getLastVisistedGroup;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.isT9SearchEnabled;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.setLastVisistedGroup;
 
 import android.content.Intent;
@@ -41,6 +41,7 @@ import opencontacts.open.com.opencontacts.actions.DefaultContactsListActions;
 import opencontacts.open.com.opencontacts.data.datastore.ContactGroupsDataStore;
 import opencontacts.open.com.opencontacts.domain.Contact;
 import opencontacts.open.com.opencontacts.domain.ContactGroup;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 public class GroupsActivity extends AppBaseActivity {
 
@@ -216,7 +217,8 @@ public class GroupsActivity extends AppBaseActivity {
 
     private void bindSearchViewToContacts(SearchView searchView) {
         if (contactsListView == null) return;
-        searchView.setInputType(isT9SearchEnabled(this) ? InputType.TYPE_CLASS_PHONE : InputType.TYPE_CLASS_TEXT);
+        Log.i("G&S","Modificato");
+        searchView.setInputType(getBoolean(SharedPreferencesUtils.T9_SEARCH_ENABLED_SHARED_PREF_KEY, true, this) ? InputType.TYPE_CLASS_PHONE : InputType.TYPE_CLASS_TEXT);
         searchView.setOnCloseListener(() -> {
             contactsListView.clearTextFilter();
             return false;

@@ -1,10 +1,12 @@
 package opencontacts.open.com.opencontacts.views;
 
+import static android.content.Context.MODE_PRIVATE;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SIGNAL;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.TELEGRAM;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
 
 import opencontacts.open.com.opencontacts.R;
@@ -22,7 +24,9 @@ public class SocialAppButton extends ImageButtonWithTint {
 
     public SocialAppButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        String defaultSocialApp = SharedPreferencesUtils.defaultSocialAppEnabled(context);
+        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        String defaultSocialApp = context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+            .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_APP, TELEGRAM);
         if (defaultSocialApp.equalsIgnoreCase(TELEGRAM)) setImageResource(R.drawable.ic_telegram);
         else if (defaultSocialApp.equalsIgnoreCase(SIGNAL)) setImageResource(R.drawable.ic_signal_app);
         else setImageResource(R.drawable.ic_whatsapp);

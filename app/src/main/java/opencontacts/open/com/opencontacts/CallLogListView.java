@@ -1,5 +1,6 @@
 package opencontacts.open.com.opencontacts;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.graphics.Color.TRANSPARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static opencontacts.open.com.opencontacts.activities.CallLogGroupDetailsActivity.getIntentToShowCallLogEntries;
@@ -11,7 +12,6 @@ import static opencontacts.open.com.opencontacts.utils.DomainUtils.getTimestampP
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.shareContactAsText;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.PREFTIMEFORMAT_12_HOURS_SHARED_PREF_KEY;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.isSocialIntegrationEnabled;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.setSharedPreferencesChangeListener;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldToggleContactActions;
 import static opencontacts.open.com.opencontacts.utils.ThemeUtils.getHighlightColor;
@@ -61,6 +61,7 @@ import opencontacts.open.com.opencontacts.orm.CallLogEntry;
 import opencontacts.open.com.opencontacts.utils.AndroidUtils;
 import opencontacts.open.com.opencontacts.utils.CallLogGroupingUtil;
 import opencontacts.open.com.opencontacts.utils.Common;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 /**
  * Created by sultanm on 7/31/17.
@@ -95,7 +96,9 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
         addView(getSwipeRefreshLayout(context));
         prepareLongClickActions();
         boolean shouldToggleContactActions = shouldToggleContactActions(context);
-        isSocialAppIntegrationEnabled = isSocialIntegrationEnabled(context);
+        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        isSocialAppIntegrationEnabled = context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+            .getBoolean(SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY, false);
         timeStampFormat = getTimestampPattern(context);
         List<CallLogEntry> callLogEntries = new ArrayList<>();
         inSelectionMode = false;
@@ -253,7 +256,9 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
             if (!SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY.equals(key)
                 && !PREFTIMEFORMAT_12_HOURS_SHARED_PREF_KEY.equals(key)
             ) return;
-            isSocialAppIntegrationEnabled = isSocialIntegrationEnabled(context);
+            Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+            isSocialAppIntegrationEnabled =context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
+                .getBoolean(SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY, false);
             timeStampFormat = getTimestampPattern(context);
             adapter.notifyDataSetChanged();
         };

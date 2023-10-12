@@ -13,10 +13,10 @@ import static opencontacts.open.com.opencontacts.interfaces.DataStoreChangeListe
 import static opencontacts.open.com.opencontacts.interfaces.DataStoreChangeListener.DELETION;
 import static opencontacts.open.com.opencontacts.interfaces.DataStoreChangeListener.REFRESH;
 import static opencontacts.open.com.opencontacts.interfaces.DataStoreChangeListener.UPDATION;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.processAsync;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.toastFromNonUIThread;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getPinyinTextFromChinese;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.isT9PinyinEnabled;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.markFavoriteInVCard;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.mergeVCardStrings;
 
@@ -46,6 +46,7 @@ import opencontacts.open.com.opencontacts.orm.TemporaryContact;
 import opencontacts.open.com.opencontacts.orm.VCardData;
 import opencontacts.open.com.opencontacts.utils.AndroidUtils;
 import opencontacts.open.com.opencontacts.utils.DomainUtils;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 public class ContactsDataStore {
     private static List<Contact> contacts = null;
@@ -231,7 +232,8 @@ public class ContactsDataStore {
     }
 
     public static void updateT9Supplier(Context context) {
-        boolean pinyinEnabled = isT9PinyinEnabled(context);
+        Log.i("G&S","Modificato");
+        boolean pinyinEnabled = getBoolean(SharedPreferencesUtils.T9_PINYIN_ENABLED_SHARED_PREF_KEY, false, context);
         t9NameSupplier = pinyinEnabled ? pinyinName : defaultName;
     }
 

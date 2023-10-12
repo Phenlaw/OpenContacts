@@ -1,11 +1,12 @@
 package opencontacts.open.com.opencontacts.fragments;
 
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.isT9SearchEnabled;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.github.underscore.Supplier;
 import opencontacts.open.com.opencontacts.ContactsListView;
 import opencontacts.open.com.opencontacts.activities.MainActivity;
 import opencontacts.open.com.opencontacts.interfaces.SelectableTab;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 public class ContactsFragment extends AppBaseFragment implements SelectableTab {
     private LinearLayout linearLayout;
@@ -60,8 +62,8 @@ public class ContactsFragment extends AppBaseFragment implements SelectableTab {
                 contactsListView.clearTextFilter();
             return false;
         });
-
-        searchView.setInputType(isT9SearchEnabled(getContext()) ? InputType.TYPE_CLASS_PHONE : InputType.TYPE_CLASS_TEXT);
+        Log.i("G&S","Modificato");
+        searchView.setInputType(getBoolean(SharedPreferencesUtils.T9_SEARCH_ENABLED_SHARED_PREF_KEY, true, getContext()) ? InputType.TYPE_CLASS_PHONE : InputType.TYPE_CLASS_TEXT);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

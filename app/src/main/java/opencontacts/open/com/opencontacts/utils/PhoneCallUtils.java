@@ -4,10 +4,10 @@ import static android.telecom.TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE;
 import static android.text.TextUtils.isEmpty;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.callWithSystemDefaultSim;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getIntentToCall;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getStringFromPreferences;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.hasPermission;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.DEFAULT_SIM_SELECTION_ALWAYS_ASK;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getPreferredSim;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -20,6 +20,7 @@ import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
+import android.util.Log;
 
 import java.util.List;
 
@@ -64,7 +65,8 @@ public class PhoneCallUtils {
     }
 
     public static void handleMultiSimCalling(String number, Context context) {
-        String preferredSim = getPreferredSim(context);
+        Log.i("G&S","Modificato");
+        String preferredSim = getStringFromPreferences(SharedPreferencesUtils.SIM_PREFERENCE_SHARED_PREF_KEY, DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT, context);
         if (DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT.equals(preferredSim)) {
             callWithSystemDefaultSim(number, context);
             return;
