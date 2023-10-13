@@ -1,14 +1,16 @@
 package opencontacts.open.com.opencontacts.components.fieldcollections.textinputspinnerfieldcollection;
 
-import static opencontacts.open.com.opencontacts.utils.SpinnerUtil.setItem;
-import static opencontacts.open.com.opencontacts.utils.SpinnerUtil.setupSpinner;
+import static opencontacts.open.com.opencontacts.components.TintedDrawablesStore.getTintedDrawable;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.core.util.Pair;
+
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 
 import com.reginald.editspinner.EditSpinner;
 
@@ -30,7 +32,10 @@ public class TextInputAndSpinnerViewHolder extends FieldViewHolder {
         this.types = types;
         this.fieldView = fieldView;
         setupTextInput(hint, inputType, fieldView);
-        setupSpinner(types, spinner, context);
+        Log.i("G&S","Modificato");
+        spinner.setDropDownDrawable(getTintedDrawable(R.drawable.ic_arrow_drop_down_black_24dp, context));
+        spinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, types));
+        if (types.size() > 0) spinner.selectItem(0);
     }
 
     private void setupTextInput(String hint, int inputType, View fieldView) {
@@ -41,7 +46,10 @@ public class TextInputAndSpinnerViewHolder extends FieldViewHolder {
 
     public void set(String value, String type) {
         editText.setText(value);
-        setItem(type, types, spinner);
+        Log.i("G&S","Modificato");
+        int indexOfType = types.indexOf(type);
+        if (indexOfType == -1) spinner.setText(type);
+        else spinner.selectItem(indexOfType);
     }
 
     @Override

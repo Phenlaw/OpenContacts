@@ -18,7 +18,6 @@ import static java.lang.Math.round;
 import static opencontacts.open.com.opencontacts.utils.PhoneCallUtils.handleMultiSimCalling;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SIGNAL;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.TELEGRAM;
-import static opencontacts.open.com.opencontacts.utils.ThemeUtils.getPrimaryColor;
 
 import android.Manifest;
 import android.app.KeyguardManager;
@@ -381,7 +380,8 @@ public class AndroidUtils {
         Drawable navigationIcon = toolBar.getNavigationIcon();
         if (navigationIcon == null)
             return;
-        setColorFilterUsingColor(navigationIcon, getPrimaryColor(appCompatActivity));
+        Log.i("G&S","Modificato");
+        setColorFilterUsingColor(navigationIcon, getThemeAttributeColor(android.R.attr.textColorPrimary, appCompatActivity));
     }
 
     public static android.app.AlertDialog getAlertDialogToAddContact(final String phoneNumber, final Context context) {

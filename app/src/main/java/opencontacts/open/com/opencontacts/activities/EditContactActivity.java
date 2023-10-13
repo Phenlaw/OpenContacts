@@ -11,6 +11,7 @@ import static opencontacts.open.com.opencontacts.utils.AndroidUtils.wrapInConfir
 import static opencontacts.open.com.opencontacts.utils.Common.getCalendarInstanceAt;
 import static opencontacts.open.com.opencontacts.utils.Common.getOrDefault;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.defaultPhoneNumberTypeTranslatedText;
+import static opencontacts.open.com.opencontacts.utils.PrimitiveDataTypeUtils.toPrimitiveBools;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.getMobileNumber;
 
 import android.app.DatePickerDialog;
@@ -192,7 +193,9 @@ public class EditContactActivity extends AppBaseActivity {
         List<String> groupNames;
         if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
         else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
-        SpinnerUtil.setSelection(groupNames, allGroups, groupsSpinner);
+        Log.i("G&S","Modificato");
+        boolean[] selectionMatrix = toPrimitiveBools(U.map(allGroups, groupNames::contains));
+        groupsSpinner.setSelected(selectionMatrix);
     }
 
 
@@ -288,9 +291,12 @@ public class EditContactActivity extends AppBaseActivity {
 
     private void addGroupsToNewVCard(VCard newVCard) {
         Log.i("G&S","Modificato");
-        List<String> newGroupNames = SpinnerUtil.getSelectedItems(groupsSpinner, U.chain(ContactGroupsDataStore.getAllGroups())
+        Log.i("G&S","Modificato");
+        boolean[] selectionMatrix = groupsSpinner.getSelected();
+        List<String> newGroupNames = U.filterIndexed(U.chain(ContactGroupsDataStore.getAllGroups())
             .map(ContactGroup::getName)
-            .value());
+            .value(), (index, item) -> selectionMatrix[index]);
+
         if (newGroupNames.isEmpty()) return;
         VCardUtils.setCategories(newGroupNames, newVCard);
     }

@@ -7,6 +7,7 @@ import static opencontacts.open.com.opencontacts.activities.CallLogGroupDetailsA
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.dpToPixels;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getASpaceOfHeight;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getThemeAttributeColor;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.handleLongClickWith;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.shareContact;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getTimestampPattern;
@@ -14,7 +15,6 @@ import static opencontacts.open.com.opencontacts.utils.DomainUtils.shareContactA
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.PREFTIMEFORMAT_12_HOURS_SHARED_PREF_KEY;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.setSharedPreferencesChangeListener;
-import static opencontacts.open.com.opencontacts.utils.ThemeUtils.getHighlightColor;
 
 import android.content.Context;
 import android.content.Intent;
@@ -222,8 +222,10 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
                 if (inSelectionMode) {
                     reusableView.setOnClickListener(selectionModeTap);
                     reusableView.setOnLongClickListener(null);
-                    if (selectedEntries.contains(groupedCallLogEntry))
-                        reusableView.setBackgroundColor(getHighlightColor(context));
+                    if (selectedEntries.contains(groupedCallLogEntry)) {
+                        Log.i("G&S","Modificato");
+                        reusableView.setBackgroundColor(getThemeAttributeColor(android.R.attr.colorMultiSelectHighlight, context));
+                    }
                     else reusableView.setBackgroundColor(TRANSPARENT);
                 } else {
                     reusableView.setOnClickListener(showContactDetails);

@@ -21,7 +21,6 @@ import static opencontacts.open.com.opencontacts.utils.AndroidUtils.setColorFilt
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.updatePreference;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.wrapInConfirmation;
 import static opencontacts.open.com.opencontacts.utils.Common.hasItBeen;
-import static opencontacts.open.com.opencontacts.utils.ThemeUtils.getPrimaryColor;
 import static opencontacts.open.com.opencontacts.utils.domain.AppShortcuts.TAB_INDEX_INTENT_EXTRA;
 
 import android.content.Intent;
@@ -183,11 +182,14 @@ public class MainActivity extends AppBaseActivity {
             bottomMenu = null;
             return;
         }
-
-        ExpandedMenuItem searchItem = new ExpandedMenuItem(R.drawable.ic_search_black_24dp, "Search", getPrimaryColor(this));
-        ExpandedMenuItem groupItem = new ExpandedMenuItem(R.drawable.ic_group_merge_contacts_24dp, "Groups", getPrimaryColor(this));
-        ExpandedMenuItem dialpadItem = new ExpandedMenuItem(R.drawable.dial_pad, "Dial", getPrimaryColor(this));
-        ExpandedMenuItem addContactItem = new ExpandedMenuItem(R.drawable.ic_add_circle_outline_24dp, "Add contact", getPrimaryColor(this));
+        Log.i("G&S","Modificato");
+        ExpandedMenuItem searchItem = new ExpandedMenuItem(R.drawable.ic_search_black_24dp, "Search", getThemeAttributeColor(android.R.attr.textColorPrimary, this));
+        Log.i("G&S","Modificato");
+        ExpandedMenuItem groupItem = new ExpandedMenuItem(R.drawable.ic_group_merge_contacts_24dp, "Groups", getThemeAttributeColor(android.R.attr.textColorPrimary, this));
+        Log.i("G&S","Modificato");
+        ExpandedMenuItem dialpadItem = new ExpandedMenuItem(R.drawable.dial_pad, "Dial", getThemeAttributeColor(android.R.attr.textColorPrimary, this));
+        Log.i("G&S","Modificato");
+        ExpandedMenuItem addContactItem = new ExpandedMenuItem(R.drawable.ic_add_circle_outline_24dp, "Add contact", getThemeAttributeColor(android.R.attr.textColorPrimary, this));
         bottomMenu.setIcons(searchItem, groupItem, addContactItem, dialpadItem);
         bottomMenu.setOnItemClickListener(i -> {
             switch (i) {

@@ -1,9 +1,9 @@
 package opencontacts.open.com.opencontacts.activities;
 
+import static open.fontscaling.FontScalingUtil.setCustomFontSizeOnViewCreated;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getThemeAttributeColor;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.setColorFilterUsingColor;
-import static opencontacts.open.com.opencontacts.utils.ThemeUtils.applyOptedTheme;
-import static opencontacts.open.com.opencontacts.utils.ThemeUtils.getSecondaryColor;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -25,7 +25,9 @@ public abstract class AppBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        applyOptedTheme(this);
+        Log.i("G&S","Modificato"); Log.i("G&S","Modificato2"); Log.i("G&S","Modificato3");
+        this.getTheme().applyStyle(this.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getBoolean(SharedPreferencesUtils.IS_DARK_THEME_ACTIVE_PREFERENCES_KEY, false) ? R.style.Theme_AppCompat_NoActionBar_Customized : R.style.Theme_AppCompat_Light_NoActionBar_Customized, true);
+        setCustomFontSizeOnViewCreated(this);
         Log.i("G&S","Modificato");
         if(getBoolean(SharedPreferencesUtils.LOCK_TO_PORTRAIT, true, this))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -34,8 +36,9 @@ public abstract class AppBaseActivity extends AppCompatActivity {
         setContentView(getLayoutResource());
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Log.i("G&S","Modificato");
         toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.more_overflow_menu));
-        setColorFilterUsingColor(toolbar.getOverflowIcon(), getSecondaryColor(this));
+        setColorFilterUsingColor(toolbar.getOverflowIcon(), getThemeAttributeColor(android.R.attr.textColorSecondary, this));
         AndroidUtils.setBackButtonInToolBar(toolbar, this);
         super.onCreate(savedInstanceState);
     }
@@ -46,7 +49,8 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!menu.hasVisibleItems())
             return super.onCreateOptionsMenu(menu);
-        processMenu(menu, getSecondaryColor(this));
+        Log.i("G&S","Modificato");
+        processMenu(menu, getThemeAttributeColor(android.R.attr.textColorSecondary, this));
         return super.onCreateOptionsMenu(menu);
     }
 

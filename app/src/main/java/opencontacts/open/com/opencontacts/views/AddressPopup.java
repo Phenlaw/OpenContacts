@@ -1,10 +1,9 @@
 package opencontacts.open.com.opencontacts.views;
 
 import static java.util.Arrays.asList;
+import static opencontacts.open.com.opencontacts.components.TintedDrawablesStore.getTintedDrawable;
 import static opencontacts.open.com.opencontacts.utils.Common.getOrDefault;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getAddressTypeTranslatedText;
-import static opencontacts.open.com.opencontacts.utils.SpinnerUtil.setItem;
-import static opencontacts.open.com.opencontacts.utils.SpinnerUtil.setupSpinner;
 
 import android.content.Context;
 
@@ -16,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 
 import com.reginald.editspinner.EditSpinner;
 
@@ -61,8 +61,11 @@ public class AddressPopup {
         cityTextInput.setText(address.getLocality());
         stateTextInput.setText(address.getRegion());
         countryTextInput.setText(address.getCountry());
+        Log.i("G&S","Modificato");
+        int indexOfType = types.indexOf(getAddressTypeTranslatedText(address, context));
+        if (indexOfType == -1) addressTypeSpinner.setText(getAddressTypeTranslatedText(address, context));
+        else addressTypeSpinner.selectItem(indexOfType);
 
-        setItem(getAddressTypeTranslatedText(address, context), types, addressTypeSpinner);
     }
 
     private void computeAddressAndCallBack() {
@@ -125,6 +128,9 @@ public class AddressPopup {
 
     private void setupAddressTypeSpinner() {
         types = asList(context.getResources().getStringArray(R.array.address_types));
-        setupSpinner(types, addressTypeSpinner, context);
-    }//da ottimizzare forse
+        Log.i("G&S", "Modificato");
+        addressTypeSpinner.setDropDownDrawable(getTintedDrawable(R.drawable.ic_arrow_drop_down_black_24dp, context));
+        addressTypeSpinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, types));
+        if (types.size() > 0) addressTypeSpinner.selectItem(0);
+    }       //da ottimizzare forse
 }

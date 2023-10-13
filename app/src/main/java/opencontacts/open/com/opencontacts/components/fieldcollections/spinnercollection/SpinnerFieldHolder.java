@@ -1,10 +1,11 @@
 package opencontacts.open.com.opencontacts.components.fieldcollections.spinnercollection;
 
-import static opencontacts.open.com.opencontacts.utils.SpinnerUtil.setItem;
-import static opencontacts.open.com.opencontacts.utils.SpinnerUtil.setupSpinner;
+import static opencontacts.open.com.opencontacts.components.TintedDrawablesStore.getTintedDrawable;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 
 import com.reginald.editspinner.EditSpinner;
 
@@ -27,11 +28,19 @@ public class SpinnerFieldHolder extends FieldViewHolder {
         this.fieldView = fieldView;
         if (editDisabled) spinner.setEditable(false);
         this.options = options;
-        setupSpinner(options, spinner, context);
+        Log.i("G&S","Modificato");
+        spinner.setDropDownDrawable(getTintedDrawable(R.drawable.ic_arrow_drop_down_black_24dp, context));
+        spinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, options));
+        if (options.size() > 0) spinner.selectItem(0);
+
     }
 
     public void set(String option) {
-        setItem(option, options, spinner);
+        Log.i("G&S","Modificato");
+        int indexOfType = options.indexOf(option);
+        if (indexOfType == -1) spinner.setText(option);
+        else spinner.selectItem(indexOfType);
+
     }
 
     public void setOnDelete(View.OnClickListener onClickListener) {
