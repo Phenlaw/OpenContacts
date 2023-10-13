@@ -10,11 +10,11 @@ import static opencontacts.open.com.opencontacts.data.datastore.ContactGroupsDat
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.blockUIUntil;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getMenuItemClickHandlerFor;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getStringFromPreferences;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.message;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.updatePreference;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.wrapInConfirmation;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.sortContactsBasedOnName;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getLastVisistedGroup;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.setLastVisistedGroup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -68,7 +68,8 @@ public class GroupsActivity extends AppBaseActivity {
                 ContactGroup selectedItem = (ContactGroup) groupNameSpinner.getSelectedItem();
                 if (selectedItem == null) return;
                 Log.i("G&S","Modificato");
-                setLastVisistedGroup(selectedItem.name, GroupsActivity.this);
+                Log.i("G&S","Modificato");
+                updatePreference(SharedPreferencesUtils.LAST_VISITED_GROUP_SHARED_PREF_KEY, selectedItem.name, GroupsActivity.this);
                 showContactsListOfSelectedGroup(position);
             }
 
@@ -100,7 +101,8 @@ public class GroupsActivity extends AppBaseActivity {
     }
 
     private int getSelectedGroupIndex() {
-        String lastVisitedGroupName = getLastVisistedGroup(this);
+        Log.i("G&S","Modificato");
+        String lastVisitedGroupName = getStringFromPreferences(SharedPreferencesUtils.LAST_VISITED_GROUP_SHARED_PREF_KEY, "", this);
         if (isEmpty(lastVisitedGroupName)) return 0;
         Log.i("G&S","Modificato");
         int selectedGroupIndex = U.findIndex(allGroups, group -> group.name.equals(lastVisitedGroupName));

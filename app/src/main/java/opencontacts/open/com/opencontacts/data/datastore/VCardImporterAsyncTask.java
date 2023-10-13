@@ -1,14 +1,16 @@
 package opencontacts.open.com.opencontacts.data.datastore;
 
+import static android.text.TextUtils.isEmpty;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactGroupsDataStore.invalidateGroups;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getEncryptingContactsKey;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.hasEncryptingContactsKey;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getStringFromPreferences;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
+
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
@@ -23,6 +25,7 @@ import ezvcard.VCard;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.utils.AndroidUtils;
 import opencontacts.open.com.opencontacts.utils.CrashUtils;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 import opencontacts.open.com.opencontacts.utils.ZipUtils;
 
 public class VCardImporterAsyncTask extends AsyncTask<Void, Object, List<Pair<VCard, Throwable>>> {
@@ -85,9 +88,11 @@ public class VCardImporterAsyncTask extends AsyncTask<Void, Object, List<Pair<VC
 
     @NonNull
     private InputStream getPlainTextInputStreamFromZip(InputStream vcardInputStream) throws Exception {
-        if (!hasEncryptingContactsKey(contextWeakReference.get()))
+        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        if (isEmpty(getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, contextWeakReference.get())))
             throw new NoPasswordFoundException();
-        return ZipUtils.getPlainTextInputStreamFromZip(getEncryptingContactsKey(contextWeakReference.get()), vcardInputStream);
+        Log.i("G&S","Modificato");
+        return ZipUtils.getPlainTextInputStreamFromZip(getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, contextWeakReference.get()), vcardInputStream);
     }
 
     private boolean processVCard(VCard vcard) {

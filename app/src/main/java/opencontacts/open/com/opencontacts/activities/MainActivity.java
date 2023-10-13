@@ -6,21 +6,21 @@ import static android.view.View.VISIBLE;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
+import static java.util.Calendar.MINUTE;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getLong;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getMenuItemClickHandlerFor;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getNumberToDial;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getStringFromPreferences;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getThemeAttributeColor;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.hasPermission;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.isAddContactIntent;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.isValidDialIntent;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.runOnMainDelayed;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.setColorFilterUsingColor;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.updatePreference;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.wrapInConfirmation;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getDefaultTab;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.markPermissionsAksed;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldBottomMenuOpenByDefault;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldKeyboardResizeViews;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldLaunchDefaultTab;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldShowBottomMenu;
+import static opencontacts.open.com.opencontacts.utils.Common.hasItBeen;
 import static opencontacts.open.com.opencontacts.utils.ThemeUtils.getPrimaryColor;
 import static opencontacts.open.com.opencontacts.utils.domain.AppShortcuts.TAB_INDEX_INTENT_EXTRA;
 
@@ -29,6 +29,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +47,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import opencontacts.open.com.opencontacts.CardDavSyncActivity;
@@ -132,7 +134,10 @@ public class MainActivity extends AppBaseActivity {
     protected void onResume() {
         super.onResume();
         refresh();
-        if (shouldLaunchDefaultTab(this)) gotoDefaultTab();
+        Log.i("G&S","Modificato");
+        boolean shouldLaunchDefaultTab = hasItBeen(5, MINUTE, getLong(SharedPreferencesUtils.LAST_DEFAULT_TAB_LAUNCH_TIME_SHARED_PREF_KEY, 0, this));
+        updatePreference(SharedPreferencesUtils.LAST_DEFAULT_TAB_LAUNCH_TIME_SHARED_PREF_KEY, new Date().getTime(), this);
+        if (shouldLaunchDefaultTab) gotoDefaultTab();
     }
 
     private void gotoDefaultTab() {
@@ -140,34 +145,40 @@ public class MainActivity extends AppBaseActivity {
         // affecting the fragments order etc resulting in cast exception when recreating activity while reusing fragments
         runOnMainDelayed(() -> {
             if (viewPager == null) return;
-            viewPager.setCurrentItem(getDefaultTab(this));
+            Log.i("G&S","Modificato");
+            viewPager.setCurrentItem(Integer.parseInt(getStringFromPreferences(SharedPreferencesUtils.DEFAULT_TAB_SHARED_PREF_KEY, "0", this)));
         }, 100);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (SharedPreferencesUtils.shouldAskForPermissions(this)) {
+        Log.i("G&S","Modificato");
+        if (getBoolean(SharedPreferencesUtils.SHOULD_ASK_FOR_PERMISSIONS, true, this)) {
             AndroidUtils.askForPermissionsIfNotGranted(this);
             View startButton = findViewById(R.id.start_button);
             startButton.setVisibility(VISIBLE);
             startButton.setOnClickListener(x -> this.recreate());
-            markPermissionsAksed(this);
+            Log.i("G&S","Modificato");
+            updatePreference(SharedPreferencesUtils.SHOULD_ASK_FOR_PERMISSIONS, false, this);
             return;
         } else {
             setupTabs();
             setupBottomMenu();
-            if (shouldKeyboardResizeViews(this))
+            Log.i("G&S","Modificato");
+            if (getBoolean(SharedPreferencesUtils.KEYBOARD_RESIZE_VIEWS_SHARED_PREF_KEY, false, this))
                 getWindow().setSoftInputMode(SOFT_INPUT_ADJUST_RESIZE);
             if (handleIntent(getIntent())) ;
             else gotoDefaultTab();
         }
-        markPermissionsAksed(this);
+        Log.i("G&S","Modificato");
+        updatePreference(SharedPreferencesUtils.SHOULD_ASK_FOR_PERMISSIONS, false, this);
     }
 
     private void setupBottomMenu() {
         bottomMenu = findViewById(R.id.bottom_menu);
-        if (!shouldShowBottomMenu(this)) {
+        Log.i("G&S","Modificato");
+        if (!getBoolean(SharedPreferencesUtils.SHOULD_SHOW_BOTTOM_MENU_SHARED_PREF_KEY, true, this)) {
             bottomMenu.setVisibility(GONE);
             bottomMenu = null;
             return;
@@ -194,7 +205,8 @@ public class MainActivity extends AppBaseActivity {
                     break;
             }
         });
-        if (shouldBottomMenuOpenByDefault(this)) bottomMenu.expandMenu();
+        Log.i("G&S","Modificato");
+        if (getBoolean(SharedPreferencesUtils.BOTTOM_MENU_OPEN_DEFAULT_SHARED_PREF_KEY, true, this)) bottomMenu.expandMenu();
         else bottomMenu.collapseMenu();
     }
 
@@ -407,7 +419,8 @@ public class MainActivity extends AppBaseActivity {
     }
 
     public void showBottomMenu() {
-        if (bottomMenu == null || !shouldShowBottomMenu(this)) return;
+        Log.i("G&S","Modificato");
+        if (bottomMenu == null || !getBoolean(SharedPreferencesUtils.SHOULD_SHOW_BOTTOM_MENU_SHARED_PREF_KEY, true, this)) return;
         bottomMenu.setVisibility(VISIBLE);
     }
 }

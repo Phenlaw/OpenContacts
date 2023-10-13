@@ -4,9 +4,9 @@ import static android.content.Context.MODE_PRIVATE;
 import static android.view.WindowManager.LayoutParams.TYPE_PHONE;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
 import static opencontacts.open.com.opencontacts.OpenContactsApplication.MISSED_CALLS_CHANEL_ID;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.isScreenLocked;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.saveCallerIdLocationOnScreen;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldAutoCancelMissedCallNotification;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -96,11 +96,12 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         PendingIntent pendingIntentToCall = PendingIntent.getActivity(context, 0, AndroidUtils.getIntentToCall(incomingNumber, context), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent pendingIntentToMessage = PendingIntent.getActivity(context, 0, AndroidUtils.getIntentToMessage(incomingNumber), PendingIntent.FLAG_UPDATE_CURRENT);
         Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(context, MISSED_CALLS_CHANEL_ID)
                 .setSmallIcon(R.drawable.ic_phone_missed_black_24dp)
                 .setContentTitle(context.getString(R.string.missed_call))
-                .setAutoCancel(shouldAutoCancelMissedCallNotification(context))
+                .setAutoCancel( getBoolean(SharedPreferencesUtils.SHOULD_AUTO_CANCEL_MISSED_CALL_NOTIF_SHARED_PREF_KEY, false, context))
                 .setTicker(context.getString(R.string.missed_call_from, callingContact.firstName, callingContact.lastName))
                 .setContentText(callingContact.firstName + " " + callingContact.lastName)
                 .addAction(R.drawable.ic_call_black_24dp, context.getString(R.string.call), pendingIntentToCall)

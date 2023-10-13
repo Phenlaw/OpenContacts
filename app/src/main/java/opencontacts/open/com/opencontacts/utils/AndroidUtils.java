@@ -18,7 +18,6 @@ import static java.lang.Math.round;
 import static opencontacts.open.com.opencontacts.utils.PhoneCallUtils.handleMultiSimCalling;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SIGNAL;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.TELEGRAM;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldUseSystemCallingApp;
 import static opencontacts.open.com.opencontacts.utils.ThemeUtils.getPrimaryColor;
 
 import android.Manifest;
@@ -256,7 +255,8 @@ public class AndroidUtils {
             callIntent = new Intent(Intent.ACTION_DIAL, numberUri);
             callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        if (shouldUseSystemCallingApp(context)) {
+        Log.i("G&S","Modificato");
+        if (getBoolean(SharedPreferencesUtils.SHOULD_USE_SYSTEM_PHONE_APP, false, context)) {
             ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(callIntent, PackageManager.MATCH_SYSTEM_ONLY);
             ActivityInfo targetActivityInfo = resolveInfo.activityInfo;
             callIntent.setComponent(new ComponentName(targetActivityInfo.packageName, targetActivityInfo.name));

@@ -1,12 +1,14 @@
 package opencontacts.open.com.opencontacts.fragments;
 
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.processAsync;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.removeAnyMissedCallNotifications;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldAutoCancelMissedCallNotification;
 
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import opencontacts.open.com.opencontacts.CallLogListView;
 import opencontacts.open.com.opencontacts.activities.MainActivity;
 import opencontacts.open.com.opencontacts.interfaces.EditNumberBeforeCallHandler;
 import opencontacts.open.com.opencontacts.interfaces.SelectableTab;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 public class CallLogFragment extends AppBaseFragment implements SelectableTab {
     private CallLogListView callLogListView;
@@ -41,7 +44,8 @@ public class CallLogFragment extends AppBaseFragment implements SelectableTab {
     @Override
     public void onResume() {
         super.onResume();
-        if(shouldAutoCancelMissedCallNotification(getContext())) processAsync(() -> removeAnyMissedCallNotifications(getContext()));
+        Log.i("G&S","Modificato");
+        if( getBoolean(SharedPreferencesUtils.SHOULD_AUTO_CANCEL_MISSED_CALL_NOTIF_SHARED_PREF_KEY, false, getContext())) processAsync(() -> removeAnyMissedCallNotifications(getContext()));
     }
 
     @Override

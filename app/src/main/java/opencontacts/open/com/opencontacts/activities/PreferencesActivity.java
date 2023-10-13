@@ -7,6 +7,7 @@ import static open.fontscaling.SharePrefUtil.TEXT_SIZE_SCALING_SHARED_PREF_KEY;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.blockUIUntil;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getStringFromPreferences;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.runOnMainDelayed;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.updatePreference;
 import static opencontacts.open.com.opencontacts.utils.PhoneCallUtils.getSimNames;
 import static opencontacts.open.com.opencontacts.utils.PhoneCallUtils.hasMultipleSims;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME;
@@ -21,7 +22,6 @@ import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.T9
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.T9_SEARCH_ENABLED_SHARED_PREF_KEY;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.disableSocialIntegration;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.enableCallFiltering;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.enableSocialappIntegration;
 
 import android.app.Activity;
@@ -273,7 +273,8 @@ public class PreferencesActivity extends AppBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_TO_BECOMING_CALL_SCREENER) {
             if (resultCode != Activity.RESULT_OK) return;
-            enableCallFiltering(this);
+            Log.i("G&S","Modificato");
+            updatePreference(ENABLE_CALL_FILTERING_SHARED_PREF_KEY, true, this);
             recreate();
         }
     }

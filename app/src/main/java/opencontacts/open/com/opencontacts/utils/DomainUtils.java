@@ -5,14 +5,12 @@ import static android.text.TextUtils.isEmpty;
 import static android.widget.Toast.LENGTH_LONG;
 import static opencontacts.open.com.opencontacts.BuildConfig.DEBUG;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getStringFromPreferences;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.processAsync;
 import static opencontacts.open.com.opencontacts.utils.Common.appendNewLineIfNotEmpty;
 import static opencontacts.open.com.opencontacts.utils.Common.getOrDefault;
 import static opencontacts.open.com.opencontacts.utils.Common.mapIndexes;
 import static opencontacts.open.com.opencontacts.utils.Common.replaceAccentedCharactersWithEnglish;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.getEncryptingContactsKey;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.hasEncryptingContactsKey;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldSortUsingFirstName;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.getVCardFromString;
 
 import android.app.NotificationManager;
@@ -160,7 +158,8 @@ public class DomainUtils {
         byte[] plainTextExportBytes = getVCFExportBytes(ContactsDataStore.getAllContacts(),favorites);
         createOpenContactsDirectoryIfItDoesNotExist();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH-mm-ss");
-        if (hasEncryptingContactsKey(context))
+        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        if (!isEmpty(getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, context)))
             exportAsEncryptedZip(context, plainTextExportBytes, simpleDateFormat);
         else exportAsPlainTextVCFFile(plainTextExportBytes, simpleDateFormat);
     }
@@ -186,7 +185,8 @@ public class DomainUtils {
 
     private static void exportAsEncryptedZip(Context context, byte[] plainTextExportBytes, SimpleDateFormat simpleDateFormat) throws IOException {
         String exportFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + STORAGE_DIRECTORY_NAME + "/Contacts_" + simpleDateFormat.format(new Date()) + ".zip";
-        ZipUtils.exportZip(getEncryptingContactsKey(context), plainTextExportBytes, exportFilePath);
+        Log.i("G&S","Modificato");
+        ZipUtils.exportZip(getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, context), plainTextExportBytes, exportFilePath);
     }
 
     private static byte[] getVCFExportBytes(List<Contact> allContacts, List<Contact> favorites) throws IOException {
@@ -446,7 +446,8 @@ public class DomainUtils {
 
     @NonNull
     public static Comparator<Contact> getContactComparatorBasedOnName(Context context) {
-        if (shouldSortUsingFirstName(context))
+        Log.i("G&S","Modificato");
+        if (getBoolean(SharedPreferencesUtils.SORT_USING_FIRST_NAME, true, context))
             return (contact1, contact2) -> contact1.name.compareToIgnoreCase(contact2.name);
         else
             return (contact1, contact2) -> getLastNameOrFullInCaseEmpty(contact1).compareToIgnoreCase(getLastNameOrFullInCaseEmpty(contact2));
@@ -495,8 +496,9 @@ public class DomainUtils {
     }
 
     public static void deleteAllContacts(Context context) {
+        Log.i("G&S","Modificato");
         ContactsDataStore.deleteAllContacts(context);
-        SharedPreferencesUtils.removeSyncProgress(context);
+        AndroidUtils.updatePreference(SharedPreferencesUtils.SYNC_TOKEN_SHARED_PREF_KEY, "", context);
     }
 
     public static void shareContact(long contactId, Context context) {

@@ -7,7 +7,6 @@ import static android.view.View.OnLongClickListener;
 import static android.view.View.VISIBLE;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldToggleContactActions;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
@@ -49,7 +48,8 @@ public class ContactsListViewAdapter extends ArrayAdapter<Contact> {
         Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
         socialAppIntegrationEnabled = context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .getBoolean(SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY, false);
-        shouldToggleContactActions = shouldToggleContactActions(context);
+        Log.i("G&S","Modificato");
+        shouldToggleContactActions = getBoolean(SharedPreferencesUtils.TOGGLE_CONTACT_ACTIONS, false, context);
     }
 
     public void createContactsListFilter(ContactsListFilter.AllContactsHolder allContactsHolder) {

@@ -1,14 +1,16 @@
 package opencontacts.open.com.opencontacts.utils.domain;
 
 import static opencontacts.open.com.opencontacts.activities.MainActivity.DIALER_TAB_INDEX;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.dynamicShortcutsAddedAlready;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.markAddedDynamicShortcuts;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getStringFromPreferences;
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.updatePreference;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.os.Build;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.pm.ShortcutInfoCompat;
@@ -16,10 +18,12 @@ import androidx.core.graphics.drawable.IconCompat;
 
 import java.util.Arrays;
 
+import opencontacts.open.com.opencontacts.BuildConfig;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.activities.EditContactActivity;
 import opencontacts.open.com.opencontacts.activities.MainActivity;
 import opencontacts.open.com.opencontacts.utils.AndroidUtils;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 public class AppShortcuts {
     public static final String ADD_CONTACT_SHORTCUT_ID = "ADD_CONTACT_SHORTCUT_ID";
@@ -34,14 +38,16 @@ public class AppShortcuts {
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     private static void addDynamicShortcuts(Context context) {
         ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(Context.SHORTCUT_SERVICE);
-        if (dynamicShortcutsAddedAlready(context)) return;
+        Log.i("G&S","Modificato");
+        if (BuildConfig.VERSION_NAME.equals(getStringFromPreferences(SharedPreferencesUtils.SHORTCUTS_ADDED_IN_VERSION_SHARED_PREF_KEY, context))) return;
         shortcutManager.addDynamicShortcuts(
             Arrays.asList(
                 getAddContactShortcut(context),
                 getDialerShortcut(context)
             )
         );
-        markAddedDynamicShortcuts(context);
+        Log.i("G&S","Modificato");
+        updatePreference(SharedPreferencesUtils.SHORTCUTS_ADDED_IN_VERSION_SHARED_PREF_KEY, BuildConfig.VERSION_NAME, context);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)

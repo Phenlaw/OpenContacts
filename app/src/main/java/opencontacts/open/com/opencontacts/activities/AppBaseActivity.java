@@ -1,7 +1,7 @@
 package opencontacts.open.com.opencontacts.activities;
 
+import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.setColorFilterUsingColor;
-import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.shouldLockToPortrait;
 import static opencontacts.open.com.opencontacts.utils.ThemeUtils.applyOptedTheme;
 import static opencontacts.open.com.opencontacts.utils.ThemeUtils.getSecondaryColor;
 
@@ -10,11 +10,14 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.utils.AndroidUtils;
+import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 public abstract class AppBaseActivity extends AppCompatActivity {
 
@@ -23,7 +26,8 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         applyOptedTheme(this);
-        if(shouldLockToPortrait(this))
+        Log.i("G&S","Modificato");
+        if(getBoolean(SharedPreferencesUtils.LOCK_TO_PORTRAIT, true, this))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         else
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
