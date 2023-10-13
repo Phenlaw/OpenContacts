@@ -1,5 +1,6 @@
 package opencontacts.open.com.opencontacts.data.datastore;
 
+import static ezvcard.Ezvcard.write;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDBHelper.getContact;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDBHelper.replacePhoneNumbersInDB;
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.updateContact;
@@ -7,7 +8,6 @@ import static opencontacts.open.com.opencontacts.orm.VCardData.STATUS_NONE;
 import static opencontacts.open.com.opencontacts.orm.VCardData.STATUS_UPDATED;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getPinyinTextFromChinese;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.getNameFromVCard;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.writeVCardToString;
 
 import android.content.Context;
 import android.util.Log;
@@ -49,7 +49,8 @@ public class ContactsSyncHelper {
         dbContact.pinyinName = getPinyinTextFromChinese(dbContact.firstName + " " + dbContact.lastName);
         dbContact.save();
         replacePhoneNumbersInDB(dbContact, hrefEtagAndVCard.z, getContact(vCardData.contact.getId()).primaryPhoneNumber.phoneNumber);
-        vCardData.vcardDataAsString = writeVCardToString(mergedCard);
+        Log.i("G&S","Modificato");
+        vCardData.vcardDataAsString = write(mergedCard).caretEncoding(true).go();
         vCardData.etag = hrefEtagAndVCard.y;
         vCardData.href = hrefEtagAndVCard.x;
         vCardData.uid = hrefEtagAndVCard.z.getUid().getValue();

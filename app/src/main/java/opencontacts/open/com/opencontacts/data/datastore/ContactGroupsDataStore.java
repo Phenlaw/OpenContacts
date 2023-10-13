@@ -1,11 +1,11 @@
 package opencontacts.open.com.opencontacts.data.datastore;
 
 
+import static ezvcard.Ezvcard.write;
 import static opencontacts.open.com.opencontacts.domain.Contact.GROUPS_SEPERATOR_CHAR;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.processAsync;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.toastFromNonUIThread;
 import static opencontacts.open.com.opencontacts.utils.Common.getOrDefault;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.writeVCardToString;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import ezvcard.VCard;
+import ezvcard.io.text.VCardReader;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.domain.Contact;
 import opencontacts.open.com.opencontacts.domain.ContactGroup;
@@ -136,9 +137,11 @@ public class ContactGroupsDataStore {
     private static void updateVCardTable(Contact contact, List<String> allGroupsOfContact) {
         try {
             VCardData vCardData = ContactsDBHelper.getVCard(contact.id);
-            VCard vcard = VCardUtils.getVCardFromString(vCardData.vcardDataAsString);
+            Log.i("G&S","Modificato");
+            VCard vcard = new VCardReader(vCardData.vcardDataAsString).readNext();
             vcard.setCategories(allGroupsOfContact.toArray(new String[]{}));
-            vCardData.vcardDataAsString = writeVCardToString(vcard);
+            Log.i("G&S","Modificato");
+            vCardData.vcardDataAsString = write(vcard).caretEncoding(true).go();
             vCardData.save();
         } catch (IOException e) {
             e.printStackTrace();

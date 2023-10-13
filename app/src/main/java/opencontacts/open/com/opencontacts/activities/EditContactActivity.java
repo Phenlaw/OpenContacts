@@ -12,7 +12,6 @@ import static opencontacts.open.com.opencontacts.utils.Common.getCalendarInstanc
 import static opencontacts.open.com.opencontacts.utils.Common.getOrDefault;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.defaultPhoneNumberTypeTranslatedText;
 import static opencontacts.open.com.opencontacts.utils.PrimitiveDataTypeUtils.toPrimitiveBools;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.getMobileNumber;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -241,7 +240,11 @@ public class EditContactActivity extends AppBaseActivity {
         }
         //Da ottimizzare FORSE
 
-        U.forEach(telephoneNumbers, telephoneNumber -> phoneNumbersInputCollection.addOneMoreView(getMobileNumber(telephoneNumber), DomainUtils.getMobileNumberTypeTranslatedText(telephoneNumber.getTypes(), EditContactActivity.this)));
+        U.forEach(telephoneNumbers, telephoneNumber -> {
+            Log.i("G&S","Modificato");
+            String telephoneText = telephoneNumber.getText();
+            phoneNumbersInputCollection.addOneMoreView(telephoneText == null ? telephoneNumber.getUri().getNumber() : telephoneText, DomainUtils.getMobileNumberTypeTranslatedText(telephoneNumber.getTypes(), EditContactActivity.this)) ;
+        });
         if (newPhoneNumberToBeAdded != null)
             phoneNumbersInputCollection.addOneMoreView(newPhoneNumberToBeAdded, defaultPhoneNumberTypeTranslatedText);
     }
@@ -298,7 +301,8 @@ public class EditContactActivity extends AppBaseActivity {
             .value(), (index, item) -> selectionMatrix[index]);
 
         if (newGroupNames.isEmpty()) return;
-        VCardUtils.setCategories(newGroupNames, newVCard);
+        Log.i("G&S","Modificato");
+        newVCard.setCategories(newGroupNames.toArray(new String[]{}));
     }
 
     private void addDateOfBirthFromFieldsToNewVCard(VCard newVCard) {

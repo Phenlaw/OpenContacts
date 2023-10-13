@@ -11,7 +11,6 @@ import static opencontacts.open.com.opencontacts.utils.Common.appendNewLineIfNot
 import static opencontacts.open.com.opencontacts.utils.Common.getOrDefault;
 import static opencontacts.open.com.opencontacts.utils.Common.mapIndexes;
 import static opencontacts.open.com.opencontacts.utils.Common.replaceAccentedCharactersWithEnglish;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.getVCardFromString;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -61,6 +60,7 @@ import java.util.regex.Pattern;
 
 import ezvcard.VCard;
 import ezvcard.VCardVersion;
+import ezvcard.io.text.VCardReader;
 import ezvcard.io.text.VCardWriter;
 import ezvcard.parameter.AddressType;
 import ezvcard.parameter.EmailType;
@@ -202,7 +202,8 @@ public class DomainUtils {
                 createVCardAndWrite(vCardWriter, structuredName, contact);
             else {
                 try {
-                    VCard vcard = getVCardFromString(vCardData.vcardDataAsString);
+                    Log.i("G&S","Modificato");
+                    VCard vcard = new VCardReader(vCardData.vcardDataAsString).readNext();
                     vCardWriter.write(vcard);
                 } catch (IOException e) {
                     e.printStackTrace();

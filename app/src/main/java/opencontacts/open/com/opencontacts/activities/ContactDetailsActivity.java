@@ -16,7 +16,6 @@ import static opencontacts.open.com.opencontacts.utils.DomainUtils.formatAddress
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getAddressTypeTranslatedText;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getMobileNumberTypeTranslatedText;
 import static opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils.SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.getMobileNumber;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,12 +34,14 @@ import android.widget.Toast;
 import com.github.underscore.U;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import ezvcard.VCard;
 import ezvcard.io.text.VCardReader;
 import ezvcard.property.Address;
 import ezvcard.property.Birthday;
+import ezvcard.property.Categories;
 import ezvcard.property.Email;
 import ezvcard.property.Note;
 import ezvcard.property.Url;
@@ -154,7 +155,11 @@ public class ContactDetailsActivity extends AppBaseActivity {
     }
 
     private void fillGroups() {
-        List<String> categories = VCardUtils.getCategories(vcard);
+        Log.i("G&S","Modificato");
+        Categories categoriesTemp = vcard.getCategories();
+        List<String> categories;
+        if(categoriesTemp == null) categories = Collections.emptyList();
+        else categories = categoriesTemp.getValues();
         View groupsCard = findViewById(R.id.groups_card);
         if (categories.isEmpty()) {
             groupsCard.setVisibility(GONE);
@@ -255,7 +260,13 @@ public class ContactDetailsActivity extends AppBaseActivity {
         //Da ottimizzare FORSE
         U.forEach(vcard.getTelephoneNumbers(), telephone -> {
             View inflatedView = layoutInflater.inflate(R.layout.contact_details_row, phoneNumbersLinearLayout, false);
-            String telephoneText = getMobileNumber(telephone);
+            Log.i("G&S","Modificato");
+            String telephoneTextTemp = telephone.getText();
+            String telephoneText;
+
+            if(telephoneTextTemp == null) telephoneText = telephone.getUri().getNumber();
+            else telephoneText = telephoneTextTemp;
+
             ((TextView) inflatedView.findViewById(R.id.textview_phone_number)).setText(telephoneText);
             AppCompatImageButton primaryNumberToggleButton = inflatedView.findViewById(R.id.button_primary_number);
             primaryNumberToggleButton.setImageResource(telephoneText.equals(contact.primaryPhoneNumber.phoneNumber) ? R.drawable.ic_star_filled_24dp : R.drawable.ic_star_empty_24dp);

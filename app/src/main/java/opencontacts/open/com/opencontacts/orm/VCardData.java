@@ -1,8 +1,9 @@
 package opencontacts.open.com.opencontacts.orm;
 
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.writeVCardToString;
+import static ezvcard.Ezvcard.write;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -10,6 +11,8 @@ import com.github.underscore.U;
 import com.orm.SugarRecord;
 
 import ezvcard.VCard;
+import ezvcard.property.StructuredName;
+import ezvcard.property.Uid;
 import opencontacts.open.com.opencontacts.utils.VCardUtils;
 
 public class VCardData extends SugarRecord {
@@ -25,20 +28,36 @@ public class VCardData extends SugarRecord {
     public String href;
 
     public VCardData(Contact contact, VCard vCard, String uid, int status, String etag) {
-        VCardUtils.setFormattedNameIfNotPresent(vCard);
-        VCardUtils.setUidIfNotPresent(vCard, uid);
+        Log.i("G&S","Modificato");
+        if (vCard.getFormattedName() == null){
+            StructuredName structuredName = vCard.getStructuredName();
+            if (structuredName == null) vCard.setFormattedName("");
+            else vCard.setFormattedName(structuredName.getGiven() + " " + structuredName.getFamily());
+        }
+        Log.i("G&S","Modificato");
+        Uid existingUid = vCard.getUid();
+        if (existingUid == null) vCard.setUid(new Uid(uid));
         this.contact = contact;
-        this.vcardDataAsString = writeVCardToString(vCard);
+        Log.i("G&S","Modificato");
+        this.vcardDataAsString = write(vCard).caretEncoding(true).go();
         this.uid = uid;
         this.status = status;
         this.etag = etag;
     }
 
     public VCardData(Contact contact, VCard vCard, String uid, int status, String etag, String href) {
-        VCardUtils.setFormattedNameIfNotPresent(vCard);
-        VCardUtils.setUidIfNotPresent(vCard, uid);
+        Log.i("G&S","Modificato");
+        if (vCard.getFormattedName() == null){
+            StructuredName structuredName = vCard.getStructuredName();
+            if (structuredName == null) vCard.setFormattedName("");
+            else vCard.setFormattedName(structuredName.getGiven() + " " + structuredName.getFamily());
+        }
+        Log.i("G&S","Modificato");
+        Uid existingUid = vCard.getUid();
+        if (existingUid == null) vCard.setUid(new Uid(uid));
         this.contact = contact;
-        this.vcardDataAsString = writeVCardToString(vCard);
+        Log.i("G&S","Modificato");
+        this.vcardDataAsString = write(vCard).caretEncoding(true).go();
         this.uid = uid;
         this.status = status;
         this.etag = etag;
@@ -55,8 +74,14 @@ public class VCardData extends SugarRecord {
 
     public static void updateVCardData(VCard vCard, long contactId, Context context) {
         VCardData vCardDataInDB = VCardData.getVCardData(contactId);
-        VCardUtils.setFormattedNameIfNotPresent(vCard);
-        vCardDataInDB.vcardDataAsString = writeVCardToString(vCard);
+        Log.i("G&S","Modificato");
+        if (vCard.getFormattedName() == null){
+            StructuredName structuredName = vCard.getStructuredName();
+            if (structuredName == null) vCard.setFormattedName("");
+            else vCard.setFormattedName(structuredName.getGiven() + " " + structuredName.getFamily());
+        }
+        Log.i("G&S","Modificato");
+        vCardDataInDB.vcardDataAsString = write(vCard).caretEncoding(true).go();
         vCardDataInDB.status = vCardDataInDB.status == STATUS_CREATED ? STATUS_CREATED : STATUS_UPDATED;
         vCardDataInDB.save();
     }

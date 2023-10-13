@@ -7,6 +7,8 @@ import static opencontacts.open.com.opencontacts.utils.Common.getEmptyStringIfNu
 import static opencontacts.open.com.opencontacts.utils.Common.getPartsThatAreNotPresentCaseInSensitive;
 
 import android.content.Context;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
@@ -54,45 +56,33 @@ public class VCardUtils {
             if (formattedName == null) {
                 name = new Pair<>(noNameString, "");
             } else name = new Pair<>(formattedName.getValue(), "");
-        else name = getNameFromStructureNameOfVcard(structuredName);
+
+        else{
+
+            List<String> additionalNames = structuredName.getAdditionalNames();
+            String lastName = getEmptyStringIfNull(structuredName.getFamily());
+            if (additionalNames.size() > 0) {
+                StringBuilder nameBuffer = new StringBuilder();
+                //da ottimizzare
+                for (String additionalName : additionalNames)
+                    nameBuffer.append(additionalName).append(" ");
+                lastName = nameBuffer.append(lastName).toString();
+            }
+            name = new Pair<>(getEmptyStringIfNull(structuredName.getGiven()), lastName);
+        }
         return name;
     }
 
-    private static Pair<String, String> getNameFromStructureNameOfVcard(StructuredName structuredName) {
-        List<String> additionalNames = structuredName.getAdditionalNames();
-        String lastName = getEmptyStringIfNull(structuredName.getFamily());
-        if (additionalNames.size() > 0) {
-            StringBuilder nameBuffer = new StringBuilder();
-            //da ottimizzare
-            for (String additionalName : additionalNames)
-                nameBuffer.append(additionalName).append(" ");
-            lastName = nameBuffer.append(lastName).toString();
-        }
-        return new Pair<>(getEmptyStringIfNull(structuredName.getGiven()), lastName);
-    }
 
-    public static String getMobileNumber(Telephone telephone) {
-        String telephoneText = telephone.getText();
-        return telephoneText == null ? telephone.getUri().getNumber() : telephoneText;
-    }
 
-    public static void setFormattedNameIfNotPresent(VCard vcard) {
-        if (vcard.getFormattedName() != null) return;
-        StructuredName structuredName = vcard.getStructuredName();
-        if (structuredName == null) vcard.setFormattedName("");
-        else vcard.setFormattedName(structuredName.getGiven() + " " + structuredName.getFamily());
-    }
-
-    public static void setUidIfNotPresent(VCard vCard, String uid) {
-        Uid existingUid = vCard.getUid();
-        if (existingUid == null) vCard.setUid(new Uid(uid));
-    }
 
     public static VCard mergeVCards(VCard secondaryVcard, VCard primaryVCard, Context context) {
         VCard mergedCard = null;
 
         try {
-            mergedCard = new VCardReader(writeVCardToString(primaryVCard)).readNext();
+            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato");
+            mergedCard = new VCardReader(write(primaryVCard).caretEncoding(true).go()).readNext();
         } catch (IOException e) {
             e.printStackTrace();
 //            TODO: this will crash. Throw this exception and let consumers handle this
@@ -108,8 +98,11 @@ public class VCardUtils {
         StructuredName finalName = getMergedStructuredName(secondaryVcard, primaryVCard, context);
         mergedCard.setStructuredName(finalName);
         Uid uid = primaryVCard.getUid();
-        setUidIfNotPresent(mergedCard, uid == null ? UUID.randomUUID().toString() : uid.toString());
+        Log.i("G&S","Modificato");
+        Uid existingUid = mergedCard.getUid();
+        if (existingUid == null) mergedCard.setUid(new Uid(uid == null ? UUID.randomUUID().toString() : uid.toString()));
         return mergedCard;
+
     }
 
     private static <T extends TextProperty> List<T> getExtraVCardTextProperties(VCard primaryVCard, VCard secondaryVCard, Class<T> propertyClass) {
@@ -143,31 +136,6 @@ public class VCardUtils {
         return finalStructuredName;
     }
 
-    public static VCard getVCardFromString(String vcardAsString) throws IOException {
-        return new VCardReader(vcardAsString).readNext();
-    }
-
-    public static String writeVCardToString(VCard vcard) {
-        return write(vcard).caretEncoding(true).go();
-    }
-
-    public static VCard mergeVCardStrings(String primaryVCardString, String secondaryVCardString, Context context) throws IOException {
-        return mergeVCards(getVCardFromString(secondaryVCardString), getVCardFromString(primaryVCardString), context);
-    }
-
-    public static void markFavoriteInVCard(boolean isFavorite, VCard vcard) {
-        vcard.setExtendedProperty(X_FAVORITE_EXTENDED_VCARD_PROPERTY, String.valueOf(isFavorite));
-    }
-
-    public static void markFavoriteInVCard(boolean isFavorite, String vCardAsString) throws IOException {
-        getVCardFromString(vCardAsString)
-            .setExtendedProperty(X_FAVORITE_EXTENDED_VCARD_PROPERTY, String.valueOf(isFavorite));
-    }
-
-    public static boolean isFavorite(VCard vcard) {
-        RawProperty isFavoriteVcardProperty = vcard.getExtendedProperty(X_FAVORITE_EXTENDED_VCARD_PROPERTY);
-        return isFavoriteVcardProperty != null && isFavoriteVcardProperty.getValue().equals(String.valueOf(true));
-    }
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, VCard vcard) {
         //da ottimizzare forse
@@ -182,31 +150,20 @@ public class VCardUtils {
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, String vcardData) {
         try {
-            markPrimaryPhoneNumberInVCard(contact, getVCardFromString(vcardData));
+            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato");
+            U.forEach(new VCardReader(vcardData).readNext().getTelephoneNumbers(),
+                telephoneNumber -> {
+                    if (contact.primaryPhoneNumber.phoneNumber.equals(telephoneNumber.getText()))
+                        telephoneNumber.setPref(PRIMARY_PHONE_NUMBER_PREF);
+                    else telephoneNumber.setPref(NON_PRIMARY_PHONE_NUMBER_PREF);
+                }
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean isPrimaryPhoneNumber(Telephone telephone) {
-        Integer telephonePref = telephone.getPref();
-        return telephonePref != null && telephone.getPref() == PRIMARY_PHONE_NUMBER_PREF;
-    }
 
-    public static List<String> getCategories(VCard vcard) {
-        Categories categories = vcard.getCategories();
-        return categories == null ? Collections.emptyList() : categories.getValues();
-    }
-
-    public static void setCategories(List<String> categories, VCard vcard) {
-        vcard.setCategories(categories.toArray(new String[]{}));
-    }//da ottimizzare
-
-    public static boolean isEmptyAddress(Address address) {
-        if (address == null) return true;
-        Address tempAddressToRemoveTypes = address.copy();
-        tempAddressToRemoveTypes.getTypes().clear();
-        return new Address().equals(tempAddressToRemoveTypes);
-    }
 
 }

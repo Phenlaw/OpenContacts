@@ -17,8 +17,8 @@ import static opencontacts.open.com.opencontacts.utils.AndroidUtils.getBoolean;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.processAsync;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.toastFromNonUIThread;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getPinyinTextFromChinese;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.markFavoriteInVCard;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.mergeVCardStrings;
+import static opencontacts.open.com.opencontacts.utils.VCardUtils.X_FAVORITE_EXTENDED_VCARD_PROPERTY;
+import static opencontacts.open.com.opencontacts.utils.VCardUtils.mergeVCards;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ezvcard.VCard;
+import ezvcard.io.text.VCardReader;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.domain.Contact;
 import opencontacts.open.com.opencontacts.interfaces.DataStoreChangeListener;
@@ -270,7 +271,9 @@ public class ContactsDataStore {
 
     private static void markAsFavoriteInVCard(long contactId) {
         try {
-            markFavoriteInVCard(true, ContactsDBHelper.getVCard(contactId).vcardDataAsString);
+            Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+            new VCardReader(ContactsDBHelper.getVCard(contactId).vcardDataAsString).readNext()
+                .setExtendedProperty(X_FAVORITE_EXTENDED_VCARD_PROPERTY, String.valueOf(true));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -297,7 +300,9 @@ public class ContactsDataStore {
     public static void mergeContacts(Contact primaryContact, Contact secondaryContact, Context context) throws IOException {
         VCardData primaryVCardData = VCardData.getVCardData(primaryContact.id);
         VCardData secondaryVCardData = VCardData.getVCardData(secondaryContact.id);
-        VCard mergedVCard = mergeVCardStrings(primaryVCardData.vcardDataAsString, secondaryVCardData.vcardDataAsString, context);
+        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        Log.i("G&S","Modificato");
+        VCard mergedVCard = mergeVCards(new VCardReader(secondaryVCardData.vcardDataAsString).readNext(), new VCardReader(primaryVCardData.vcardDataAsString).readNext(), context);
         removeContact(secondaryContact);
         updateContact(primaryContact.id, primaryContact.primaryPhoneNumber.phoneNumber, mergedVCard, context);
     }

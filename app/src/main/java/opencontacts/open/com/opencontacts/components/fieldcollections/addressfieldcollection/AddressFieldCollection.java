@@ -1,11 +1,11 @@
 package opencontacts.open.com.opencontacts.components.fieldcollections.addressfieldcollection;
 
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getAddressTypeTranslatedText;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.isEmptyAddress;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.github.underscore.U;
 
@@ -52,13 +52,32 @@ public class AddressFieldCollection extends TextViewFieldCollection {
     }
 
     private void removeFieldIfEmptyAddress(int fieldIndex) {
-        if (isEmptyAddress(addresses.get(fieldIndex)))
+        Log.i("G&S","Modificato");
+        Address address = addresses.get(fieldIndex);
+        boolean isEmptyAddress;
+        if (addresses.get(fieldIndex) == null)  isEmptyAddress = true;
+        else {
+            Address tempAddressToRemoveTypes = address.copy();
+            tempAddressToRemoveTypes.getTypes().clear();
+            isEmptyAddress = new Address().equals(tempAddressToRemoveTypes);
+        }
+
+        if (isEmptyAddress)
             removeField(fieldViewHoldersList.get(fieldIndex));
     }
 
     private void onSave(int indexOfAddressToEdit, Address newAddress) {
         TextViewViewHolder field = fieldViewHoldersList.get(indexOfAddressToEdit);
-        if (isEmptyAddress(newAddress)) {
+        Log.i("G&S","Modificato");
+        boolean isEmptyAddress;
+        if (newAddress == null)  isEmptyAddress = true;
+        else {
+            Address tempAddressToRemoveTypes = newAddress.copy();
+            tempAddressToRemoveTypes.getTypes().clear();
+            isEmptyAddress = new Address().equals(tempAddressToRemoveTypes);
+        }
+
+        if (isEmptyAddress) {
             removeField(field);
             return;
         }

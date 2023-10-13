@@ -9,11 +9,8 @@ import static opencontacts.open.com.opencontacts.orm.VCardData.STATUS_CREATED;
 import static opencontacts.open.com.opencontacts.orm.VCardData.STATUS_DELETED;
 import static opencontacts.open.com.opencontacts.orm.VCardData.updateVCardData;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getPinyinTextFromChinese;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.getCategories;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.getMobileNumber;
+import static opencontacts.open.com.opencontacts.utils.VCardUtils.PRIMARY_PHONE_NUMBER_PREF;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.getNameFromVCard;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.isFavorite;
-import static opencontacts.open.com.opencontacts.utils.VCardUtils.isPrimaryPhoneNumber;
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.markPrimaryPhoneNumberInVCard;
 
 import android.content.Context;
@@ -31,6 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ezvcard.VCard;
+import ezvcard.property.Categories;
 import ezvcard.property.Telephone;
 import opencontacts.open.com.opencontacts.orm.CallLogEntry;
 import opencontacts.open.com.opencontacts.orm.Contact;
@@ -97,7 +95,12 @@ public class ContactsDBHelper {
         List<PhoneNumber> dbPhoneNumbers = PhoneNumber.find(PhoneNumber.class, "contact = ?", "" + dbContact.getId());
         U.forEach(vcard.getTelephoneNumbers(),
             telephone -> {
-                String phoneNumberText = VCardUtils.getMobileNumber(telephone);
+                Log.i("G&S","Modificato");
+                String telephoneTextTemp = telephone.getText();
+                String phoneNumberText;
+
+                if(telephoneTextTemp == null) phoneNumberText = telephone.getUri().getNumber();
+                else phoneNumberText = telephoneTextTemp;
                 new PhoneNumber(phoneNumberText, dbContact, primaryPhoneNumber.equals(phoneNumberText)).save();
             });
         PhoneNumber.deleteInTx(dbPhoneNumbers);
@@ -109,7 +112,12 @@ public class ContactsDBHelper {
         dbContact.firstName = nameFromVCard.first;
         dbContact.lastName = nameFromVCard.second;
         Log.i("G&S","Modificato");
-        dbContact.groups = U.join(getCategories(vCard), GROUPS_SEPERATOR_CHAR);
+        Log.i("G&S","Modificato");
+        Categories categoriesTemp = vCard.getCategories();
+        List<String> categories;
+        if(categoriesTemp == null) categories = Collections.emptyList();
+        else categories = categoriesTemp.getValues();
+        dbContact.groups = U.join(categories, GROUPS_SEPERATOR_CHAR);
         Log.i("G&S", "Modificato");
         dbContact.pinyinName = getPinyinTextFromChinese(dbContact.firstName + " " + dbContact.lastName);
         dbContact.save();
@@ -195,7 +203,8 @@ public class ContactsDBHelper {
     }
 
     private static void addToFavoritesInCaseIs(VCard vcard, Contact contact) {
-        if (isFavorite(vcard)) ContactsDataStore.addFavorite(contact);
+        Log.i("G&S","Modificato");
+        if (vcard.getExtendedProperty(VCardUtils.X_FAVORITE_EXTENDED_VCARD_PROPERTY) != null && vcard.getExtendedProperty(VCardUtils.X_FAVORITE_EXTENDED_VCARD_PROPERTY).getValue().equals(String.valueOf(true))) ContactsDataStore.addFavorite(contact);
     }
 
     public static Contact addContact(Triplet<String, String, VCard> hrefEtagAndVCard, Context context) {
@@ -233,7 +242,11 @@ public class ContactsDBHelper {
             } catch (Exception e) {
                 continue;
             }
-            new PhoneNumber(getMobileNumber(telephoneNumber), contact, isPrimaryPhoneNumber(telephoneNumber)).save();
+            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato");
+            String telephoneText =  telephoneNumber.getText();
+            Integer telephonePref = telephoneNumber.getPref();
+            new PhoneNumber(telephoneText == null ? telephoneNumber.getUri().getNumber() : telephoneText, contact, telephonePref != null && telephonePref == PRIMARY_PHONE_NUMBER_PREF).save();
         }
     }
 
@@ -241,7 +254,12 @@ public class ContactsDBHelper {
         Pair<String, String> name = getNameFromVCard(vcard, context);
         Contact contact = new Contact(name.first, name.second);
         Log.i("G&S","Modificato");
-        contact.groups = U.join(getCategories(vcard),GROUPS_SEPERATOR_CHAR);
+        Log.i("G&S","Modificato");
+        Categories categoriesTemp = vcard.getCategories();
+        List<String> categories;
+        if(categoriesTemp == null) categories = Collections.emptyList();
+        else categories = categoriesTemp.getValues();
+        contact.groups = U.join(categories,GROUPS_SEPERATOR_CHAR);
         Log.i("G&S", "Modificato");
         contact.pinyinName = getPinyinTextFromChinese(contact.firstName + " " + contact.lastName);
         contact.save();
