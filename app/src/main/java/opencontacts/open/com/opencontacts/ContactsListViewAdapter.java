@@ -27,7 +27,7 @@ import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
 
 public class ContactsListViewAdapter extends ArrayAdapter<Contact> {
     private boolean shouldToggleContactActions;
-    private ContactsListActionsListener contactsListActionsListener;
+    public ContactsListActionsListener contactsListActionsListener;
     private LayoutInflater layoutInflater;
     public ContactsListFilter contactsListFilter;
     private boolean socialAppIntegrationEnabled;
@@ -137,9 +137,7 @@ public class ContactsListViewAdapter extends ArrayAdapter<Contact> {
         return contactsListFilter;
     }
 
-    public void setContactsListActionsListener(ContactsListActionsListener contactsListActionsListener) {
-        this.contactsListActionsListener = contactsListActionsListener;
-    }
+
 
     public interface ContactsListActionsListener {
         void onCallClicked(Contact contact);

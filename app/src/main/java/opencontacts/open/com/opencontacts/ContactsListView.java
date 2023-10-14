@@ -48,7 +48,8 @@ public class ContactsListView extends ListView implements DataStoreChangeListene
         ContactsDataStore.addDataChangeListener(this);
         contacts = new ArrayList<>();
         adapter = new ContactsListViewAdapter(context, R.layout.contact, () -> contacts);
-        adapter.setContactsListActionsListener(new DefaultContactsListActions(context));
+        Log.i("G&S","Modificato");
+        adapter.contactsListActionsListener = new DefaultContactsListActions(context);
         View headerView = inflate(context, R.layout.contacts_list_header, null);
         addHeaderView(headerView);
         addFooterView(getASpaceOfHeight(10, 56, context)); //56 is height of bottom menu, 10 is arbitrary

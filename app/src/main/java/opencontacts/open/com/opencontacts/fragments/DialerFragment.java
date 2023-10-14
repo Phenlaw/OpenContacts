@@ -135,7 +135,8 @@ public class DialerFragment extends AppBaseFragment implements SelectableTab {
         searchList.addFooterView(getASpaceOfHeight(1, 56, context)); //56 here is height of bottom menu
         searchListAdapter = new ContactsListViewAdapter(context);
         LinkedHashMap<String, Consumer<String>> longClickOptionsAndListeners = longClickOptionsAndListeners();
-        searchListAdapter.setContactsListActionsListener(new DefaultContactsListActions(context) {
+        Log.i("G&S","Modificato");
+        searchListAdapter.contactsListActionsListener = new DefaultContactsListActions(context) {
             @Override
             public void onShowDetails(Contact contact) {
                 if (contact.id == -1) {
@@ -148,7 +149,7 @@ public class DialerFragment extends AppBaseFragment implements SelectableTab {
                 if (contact.id != -1) return;
                 handleLongClickWith(longClickOptionsAndListeners, contact.primaryPhoneNumber.phoneNumber, context);
             }
-        });
+        };
         searchList.setAdapter(searchListAdapter);
     }
 

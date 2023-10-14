@@ -13,6 +13,8 @@ import androidx.core.util.Pair;
 import android.util.Log;
 import android.widget.Toast;
 
+import net.lingala.zip4j.io.inputstream.ZipInputStream;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -92,7 +94,10 @@ public class VCardImporterAsyncTask extends AsyncTask<Void, Object, List<Pair<VC
         if (isEmpty(getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, contextWeakReference.get())))
             throw new NoPasswordFoundException();
         Log.i("G&S","Modificato");
-        return ZipUtils.getPlainTextInputStreamFromZip(getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, contextWeakReference.get()), vcardInputStream);
+        Log.i("G&S","Modificato");
+        ZipInputStream zipInputStream = new ZipInputStream(vcardInputStream, getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, contextWeakReference.get()).toCharArray());
+        zipInputStream.getNextEntry();
+        return zipInputStream;
     }
 
     private boolean processVCard(VCard vcard) {

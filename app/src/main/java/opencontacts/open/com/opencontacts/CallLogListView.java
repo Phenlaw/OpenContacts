@@ -68,10 +68,10 @@ import opencontacts.open.com.opencontacts.utils.SharedPreferencesUtils;
  */
 
 public class CallLogListView extends RelativeLayout implements DataStoreChangeListener<CallLogEntry> {
-    private boolean inSelectionMode;
+    public boolean inSelectionMode;
     private String UNKNOWN;
     Context context;
-    private EditNumberBeforeCallHandler editNumberBeforeCallHandler;
+    public EditNumberBeforeCallHandler editNumberBeforeCallHandler;
     ArrayAdapter<GroupedCallLogEntry> adapter;
     private boolean isSocialAppIntegrationEnabled;
     //android has weakref to this listener and gets garbage collected hence we should have it here.
@@ -81,8 +81,8 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
     private ListView listView;
     private HashSet<GroupedCallLogEntry> selectedEntries;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private Runnable onEnteringMultiSelectMode;
-    private Runnable onExitingMultiSelectMode;
+    public Runnable onEnteringMultiSelectMode;
+    public Runnable onExitingMultiSelectMode;
 
 
     public CallLogListView(final Context context, EditNumberBeforeCallHandler editNumberBeforeCallHandler) {
@@ -106,21 +106,24 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
 
         final OnClickListener callContact = v -> {
             if (inSelectionMode) return;
-            CallLogEntry callLogEntry = getLatestCallLogEntry((View) v.getParent());
+            Log.i("G&S","Modificato");
+            CallLogEntry callLogEntry = ((GroupedCallLogEntry) ((View) v.getParent()).getTag()).latestCallLogEntry;
             Log.i("G&S","Modificato");
             AndroidUtils.call(callLogEntry.phoneNumber, context);
         };
 
         final OnClickListener socialAppContact = v -> {
             if (inSelectionMode) return;
-            CallLogEntry callLogEntry = getLatestCallLogEntry((View) v.getParent());
+            Log.i("G&S","Modificato");
+            CallLogEntry callLogEntry = ((GroupedCallLogEntry) ((View) v.getParent()).getTag()).latestCallLogEntry;
             Log.i("G&S","Modificato");
             AndroidUtils.openSocialApp(callLogEntry.phoneNumber, context);
         };
 
         final OnLongClickListener socialAppLongClick = v -> {
             if (inSelectionMode) return false;
-            CallLogEntry callLogEntry = getLatestCallLogEntry((View) v.getParent());
+            Log.i("G&S","Modificato");
+            CallLogEntry callLogEntry = ((GroupedCallLogEntry) ((View) v.getParent()).getTag()).latestCallLogEntry;
             Log.i("G&S","Modificato");
             AndroidUtils.onSocialLongPress(callLogEntry.phoneNumber, context);
             return true;
@@ -128,7 +131,8 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
 
         final OnClickListener messageContact = v -> {
             if (inSelectionMode) return;
-            CallLogEntry callLogEntry = getLatestCallLogEntry((View) v.getParent());
+            Log.i("G&S","Modificato");
+            CallLogEntry callLogEntry = ((GroupedCallLogEntry) ((View) v.getParent()).getTag()).latestCallLogEntry;
             Log.i("G&S","Modificato");
             AndroidUtils.message(callLogEntry.phoneNumber, context);
         };
@@ -143,7 +147,8 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
         };
 
         final OnClickListener showContactDetails = v -> {
-            CallLogEntry callLogEntry = getLatestCallLogEntry(v);
+            Log.i("G&S","Modificato");
+            CallLogEntry callLogEntry = ((GroupedCallLogEntry) v.getTag()).latestCallLogEntry;;
             Log.i("G&S","Modificato");
             long contactId = callLogEntry.contactId;
             if (contactId == -1)
@@ -334,10 +339,6 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
         });
     }
 
-    private CallLogEntry getLatestCallLogEntry(View v) {
-        return ((GroupedCallLogEntry) v.getTag()).latestCallLogEntry;
-    }
-
     @Override
     public void onUpdate(CallLogEntry callLogEntry) {
         reload();
@@ -371,9 +372,6 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
         CallLogDataStore.removeDataChangeListener(this);
     }
 
-    public void setEditNumberBeforeCallHandler(EditNumberBeforeCallHandler editNumberBeforeCallHandler) {
-        this.editNumberBeforeCallHandler = editNumberBeforeCallHandler;
-    }
 
     public void enterSelectionMode() {
         inSelectionMode = true;
@@ -416,18 +414,6 @@ public class CallLogListView extends RelativeLayout implements DataStoreChangeLi
             .value();
         CallLogDataStore.deleteCallLogEntries(individualCallLogEntries);
         selectedEntries.clear();
-    }
-
-    public void setOnEnteringMultiSelectMode(Runnable onEnteringMultiSelectMode) {
-        this.onEnteringMultiSelectMode = onEnteringMultiSelectMode;
-    }
-
-    public void setOnExitingMultiSelectMode(Runnable onExitingMultiSelectMode) {
-        this.onExitingMultiSelectMode = onExitingMultiSelectMode;
-    }
-
-    public boolean isInSelectionMode() {
-        return inSelectionMode;
     }
 
 }

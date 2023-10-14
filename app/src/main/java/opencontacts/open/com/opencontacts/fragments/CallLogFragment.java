@@ -27,9 +27,12 @@ public class CallLogFragment extends AppBaseFragment implements SelectableTab {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato");
         callLogListView = new CallLogListView(getContext(), editNumberBeforeCallHandler);
-        callLogListView.setOnEnteringMultiSelectMode(() -> ((MainActivity) getActivity()).hideBottomMenu());
-        callLogListView.setOnExitingMultiSelectMode(() -> ((MainActivity) getActivity()).showBottomMenu());
+        callLogListView.onEnteringMultiSelectMode =  () -> ((MainActivity) getActivity()).hideBottomMenu();
+        callLogListView.onExitingMultiSelectMode = () -> ((MainActivity) getActivity()).showBottomMenu();
+
     }
 
     @Nullable
@@ -66,15 +69,19 @@ public class CallLogFragment extends AppBaseFragment implements SelectableTab {
 
     @Override
     public boolean handleBackPress() {
-        if (!callLogListView.isInSelectionMode()) return false;
+        Log.i("G&S","Modificato");
+        if (!callLogListView.inSelectionMode) return false;
         callLogListView.exitSelectionMode();
         return true;
     }
 
     public void setEditNumberBeforeCallHandler(EditNumberBeforeCallHandler editNumberBeforeCallHandler) {
         this.editNumberBeforeCallHandler = editNumberBeforeCallHandler;
-        if (callLogListView != null)
-            callLogListView.setEditNumberBeforeCallHandler(editNumberBeforeCallHandler);
+        if (callLogListView != null){
+            Log.i("G&S","Modificato");
+            callLogListView.editNumberBeforeCallHandler = editNumberBeforeCallHandler;
+
+        }
     }
 
 }

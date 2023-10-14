@@ -21,9 +21,4 @@ public class ZipUtils {
         zipFile.addStream(new ByteArrayInputStream(bytesToExport), zipParameters);
     }
 
-    public static InputStream getPlainTextInputStreamFromZip(String password, InputStream inputStream) throws IOException {
-        ZipInputStream zipInputStream = new ZipInputStream(inputStream, password.toCharArray());
-        zipInputStream.getNextEntry();
-        return zipInputStream;
-    }
 }

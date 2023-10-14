@@ -132,5 +132,5 @@ public class AddressPopup {
         addressTypeSpinner.setDropDownDrawable(getTintedDrawable(R.drawable.ic_arrow_drop_down_black_24dp, context));
         addressTypeSpinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, types));
         if (types.size() > 0) addressTypeSpinner.selectItem(0);
-    }       //da ottimizzare forse
+    }
 }

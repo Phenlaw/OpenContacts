@@ -124,11 +124,13 @@ public class GroupsActivity extends AppBaseActivity {
         contactsListAdapter = new ContactsListViewAdapter(this);
         contactsListAdapter.createContactsListFilter(this::getCurrentGroupContacts);
         contactsListView.setAdapter(contactsListAdapter);
-        contactsListAdapter.setContactsListActionsListener(new DefaultContactsListActions(this) {
+        Log.i("G&S","Modificato");
+        contactsListAdapter.contactsListActionsListener = new DefaultContactsListActions(this){
             @Override
-            public void onLongClick(Contact contact) {
+            public void onLongClick(Contact contact){
+
             }
-        });
+        };
 
     }
 

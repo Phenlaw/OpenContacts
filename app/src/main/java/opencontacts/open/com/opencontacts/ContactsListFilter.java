@@ -3,6 +3,7 @@ package opencontacts.open.com.opencontacts;
 import static opencontacts.open.com.opencontacts.utils.AndroidUtils.processAsync;
 import static opencontacts.open.com.opencontacts.utils.DomainUtils.getContactComparatorBasedOnLastAccessed;
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 
@@ -61,13 +62,11 @@ public abstract class ContactsListFilter extends Filter {
         }
 
         List<Contact> filteredContacts = filter(searchText, contacts);
-        sortFilteredContacts(filteredContacts);
+        Log.i("G&S","Modificato");
+        Collections.sort(filteredContacts, getContactComparatorBasedOnLastAccessed());
         return filteredContacts;
     }
 
     public abstract List<Contact> filter(CharSequence searchText, List<Contact> contacts);
 
-    protected void sortFilteredContacts(List<Contact> filteredContacts) {
-        Collections.sort(filteredContacts, getContactComparatorBasedOnLastAccessed());
-    }
 }

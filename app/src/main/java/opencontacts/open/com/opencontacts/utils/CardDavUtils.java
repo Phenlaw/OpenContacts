@@ -16,7 +16,6 @@ import static opencontacts.open.com.opencontacts.utils.CARDDAVConstants.XML_TAG_
 import static opencontacts.open.com.opencontacts.utils.Common.map;
 import static opencontacts.open.com.opencontacts.utils.NetworkUtils.getHttpClientWithBasicAuth;
 import static opencontacts.open.com.opencontacts.utils.XMLParsingUtils.createXMLDocument;
-import static opencontacts.open.com.opencontacts.utils.XMLParsingUtils.getText;
 
 import android.content.Context;
 import android.net.Uri;
@@ -89,7 +88,9 @@ public class CardDavUtils {
         Node responseNodeOfAddressbookType = U.firstOrNull(listOfResourceNodesWithAddressBooks);
         if (responseNodeOfAddressbookType == null)
             return null;
-        return getText(XML_TAG_HREF, XML_NAMESPACE_DAV, responseNodeOfAddressbookType);
+        Log.i("G&S","Modificato");
+        return ((Element) responseNodeOfAddressbookType).getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_HREF).item(0).getTextContent();
+
     }
 
     public static List<Triplet<String, String, VCard>> downloadAddressBook(String addressBookUrl) throws Exception {
@@ -118,10 +119,16 @@ public class CardDavUtils {
         NodeList responseNodes = xmlDocument.getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_RESPONSE);
         return map(new NodeListIterable(responseNodes), node -> {
             try {
+                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato");
+
                 return new Triplet<>(
-                    getText(XML_TAG_HREF, XML_NAMESPACE_DAV, node),
-                    getText(XML_TAG_GETETAG, XML_NAMESPACE_DAV, node),
-                    new VCardReader(getText(XML_TAG_ADDRESS_DATA, XML_NAMESPACE_CARDDAV, node)).readNext()
+
+
+                ((Element) node).getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_HREF).item(0).getTextContent(),
+                ((Element) node).getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_GETETAG).item(0).getTextContent(),
+                new VCardReader(((Element) node).getElementsByTagNameNS(XML_NAMESPACE_CARDDAV, XML_TAG_ADDRESS_DATA).item(0).getTextContent()).readNext()
                 );
             } catch (IOException e) {
                 e.printStackTrace();
@@ -271,8 +278,10 @@ public class CardDavUtils {
             NodeList responseNodes = xmlDocument.getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_RESPONSE);
             //da ottimizzare forse
             U.forEach(new NodeListIterable(responseNodes), node -> {
-                String href = getText(XML_TAG_HREF, XML_NAMESPACE_DAV, node);
-                String status = getText(XML_TAG_STATUS, XML_NAMESPACE_DAV, node);
+                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato");
+                String href = ((Element) node).getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_HREF).item(0).getTextContent();
+                String status = ((Element) node).getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_STATUS).item(0).getTextContent();
                 if (status.contains(HTTP_STATUS_NOT_FOUND)) deleted.add(href);
                 else updatedOrAdded.add(href);
 
