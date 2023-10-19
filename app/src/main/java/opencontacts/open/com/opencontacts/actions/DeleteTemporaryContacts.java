@@ -25,4 +25,5 @@ public class DeleteTemporaryContacts implements ContactsHouseKeepingAction{
                 if(hasItBeen(30, DAY_OF_MONTH, tempContactDetails.markedTemporaryOn.getTime())) ContactsDataStore.removeContact(tempContactDetails.contact.getId());
             });
     }
+
 }

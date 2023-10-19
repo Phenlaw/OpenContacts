@@ -23,6 +23,7 @@ public class TextInputAndSpinnerFieldCollection extends InputFieldCollection<Tex
     public List<String> fieldTypes;
     public String hint;
     public int inputType;
+    public boolean isNumber;
 
     public TextInputAndSpinnerFieldCollection(Context context) {
         this(context, null);
@@ -49,8 +50,10 @@ public class TextInputAndSpinnerFieldCollection extends InputFieldCollection<Tex
 
     @Override
     public TextInputAndSpinnerViewHolder createNewField() {
-        View inflatedView = layoutInflater.inflate(R.layout.layout_edit_field_and_type, fieldsHolderLayout, false);
-        return new TextInputAndSpinnerViewHolder(hint, inputType, fieldTypes, inflatedView, getContext());
+        View inflatedView;
+        if(isNumber) inflatedView = layoutInflater.inflate(R.layout.layout_edit_field_and_type, fieldsHolderLayout, false);
+        else inflatedView = layoutInflater.inflate(R.layout.layout_edit_field_and_type_email, fieldsHolderLayout, false);
+        return new TextInputAndSpinnerViewHolder(hint, inputType, fieldTypes, inflatedView, getContext(), isNumber);
     }
 
     public List<Pair<String, String>> getValuesAndTypes() {

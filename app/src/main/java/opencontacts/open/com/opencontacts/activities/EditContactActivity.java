@@ -147,7 +147,9 @@ public class EditContactActivity extends AppBaseActivity {
         editText_firstName = findViewById(R.id.editFirstName);
         editText_lastName = findViewById(R.id.editLastName);
         phoneNumbersInputCollection = findViewById(R.id.phonenumbers);
+        phoneNumbersInputCollection.isNumber=true;
         emailsInputCollection = findViewById(R.id.emails);
+        emailsInputCollection.isNumber=false;
         addressesInputCollection = findViewById(R.id.addresses);
         notesTextInputEditText = findViewById(R.id.notes);
         websiteTextInputEditText = findViewById(R.id.website);
@@ -236,6 +238,7 @@ public class EditContactActivity extends AppBaseActivity {
         String newPhoneNumberToBeAdded = getIntent().getStringExtra(INTENT_EXTRA_STRING_PHONE_NUMBER);
         if (U.isEmpty(telephoneNumbers)) {
             phoneNumbersInputCollection.addOneMoreView(newPhoneNumberToBeAdded, defaultPhoneNumberTypeTranslatedText);
+           // phoneNumbersInputCollection.getChildAt(0).setId(R.id.);
             return;
         }
         //Da ottimizzare FORSE
