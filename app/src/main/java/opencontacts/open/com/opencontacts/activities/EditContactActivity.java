@@ -135,7 +135,9 @@ public class EditContactActivity extends AppBaseActivity {
         editText_firstName = findViewById(R.id.editFirstName);
         editText_lastName = findViewById(R.id.editLastName);
         phoneNumbersInputCollection = findViewById(R.id.phonenumbers);
+        phoneNumbersInputCollection.isNumber=true;
         emailsInputCollection = findViewById(R.id.emails);
+        emailsInputCollection.isNumber=false;
         addressesInputCollection = findViewById(R.id.addresses);
         notesTextInputEditText = findViewById(R.id.notes);
         websiteTextInputEditText = findViewById(R.id.website);

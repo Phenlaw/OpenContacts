@@ -1,66 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/rl__listContact"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="?selectableItemBackground"
+    android:orientation="vertical"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:layout_height="match_parent">
+    android:paddingBottom="10dp">
 
 
     <opencontacts.open.com.opencontacts.components.ImageButtonWithTint
-        android:layout_marginLeft="5dp"
+        android:id="@+id/button_action1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_chat_black_24dp"
-        android:id="@+id/button_action1"
-        android:layout_marginRight="10dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="10dp" />
+        android:layout_marginLeft="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_chat_black_24dp" />
 
     <TextView
+        android:id="@+id/textview_full_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textview_full_name"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@id/button_social"
+        android:layout_toLeftOf="@id/button_social"
+        android:layout_toEndOf="@id/button_action1"
+        android:layout_toRightOf="@id/button_action1"
         android:text="name"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="?android:textColorPrimary"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@id/button_social"
-        android:layout_toRightOf="@id/button_action1"
-        android:layout_toEndOf="@id/button_action1"
-        android:layout_toStartOf="@id/button_social" />
+        android:textColor="?android:textColorPrimary" />
 
     <opencontacts.open.com.opencontacts.components.ImageButtonWithTint
+        android:id="@+id/button_action2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_chat_black_24dp"
-        android:id="@+id/button_action2"
-        android:layout_marginRight="5dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="5dp" />
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/ic_chat_black_24dp" />
 
     <opencontacts.open.com.opencontacts.views.SocialAppButton
+        android:id="@+id/button_social"
         style="@style/TransparentImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_whatsapp"
-        android:id="@+id/button_social"
-        android:layout_marginRight="10dp"
         android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:layout_toStartOf="@id/button_action2"
         android:layout_toLeftOf="@id/button_action2"
-        android:layout_toStartOf="@id/button_action2" />
+        android:src="@drawable/ic_whatsapp" />
 
     <TextView
-        android:layout_below="@id/textview_full_name"
-        android:text="phone_number"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:id="@+id/textview_phone_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textview_phone_number"
+        android:layout_below="@id/textview_full_name"
+        android:layout_toEndOf="@id/button_action1"
         android:layout_toRightOf="@id/button_action1"
-        android:layout_toEndOf="@id/button_action1" />
+        android:text="phone_number"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 </RelativeLayout>

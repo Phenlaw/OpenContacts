@@ -24,9 +24,17 @@ public class TextInputAndSpinnerViewHolder extends FieldViewHolder {
     private List<String> types;
     private View fieldView;
 
-    TextInputAndSpinnerViewHolder(String hint, int inputType, List<String> types, View fieldView, Context context) {
-        editText = fieldView.findViewById(R.id.edit_field);
-        spinner = fieldView.findViewById(R.id.type_spinner);
+    public boolean isNumber;
+
+    TextInputAndSpinnerViewHolder(String hint, int inputType, List<String> types, View fieldView, Context context, Boolean isNumber) {
+        this.isNumber=isNumber;
+        if (isNumber) {
+            editText = fieldView.findViewById(R.id.edit_field);
+            spinner = fieldView.findViewById(R.id.type_spinner);
+        }else {
+            editText = fieldView.findViewById(R.id.edit_field_mail);
+            spinner = fieldView.findViewById(R.id.type_spinner_mail);
+        }
         this.types = types;
         this.fieldView = fieldView;
         setupTextInput(hint, inputType, fieldView);
@@ -34,7 +42,8 @@ public class TextInputAndSpinnerViewHolder extends FieldViewHolder {
     }
 
     private void setupTextInput(String hint, int inputType, View fieldView) {
-        ((TextInputLayout) fieldView.findViewById(R.id.text_input_layout)).setHint(hint);
+        if (isNumber) ((TextInputLayout) fieldView.findViewById(R.id.text_input_layout)).setHint(hint);
+        else ((TextInputLayout) fieldView.findViewById(R.id.text_input_layout_mail)).setHint(hint);
         editText.setInputType(inputType);
     }        //Da ottimizzare FORSE
 
