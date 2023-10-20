@@ -46,12 +46,15 @@ class CallLogDBHelper {
     private Map<String, Integer> simsInfo = null;
 
     public static void removeAllContactsLinking() {
-        //da ottimizzare FORSE
-        U.forEach(getRecentCallLogEntriesFromDB(), callLogEntry -> {
+        Log.i("FOR","Modificato");
+        List<CallLogEntry> recentCallLogEntries = getRecentCallLogEntriesFromDB();
+        int recentCallLogEntriesSize = recentCallLogEntries.size();
+        for(int i =0;i<recentCallLogEntriesSize;i++){
+            CallLogEntry callLogEntry = recentCallLogEntries.get(i);
             callLogEntry.name = null;
             callLogEntry.contactId = -1;
             callLogEntry.save();
-        });
+        }
     }
 
     private void createSimsInfo(Context context) {
@@ -63,16 +66,19 @@ class CallLogDBHelper {
             //added permission check above using util intellij wasn't able to identify it
             @SuppressLint("MissingPermission") List<PhoneAccountHandle> callCapablePhoneAccounts = telecomManager.getCallCapablePhoneAccounts();
             if (callCapablePhoneAccounts.size() < 2) return;
-            //da ottimizzare FORSE
-            U.forEachIndexed(callCapablePhoneAccounts, (index, phoneAccount) -> simsInfo.put(phoneAccount.getId(), index + 1));
+            Log.i("FOR","Modificato");
+            int callCapablePhoneAccountsSize = callCapablePhoneAccounts.size();
+            for(int i=0;i<callCapablePhoneAccountsSize;i++) simsInfo.put(callCapablePhoneAccounts.get(i).getId(), i + 1);
             return;
         }
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
             @SuppressLint("MissingPermission") List<SubscriptionInfo> activeSubscriptionInfoList = ((SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE)).getActiveSubscriptionInfoList();
             if (activeSubscriptionInfoList == null)
                 return;
-            //da ottimizzare
-            for (SubscriptionInfo subscriptionInfo : activeSubscriptionInfoList) {
+            Log.i("FOR","Modificato");
+            int subscriptionInfoListSize = activeSubscriptionInfoList.size();
+            for(int i =0;i<subscriptionInfoListSize;i++)  {
+                SubscriptionInfo subscriptionInfo = activeSubscriptionInfoList.get(i);
                 simsInfo.put(subscriptionInfo.getIccId(), subscriptionInfo.getSimSlotIndex() + 1);
             }
         }

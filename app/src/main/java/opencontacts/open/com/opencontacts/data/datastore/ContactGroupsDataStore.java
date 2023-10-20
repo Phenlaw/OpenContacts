@@ -42,8 +42,10 @@ public class ContactGroupsDataStore {
     public static void COMPUTE_INTENSIVE_computeGroups() {
         List<Contact> allContacts = ContactsDataStore.getAllContacts();
         groupsMap = new HashMap<>();
-        //da ottimizzare
-        for (Contact contact : allContacts) {
+        Log.i("FOR","Modificato");
+        int contactsSize = allContacts.size();
+        for(int i=0;i<contactsSize;i++){
+            Contact contact = allContacts.get(i);
             Log.i("G&S","Modificato");
             List<String> groupNames;
             if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
@@ -51,7 +53,6 @@ public class ContactGroupsDataStore {
             U.chain(groupNames)
                 .map(groupName -> getOrDefault(groupsMap, groupName, new ContactGroup(groupName)))
                 .map(group -> group.addContact(contact))
-                //da ottimizzare FORSE
                 .forEach(group -> {
                     Log.i("G&S","Modificato");
                     groupsMap.put(group.name, group);
@@ -83,8 +84,9 @@ public class ContactGroupsDataStore {
     public static void createNewGroup(List<Contact> contacts, String groupName) {
         ContactGroup newContactGroup = new ContactGroup(groupName);
         groupsMap.put(groupName, newContactGroup);
-        //da ottimizzare FORSE
-        U.forEach(contacts, contact -> addContactToGroup(newContactGroup, contact));
+        Log.i("FOR","Modificato");
+        int contactsSize = contacts.size();
+        for(int i=0;i<contactsSize;i++) addContactToGroup(newContactGroup,contacts.get(i));
     }
 
     public static void updateGroup(List<Contact> newContacts, String newGroupName, ContactGroup group) {
@@ -95,7 +97,7 @@ public class ContactGroupsDataStore {
             return;
         }
         Collection<Contact> removedContacts = U.reject(group.contacts, newContacts::contains);
-        //da ottimizzare FORSE
+        //Non ottimizzare perchè non è ArrayList
         U.forEach(removedContacts, removedContact -> removeContactFromGroup(group, removedContact));
 
         //removing based on group name hence it should happen first
@@ -105,13 +107,12 @@ public class ContactGroupsDataStore {
 
 
         Collection<Contact> onlyNewContacts = U.reject(newContacts, group.contacts::contains);
-        //da ottimizzare FORSE
+        //Non ottimizzare perchè non è ArrayList
         U.forEach(onlyNewContacts, newContact -> addContactToGroup(group, newContact));
     }
 
     private static void destroyGroup(ContactGroup group) {
         //new array list coz of concurrent modification of same array group.contacts
-        //da ottimizzare FORSE
         U.chain(group.contacts)
             .forEach(contact -> removeContactFromGroup(group, contact));
         Log.i("G&S","Modificato");
@@ -158,7 +159,6 @@ public class ContactGroupsDataStore {
     public static void handleContactDeletion(Contact contact) {
         U.chain(groupsMap.values())
             .map(group -> group.contacts)
-            //da ottimizzare FORSE
             .forEach(contactsList -> contactsList.remove(contact));
     }
 
@@ -168,7 +168,7 @@ public class ContactGroupsDataStore {
         if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
         else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
         List<String> newGroupAssociations = groupNames;
-        //da ottimizzare FORSE
+        //Non ottimizzare perchè non è ArrayList
         U.forEach(groupsMap.values(), group -> {
             Log.i("G&S","Modificato");
             if (newGroupAssociations.contains(group.name)) group.addContact(contact);
@@ -186,13 +186,14 @@ public class ContactGroupsDataStore {
         Log.i("G&S","Modificato");
         U.chain(groupsMap.values())
             .filter(group -> groupAssociations.contains(group.name))
-            //da ottimizzare FORSE
             .forEach(group -> group.addContact(contact));
     }
 
     public static void PROCESS_INTENSIVE_delete(ContactGroup selectedGroup, Context context) {
-        //da ottimizzare FORSE
-        U.forEach(new ArrayList<>(selectedGroup.contacts), contact -> removeContactFromGroup(selectedGroup, contact));
+        Log.i("FOR","Modificato");
+        ArrayList<Contact> selectedContactsfromSelectedGroup = new ArrayList<>(selectedGroup.contacts);
+        int size = selectedContactsfromSelectedGroup.size();
+        for(int i =0;i<size; i++) removeContactFromGroup(selectedGroup,selectedContactsfromSelectedGroup.get(i));
         Log.i("G&S","Modificato");
         groupsMap.remove(selectedGroup.name);
         toastFromNonUIThread(R.string.group_deleted, Toast.LENGTH_SHORT, context);

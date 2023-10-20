@@ -66,9 +66,11 @@ public class Contact implements Serializable {
         StringBuilder searchStringBuffer = new StringBuilder();
         Log.i("G&S","Modificato");
         String nameForT9 = ContactsDataStore.t9NameSupplier.apply(this);
-        //da ottimizzare
-        for (PhoneNumber phoneNumber : phoneNumbers)
-            searchStringBuffer.append(phoneNumber.numericPhoneNumber).append(' ');
+        Log.i("FOR","Modifcato");
+        int phoneNumbersSize = phoneNumbers.size();
+        for(int i=0;i<phoneNumbersSize;i++)
+            searchStringBuffer.append(phoneNumbers.get(i).numericPhoneNumber).append(' ');
+
         searchStringBuffer.append(getNumericKeyPadNumberForString(nameForT9));
         t9Text = searchStringBuffer.toString().toUpperCase();
     }
@@ -77,9 +79,10 @@ public class Contact implements Serializable {
         StringBuilder searchStringBuffer = new StringBuilder();
         searchStringBuffer.append(name).append(' ');
         searchStringBuffer.append(replaceAccentedCharactersWithEnglish(name)).append(' ');// helps being able to search name by typing í or i - accented
-        //da ottimizzare
-        for (PhoneNumber phoneNumber : phoneNumbers)
-            searchStringBuffer.append(phoneNumber.numericPhoneNumber).append(' ');
+        Log.i("FOR","Modifcato");
+        int phoneNumbersSize = phoneNumbers.size();
+        for(int i=0;i<phoneNumbersSize;i++)
+            searchStringBuffer.append(phoneNumbers.get(i).numericPhoneNumber).append(' ');
         textSearchTarget = searchStringBuffer.toString().toUpperCase();
     }
 

@@ -44,6 +44,7 @@ import ezvcard.property.Birthday;
 import ezvcard.property.Categories;
 import ezvcard.property.Email;
 import ezvcard.property.Note;
+import ezvcard.property.Telephone;
 import ezvcard.property.Url;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.components.ExpandedList;
@@ -257,8 +258,12 @@ public class ContactDetailsActivity extends AppBaseActivity {
         }
         findViewById(R.id.phone_card).setVisibility(VISIBLE);
         phoneNumbersLinearLayout.removeAllViews();
-        //Da ottimizzare FORSE
-        U.forEach(vcard.getTelephoneNumbers(), telephone -> {
+        Log.i("FOR","Modificato");
+
+        List<Telephone> telephoneNumbers = vcard.getTelephoneNumbers();
+        int telephoneNumbersSize = telephoneNumbers.size();
+        for (int i=0;i<telephoneNumbersSize;i++){
+            Telephone telephone=telephoneNumbers.get(i);
             View inflatedView = layoutInflater.inflate(R.layout.contact_details_row, phoneNumbersLinearLayout, false);
             Log.i("G&S","Modificato");
             String telephoneTextTemp = telephone.getText();
@@ -283,7 +288,7 @@ public class ContactDetailsActivity extends AppBaseActivity {
             inflatedView.setOnLongClickListener(copyPhoneNumberToClipboard);
             inflatedView.setTag(telephoneText);
             phoneNumbersLinearLayout.addView(inflatedView);
-        });
+        }
     }
 
     private void exportToContactsApp() {

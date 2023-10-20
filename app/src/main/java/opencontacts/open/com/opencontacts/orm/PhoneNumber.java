@@ -41,6 +41,6 @@ public class PhoneNumber extends SugarRecord implements Serializable {
 
     public PhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    } //da ottimizzare
+    }
 
 }

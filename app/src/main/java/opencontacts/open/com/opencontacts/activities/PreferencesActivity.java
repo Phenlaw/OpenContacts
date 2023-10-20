@@ -160,7 +160,7 @@ public class PreferencesActivity extends AppBaseActivity {
 
         private void handlePreferenceUpdates() {
             HashMap<String, Preference.OnPreferenceChangeListener> onPreferenceChangeHandlersMap = getIndividualPreferenceHandlersMap();
-            //Da ottimizzare FORSE
+            //Non da ottimizzare poiche' non si tratta di un ArrayList
 
             U.forEach(onPreferenceChangeHandlersMap.keySet(),
                 preferenceKey -> findPreference(preferenceKey)

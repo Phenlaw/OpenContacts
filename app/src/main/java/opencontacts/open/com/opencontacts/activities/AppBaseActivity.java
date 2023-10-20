@@ -55,9 +55,9 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     }
 
     private void processMenu(Menu menu, int textColorPrimary) {
-        //Da ottimizzare FORSE
-
-        for (int i = 0, totalItems = menu.size(); i < totalItems; i++) {
+        Log.i("FOR","Modificato");
+        int totalItems = menu.size()  ;
+        for (int i = 0; i < totalItems; i++) {
             MenuItem menuItem = menu.getItem(i);
             if (menuItem.hasSubMenu()) processMenu(menuItem.getSubMenu(), textColorPrimary);
             if (menuItem.getIcon() == null) continue;

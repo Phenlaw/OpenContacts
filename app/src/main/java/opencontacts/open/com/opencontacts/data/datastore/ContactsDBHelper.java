@@ -56,10 +56,14 @@ public class ContactsDBHelper {
             return;
         Log.i("G&S","Modificato");
         List<PhoneNumber> dbPhoneNumbers = PhoneNumber.find(PhoneNumber.class, "contact = ?", "" + dbContact.getId());
-        for (PhoneNumber dbPhoneNumber : dbPhoneNumbers)
-            dbPhoneNumber.delete();
+        Log.i("FOR","Modificato");
+        int dbPhoneNumbersSize = dbPhoneNumbers.size();
+        for(int i=0;i<dbPhoneNumbersSize;i++) dbPhoneNumbers.get(i).delete();
         List<CallLogEntry> callLogEntries = getCallLogEntriesFor(contactId);
-        for (CallLogEntry callLogEntry : callLogEntries) {
+        Log.i("FOR","Modificato");
+        int callLogEntriesSize = callLogEntries.size();
+        for(int i=0;i<callLogEntriesSize;i++){
+            CallLogEntry callLogEntry = callLogEntries.get(i);
             callLogEntry.setId((long) -1);
             callLogEntry.save();
         }
@@ -93,8 +97,11 @@ public class ContactsDBHelper {
     static void replacePhoneNumbersInDB(Contact dbContact, VCard vcard, String primaryPhoneNumber) {
         Log.i("G&S","Modificato");
         List<PhoneNumber> dbPhoneNumbers = PhoneNumber.find(PhoneNumber.class, "contact = ?", "" + dbContact.getId());
-        U.forEach(vcard.getTelephoneNumbers(),
-            telephone -> {
+        Log.i("FOR","Modificato");
+        List<Telephone> vCardTelephoneNumbers = vcard.getTelephoneNumbers();
+        int vCardTelephoneNumbersSize = vCardTelephoneNumbers.size();
+        for(int i=0;i<vCardTelephoneNumbersSize;i++){
+                Telephone telephone = vCardTelephoneNumbers.get(i);
                 Log.i("G&S","Modificato");
                 String telephoneTextTemp = telephone.getText();
                 String phoneNumberText;
@@ -102,7 +109,7 @@ public class ContactsDBHelper {
                 if(telephoneTextTemp == null) phoneNumberText = telephone.getUri().getNumber();
                 else phoneNumberText = telephoneTextTemp;
                 new PhoneNumber(phoneNumberText, dbContact, primaryPhoneNumber.equals(phoneNumberText)).save();
-            });
+            }
         PhoneNumber.deleteInTx(dbPhoneNumbers);
     }
 
@@ -129,7 +136,10 @@ public class ContactsDBHelper {
         List<PhoneNumber> dbPhoneNumbers = PhoneNumber.listAll(PhoneNumber.class);
         HashMap<Long, opencontacts.open.com.opencontacts.domain.Contact> contactsMap = new HashMap<>();
         opencontacts.open.com.opencontacts.domain.Contact tempContact;
-        for (PhoneNumber dbPhoneNumber : dbPhoneNumbers) {
+        Log.i("FOR","Modificato");
+        int dbPhoneNumbersSize = dbPhoneNumbers.size();
+        for (int i=0;i<dbPhoneNumbersSize;i++) {
+            PhoneNumber dbPhoneNumber = dbPhoneNumbers.get(i);
             tempContact = contactsMap.get(dbPhoneNumber.contact.getId());
             if (tempContact == null) {
                 tempContact = createNewDomainContact(dbPhoneNumber.contact, Collections.singletonList(dbPhoneNumber));
@@ -164,7 +174,10 @@ public class ContactsDBHelper {
         List<PhoneNumber> allDbPhoneNumbersOfContact = PhoneNumber.find(PhoneNumber.class, "contact = ?", contact.id + "");
         if (allDbPhoneNumbersOfContact == null)
             return;
-        for (PhoneNumber dbPhoneNumber : allDbPhoneNumbersOfContact) {
+        Log.i("FOR","Modificato");
+        int allDbPhoneNumbersOfContactSize = allDbPhoneNumbersOfContact.size();
+        for(int i=0;i<allDbPhoneNumbersOfContactSize;i++) {
+            PhoneNumber dbPhoneNumber = allDbPhoneNumbersOfContact.get(i);
             if (dbPhoneNumber.phoneNumber.equals(mobileNumber)) {
                 dbPhoneNumber.isPrimaryNumber = !dbPhoneNumber.isPrimaryNumber;
             } else
@@ -235,7 +248,11 @@ public class ContactsDBHelper {
     }
 
     private static void createMobileNumbersAndSaveInDB(VCard vcard, Contact contact) {
-        for (Telephone telephoneNumber : vcard.getTelephoneNumbers()) {
+        Log.i("FOR","Modificato");
+        List<Telephone> vcardTelephoneNumbers = vcard.getTelephoneNumbers();
+        int vCardTelephoneNumbersSize = vcardTelephoneNumbers.size();
+        for (int i=0;i<vCardTelephoneNumbersSize;i++) {
+            Telephone telephoneNumber = vcardTelephoneNumbers.get(i);
             try {//try block here to check if telephoneNumber.getUri is null. Do not want to check a lot of null combos. so try catch would help
                 if (isEmpty(telephoneNumber.getText()) && isEmpty(telephoneNumber.getUri().getNumber()))
                     continue;
@@ -275,9 +292,11 @@ public class ContactsDBHelper {
     }
 
     public static void unmarkContactAsTemporary(long id) {
-        U.forEach(TemporaryContact.find(TemporaryContact.class, "contact = ?", "" + id),
-            tempContact -> tempContact.delete()
-        );
+        Log.i("FOR","Modificato");
+        List<TemporaryContact> temporaryContactList =TemporaryContact.find(TemporaryContact.class, "contact = ?", "" + id);
+        int temporaryContactListSize = temporaryContactList.size();
+        for(int i=0;i<temporaryContactListSize;i++) temporaryContactList.get(i).delete();
+
     }
 
     public static boolean isTemporary(long id){

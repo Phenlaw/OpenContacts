@@ -55,6 +55,7 @@ import ezvcard.property.StructuredName;
 import ezvcard.property.Telephone;
 import ezvcard.property.Url;
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
+import okhttp3.TlsVersion;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.components.fieldcollections.addressfieldcollection.AddressFieldCollection;
 import opencontacts.open.com.opencontacts.components.fieldcollections.textinputspinnerfieldcollection.TextInputAndSpinnerFieldCollection;
@@ -238,16 +239,16 @@ public class EditContactActivity extends AppBaseActivity {
         String newPhoneNumberToBeAdded = getIntent().getStringExtra(INTENT_EXTRA_STRING_PHONE_NUMBER);
         if (U.isEmpty(telephoneNumbers)) {
             phoneNumbersInputCollection.addOneMoreView(newPhoneNumberToBeAdded, defaultPhoneNumberTypeTranslatedText);
-           // phoneNumbersInputCollection.getChildAt(0).setId(R.id.);
             return;
         }
-        //Da ottimizzare FORSE
-
-        U.forEach(telephoneNumbers, telephoneNumber -> {
+        Log.i("FOR","Modificato");
+        int telephoneNumbersSize = telephoneNumbers.size();
+        for(int i =0; i<telephoneNumbersSize;i++) {
+            Telephone telephoneNumber = telephoneNumbers.get(i);
             Log.i("G&S","Modificato");
             String telephoneText = telephoneNumber.getText();
             phoneNumbersInputCollection.addOneMoreView(telephoneText == null ? telephoneNumber.getUri().getNumber() : telephoneText, DomainUtils.getMobileNumberTypeTranslatedText(telephoneNumber.getTypes(), EditContactActivity.this)) ;
-        });
+        }
         if (newPhoneNumberToBeAdded != null)
             phoneNumbersInputCollection.addOneMoreView(newPhoneNumberToBeAdded, defaultPhoneNumberTypeTranslatedText);
     }
@@ -330,14 +331,12 @@ public class EditContactActivity extends AppBaseActivity {
 
     private void addAddressFromFieldsToNewVCard(VCard newVCard) {
         if (addressesInputCollection.isEmpty()) return;
-        //Da ottimizzare FORSE
         U.chain(addressesInputCollection.getAllAddresses())
             .forEach(newVCard::addAddress);
     }
 
     private void addEmailsFromFieldsToNewVCard(VCard newVCard) {
         if (emailsInputCollection.isEmpty()) return;
-        //Da ottimizzare FORSe
         U.chain(emailsInputCollection.getValuesAndTypes())
             .map(this::createEmail)
             .forEach(newVCard::addEmail);
@@ -345,8 +344,6 @@ public class EditContactActivity extends AppBaseActivity {
 
     private void addTelephoneNumbersFromFieldsToNewVCard(VCard newVCard) {
         if (phoneNumbersInputCollection.isEmpty()) return;
-        //Da ottimizzare FORSE
-
         U.chain(phoneNumbersInputCollection.getValuesAndTypes())
             .map(this::createTelephone)
             .forEach(newVCard::addTelephoneNumber);

@@ -153,8 +153,10 @@ public class ContactsDataStore {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                //da ottimizzare
-                for (CallLogEntry callLogEntry : newCallLogEntries) {
+                Log.i("FOR","Modifcato");
+                int newCallLogEntriesSize = newCallLogEntries.size();
+                for (int i=0;i<newCallLogEntriesSize;i++) {
+                    CallLogEntry callLogEntry = newCallLogEntries.get(i);
                     Log.i("G&S","Modificato");
                     long contactId = callLogEntry.contactId;
                     if (getContactWithId(contactId) == null)
@@ -196,8 +198,10 @@ public class ContactsDataStore {
         if (dataChangeListeners.isEmpty() || pauseUpdates)
             return;
         synchronized (dataChangeListeners) {
-            //da ottimizzare FORSE
-            U.forEach(dataChangeListeners, listener -> {
+            Log.i("FOR","Modifcato");
+            int dataChangeListenersSize = dataChangeListeners.size();
+            for(int i=0;i<dataChangeListenersSize;i++){
+                DataStoreChangeListener<Contact> listener = dataChangeListeners.get(i);
                 if (listener == null) return;
                 if (type == ADDITION)
                     listener.onAdd(contact);
@@ -207,7 +211,7 @@ public class ContactsDataStore {
                     listener.onUpdate(contact);
                 else if (type == REFRESH)
                     listener.onStoreRefreshed();
-            });
+            }
         }
     }
 
@@ -240,12 +244,15 @@ public class ContactsDataStore {
 
     public static void writePinyinToDb(Context context) {
         List<opencontacts.open.com.opencontacts.orm.Contact> dbContacts = opencontacts.open.com.opencontacts.orm.Contact.listAll(opencontacts.open.com.opencontacts.orm.Contact.class);
-        //da ottimizzare FORSE
-        U.forEach(dbContacts, dbContact -> {
+        Log.i("FOR","Modifcato");
+
+        int dbContactsSize = dbContacts.size();
+        for(int i=0;i<dbContactsSize;i++){
+            opencontacts.open.com.opencontacts.orm.Contact dbContact = dbContacts.get(i);
             Log.i("G&S", "Modificato");
             dbContact.pinyinName = getPinyinTextFromChinese(dbContact.firstName + " " + dbContact.lastName);
             dbContact.save();
-        });
+        }
         refreshStoreAsync();
     }
 
@@ -312,7 +319,6 @@ public class ContactsDataStore {
         final Contact firstContact = U.first(contactsToMerge);
         U.chain(contactsToMerge)
             .rest()
-            //da ottimizzare FORSE
             .forEach(contactToMerge -> {
                 try {
                     mergeContacts(firstContact, contactToMerge, context);

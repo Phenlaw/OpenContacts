@@ -53,10 +53,9 @@ public class CallLogDataStore {
             CallLogEntry callLogEntry = recentCallLogEntries.get(0);
             callLogEntries.add(0, callLogEntry);
             processAsync(() -> {
-                //da ottimizzare
-                for (DataStoreChangeListener<CallLogEntry> dataStoreChangeListener : dataChangeListeners) {
-                    dataStoreChangeListener.onAdd(callLogEntry);
-                }
+                Log.i("FOR","Modificato");
+                int dataChangeListenersSize = dataChangeListeners.size();
+                for(int i=0;i<dataChangeListenersSize;i++)  dataChangeListeners.get(i).onAdd(callLogEntry);
             });
         }
     }
@@ -71,10 +70,10 @@ public class CallLogDataStore {
     }
 
     private static void notifyRefreshStore() {
-        //da ottimizzare
-        for (DataStoreChangeListener<CallLogEntry> dataStoreChangeListener : dataChangeListeners) {
-            dataStoreChangeListener.onStoreRefreshed();
-        }
+        Log.i("FOR","Modificato");
+        int dataChangeListenersSize = dataChangeListeners.size();
+        for(int i=0;i<dataChangeListenersSize;i++) dataChangeListeners.get(i).onStoreRefreshed();
+
     }
 
     public static CallLogEntry getMostRecentCallLogEntry(Context context) {
@@ -107,14 +106,17 @@ public class CallLogDataStore {
                 if (callLogEntriesToWorkWith.isEmpty())
                     return;
                 int numberOfEntriesUpdated = 0;
-                //da ottimizzare
-                for (PhoneNumber phoneNumber : newContact.phoneNumbers) {
+                int phoneNumbersSize = newContact.phoneNumbers.size();
+                Log.i("FOR","Modificato");
+                for (int i=0;i<phoneNumbersSize;i++) {
                     Log.i("G&S","Modificato");
-                    String searchablePhoneNumber = DomainUtils.getPhoneNumberWithoutCountryCodeAndFormatting(phoneNumber.phoneNumber);
+                    String searchablePhoneNumber = DomainUtils.getPhoneNumberWithoutCountryCodeAndFormatting(newContact.phoneNumbers.get(i).phoneNumber);
                     if (searchablePhoneNumber == null)
                         continue;
-                    //da ottimizzare
-                    for (CallLogEntry callLogEntry : callLogEntriesToWorkWith) {
+                    Log.i("FOR","Modificato");
+                    int callLogEntriesSize = callLogEntriesToWorkWith.size();
+                    for (int j=0;j<callLogEntriesSize;j++) {
+                        CallLogEntry callLogEntry = callLogEntriesToWorkWith.get(j);
                         Log.i("G&S","Modificato");
                         if (callLogEntry.contactId != -1)
                             continue;
@@ -150,8 +152,10 @@ public class CallLogDataStore {
         if (callLogEntries == null)
             callLogEntries = getRecentCallLogEntries(context);
         int numberOfEntriesUpdated = 0;
-        //da ottimizzare
-        for (CallLogEntry callLogEntry : callLogEntries) {
+        Log.i("FOR","Modificato");
+        int callLogEntriesSize = callLogEntries.size();
+        for (int i=0;i<callLogEntriesSize;i++) {
+            CallLogEntry callLogEntry = callLogEntries.get(i);
             Log.i("G&S","Modificato");
             if (callLogEntry.contactId != -1)
                 continue;
@@ -175,16 +179,17 @@ public class CallLogDataStore {
         boolean hasBeenDeleted = CallLogDBHelper.delete(id);
         if (!hasBeenDeleted)
             return;
-        //da ottimizzare
-        for (CallLogEntry callLogEntryToBeRemoved : callLogEntries) {
+        Log.i("FOR","Modificato");
+        int callLogEntriesSize = callLogEntries.size();
+        for (int i=0;i<callLogEntriesSize;i++) {
+            CallLogEntry callLogEntryToBeRemoved = callLogEntries.get(i);
             if (!callLogEntryToBeRemoved.getId().equals(id))
                 continue;
             callLogEntries.remove(callLogEntryToBeRemoved);
             processAsync(() -> {
-                //da ottimizzare
-                for (DataStoreChangeListener<CallLogEntry> dataStoreChangeListener : dataChangeListeners) {
-                    dataStoreChangeListener.onRemove(callLogEntryToBeRemoved);
-                }
+                Log.i("FOR","Modificato");
+                int dataChangeListenersSize = dataChangeListeners.size();
+                for (int j=0; j< dataChangeListenersSize;j++) dataChangeListeners.get(j).onRemove(callLogEntryToBeRemoved);
             });
             break;
         }
@@ -208,16 +213,19 @@ public class CallLogDataStore {
 
     public static Collection<CallLogEntry> getUnLabelledCallLogEntriesMatching(String number) {
         ArrayMap<String, CallLogEntry> matchedEntries = new ArrayMap<>();
-        //da ottimizzare FORSE
-        U.forEach(callLogEntries, entry -> {
-            if (entry.name != null) return;
+        Log.i("FOR","Modificato");
+        int callLogEntriesSize = callLogEntries.size();
+        for(int i=0;i<callLogEntriesSize;i++){
+            CallLogEntry entry = callLogEntries.get(i);
+            if (entry.name != null) break;
             Log.i("G&S","Modificato");
             String phoneNumber = entry.phoneNumber;
             if (matchedEntries.containsKey(phoneNumber))
-                return; // making sure only recent entries make it so that sorting based on last called will not be impacted
-            if (!phoneNumber.contains(number)) return;
+                break; // making sure only recent entries make it so that sorting based on last called will not be impacted
+            if (!phoneNumber.contains(number)) break;
             matchedEntries.put(phoneNumber, entry);
-        });
+
+        }
         return matchedEntries.values();
     }
 

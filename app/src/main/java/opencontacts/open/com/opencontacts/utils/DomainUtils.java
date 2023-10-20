@@ -194,8 +194,11 @@ public class DomainUtils {
         VCardWriter vCardWriter = new VCardWriter(contactsPlainTextExportStream, VCardVersion.V4_0);
         vCardWriter.setCaretEncodingEnabled(true);
         StructuredName structuredName = new StructuredName();
-        //da ottimizzare
-        for (Contact contact : allContacts) {
+
+        Log.i("FOR","Modificato");
+        int contactsSize = allContacts.size();
+        for (int i=0;i<contactsSize;i++) {
+            Contact contact = allContacts.get(i);
             Log.i("G&S","Modificato");
             VCardData vCardData = ContactsDBHelper.getVCard(contact.id);
             if (vCardData == null)
@@ -221,9 +224,11 @@ public class DomainUtils {
         structuredName.setGiven(contact.firstName);
         structuredName.setFamily(contact.lastName);
         vcard.setStructuredName(structuredName);
-        //da ottimizzare
-        for (PhoneNumber phoneNumber : contact.phoneNumbers)
-            vcard.addTelephoneNumber(phoneNumber.phoneNumber, TelephoneType.CELL);
+
+        Log.i("FOR","Modificato");
+        int phoneNumbersSize = contact.phoneNumbers.size();
+        for (int i =0; i<phoneNumbersSize;i++)
+            vcard.addTelephoneNumber(contact.phoneNumbers.get(i).phoneNumber, TelephoneType.CELL);
         vCardWriter.write(vcard);
     }
 
@@ -290,7 +295,7 @@ public class DomainUtils {
         if (!TextUtils.isEmpty(nonAccentedCharacters)) text = U.join(Common.map(text.split(" "), word -> TextUtils.isEmpty(word) ? "" : word.charAt(0)), "");
         String finalString = nonAccentedCharacters + " " + text;
         StringBuffer numericString = new StringBuffer();
-        //da ottimizzare
+        //Non da ottimizzare perchè non è un ArrayList
         for (char c : finalString.toCharArray()) {
             if (Character.isSpaceChar(c)) {
                 numericString.append(0);
@@ -396,8 +401,9 @@ public class DomainUtils {
             SimpleDateFormat callTimeStampFormat = getFullDateTimestampPattern(context);
             List<CallLogEntry> entireCallLog = CallLogEntry.listAll(CallLogEntry.class);
             writeCallLogCSVHeader(csvWriter);
-            //da ottimizzare forse
-            U.forEach(entireCallLog, callLogEntry -> writeCallLogEntryToFile(callLogEntry, callTimeStampFormat, finalCsvWriter));
+            Log.i("FOR","Modificato");
+            int entireCallLogSize = entireCallLog.size();
+            for(int i=0;i<entireCallLogSize;i++)  writeCallLogEntryToFile(entireCallLog.get(i), callTimeStampFormat, finalCsvWriter);
         } finally {
             if (csvWriter != null) csvWriter.flushQuietly();
         }
@@ -472,8 +478,11 @@ public class DomainUtils {
 
     public static List<Contact> filterContactsBasedOnT9Text(CharSequence t9Text, List<Contact> contacts) {
         ArrayList<Contact> filteredContacts = new ArrayList<>();
-        //da ottimizzare
-        for (Contact contact : contacts) {
+
+        Log.i("FOR","Modificato");
+        int contactsSize = contacts.size();
+        for (int i=0;i<contactsSize;i++) {
+            Contact contact = contacts.get(i);
             if (contact.t9Text == null) {
                 contact.setT9Text();
             }
@@ -513,7 +522,6 @@ public class DomainUtils {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         U.chain(notificationManager.getActiveNotifications())
             .filter(notification -> isMissedCallNotification(context, notification))
-            //da ottimizzare forse
             .forEach(notification -> notificationManager.cancel(notification.getId()));
     }
 

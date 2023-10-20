@@ -37,6 +37,7 @@ import ezvcard.property.Url;
 import ezvcard.property.VCardProperty;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.domain.Contact;
+import opencontacts.open.com.opencontacts.orm.VCardData;
 
 public class VCardUtils {
 
@@ -63,9 +64,10 @@ public class VCardUtils {
             String lastName = getEmptyStringIfNull(structuredName.getFamily());
             if (additionalNames.size() > 0) {
                 StringBuilder nameBuffer = new StringBuilder();
-                //da ottimizzare
-                for (String additionalName : additionalNames)
-                    nameBuffer.append(additionalName).append(" ");
+                Log.i("FOR","Modificato");
+                int additionalNamesSize = additionalNames.size();
+                for (int i =0;i<additionalNamesSize;i++)
+                    nameBuffer.append(additionalNames.get(i)).append(" ");
                 lastName = nameBuffer.append(lastName).toString();
             }
             name = new Pair<>(getEmptyStringIfNull(structuredName.getGiven()), lastName);
@@ -138,27 +140,30 @@ public class VCardUtils {
 
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, VCard vcard) {
-        //da ottimizzare forse
-        U.forEach(vcard.getTelephoneNumbers(),
-            telephoneNumber -> {
-                if (contact.primaryPhoneNumber.phoneNumber.equals(telephoneNumber.getText()))
-                    telephoneNumber.setPref(PRIMARY_PHONE_NUMBER_PREF);
-                else telephoneNumber.setPref(NON_PRIMARY_PHONE_NUMBER_PREF);
-            }
-        );
+        Log.i("FOR","Modificato");
+        List<Telephone> phoneNumbers = vcard.getTelephoneNumbers();
+        int phoneNumbersSize = phoneNumbers.size();
+        for(int i=0;i<phoneNumbersSize;i++){
+            Telephone telephoneNumber = phoneNumbers.get(i);
+            if (contact.primaryPhoneNumber.phoneNumber.equals(telephoneNumber.getText()))
+                telephoneNumber.setPref(PRIMARY_PHONE_NUMBER_PREF);
+            else telephoneNumber.setPref(NON_PRIMARY_PHONE_NUMBER_PREF);
+        }
     }
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, String vcardData) {
         try {
             Log.i("G&S","Modificato");
             Log.i("G&S","Modificato");
-            U.forEach(new VCardReader(vcardData).readNext().getTelephoneNumbers(),
-                telephoneNumber -> {
+            Log.i("FOR","Modificato");
+            List<Telephone> telephoneNumbers = new VCardReader(vcardData).readNext().getTelephoneNumbers();
+            int telephoneNumbersSize = telephoneNumbers.size();
+            for(int i=0;i<telephoneNumbersSize;i++){
+                Telephone telephoneNumber= telephoneNumbers.get(i);
                     if (contact.primaryPhoneNumber.phoneNumber.equals(telephoneNumber.getText()))
                         telephoneNumber.setPref(PRIMARY_PHONE_NUMBER_PREF);
                     else telephoneNumber.setPref(NON_PRIMARY_PHONE_NUMBER_PREF);
                 }
-            );
         } catch (IOException e) {
             e.printStackTrace();
         }

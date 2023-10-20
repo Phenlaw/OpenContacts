@@ -1,5 +1,6 @@
 package opencontacts.open.com.opencontacts;
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
@@ -19,9 +20,10 @@ public class ContactsListT9Filter extends ContactsListFilter {
 
     public void createDataMapping(List<Contact> contacts) {
         List<Contact> threadSafeContacts = new ArrayList<>(contacts);
-        //DA OTTIMIZZARE
-        for (Contact contact : threadSafeContacts) {
-            contact.setT9Text();
+        Log.i("FOR","Modificato");
+        int threadSafeContactsSize = threadSafeContacts.size();
+        for (int i =0;i<threadSafeContactsSize;i++) {
+            threadSafeContacts.get(i).setT9Text();
         }
     }
 

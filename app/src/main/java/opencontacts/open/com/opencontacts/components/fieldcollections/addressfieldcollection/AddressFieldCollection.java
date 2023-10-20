@@ -93,16 +93,16 @@ public class AddressFieldCollection extends TextViewFieldCollection {
     }
 
     public void setAddresses(List<Address> addresses) {
-        //Da ottimizzare FORSE
-
-        U.forEach(fieldViewHoldersList, address -> fieldsHolderLayout.removeView(fieldsHolderLayout));
+        Log.i("FOR","Modificato");
+        int fieldViewHoldersListSize = fieldViewHoldersList.size();
+        for(int i=0;i<fieldViewHoldersListSize;i++)  fieldsHolderLayout.removeView(fieldsHolderLayout);
         if (addresses.isEmpty()) {
             addOneMoreView();
             return;
         }
-        //Da ottimizzare FORSE
-
-        U.forEach(addresses, this::addOneMoreView);
+        Log.i("FOR","Modificato");
+        int addressesSize = addresses.size();
+        for(int i=0;i<addressesSize;i++) addOneMoreView(addresses.get(i));
     }
 
     private void addOneMoreView(Address address) {

@@ -312,11 +312,12 @@ public class AndroidUtils {
         Intent exportToContactsAppIntent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
 
         ArrayList<ContentValues> data = new ArrayList<>();
-        //da ottimizzare
-        for (PhoneNumber phoneNumber : contact.phoneNumbers) {
+        Log.i("FOR","Modifcato");
+        int phoneNumbersSize = contact.phoneNumbers.size();
+        for(int i=0;i<phoneNumbersSize;i++){
             ContentValues row = new ContentValues();
             row.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-            row.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber.phoneNumber);
+            row.put(ContactsContract.CommonDataKinds.Phone.NUMBER, contact.phoneNumbers.get(i).phoneNumber);
             data.add(row);
         }
         exportToContactsAppIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, data)
