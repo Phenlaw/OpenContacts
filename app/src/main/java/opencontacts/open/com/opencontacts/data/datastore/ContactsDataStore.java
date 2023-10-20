@@ -23,6 +23,7 @@ import static opencontacts.open.com.opencontacts.utils.VCardUtils.mergeVCardStri
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -158,8 +159,10 @@ public class ContactsDataStore {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                //da ottimizzare
-                for (CallLogEntry callLogEntry : newCallLogEntries) {
+                Log.i("FOR","Modifcato");
+                int newCallLogEntriesSize = newCallLogEntries.size();
+                for (int i=0;i<newCallLogEntriesSize;i++) {
+                    CallLogEntry callLogEntry = newCallLogEntries.get(i);
                     long contactId = callLogEntry.getContactId();
                     if (getContactWithId(contactId) == null)
                         continue;
@@ -199,8 +202,10 @@ public class ContactsDataStore {
         if (dataChangeListeners.isEmpty() || pauseUpdates)
             return;
         synchronized (dataChangeListeners) {
-            //da ottimizzare FORSE
-            U.forEach(dataChangeListeners, listener -> {
+            Log.i("FOR","Modifcato");
+            int dataChangeListenersSize = dataChangeListeners.size();
+            for(int i=0;i<dataChangeListenersSize;i++){
+                DataStoreChangeListener<Contact> listener = dataChangeListeners.get(i);
                 if (listener == null) return;
                 if (type == ADDITION)
                     listener.onAdd(contact);
@@ -210,7 +215,7 @@ public class ContactsDataStore {
                     listener.onUpdate(contact);
                 else if (type == REFRESH)
                     listener.onStoreRefreshed();
-            });
+            }
         }
     }
 
@@ -231,7 +236,7 @@ public class ContactsDataStore {
 
     public static VCardData getVCardData(long contactId) {
         return ContactsDBHelper.getVCard(contactId);
-    }//da ottimizzare
+    }
 
     public static void init(Context context) {
         updateT9Supplier(context);
@@ -249,11 +254,14 @@ public class ContactsDataStore {
 
     public static void writePinyinToDb(Context context) {
         List<opencontacts.open.com.opencontacts.orm.Contact> dbContacts = opencontacts.open.com.opencontacts.orm.Contact.listAll(opencontacts.open.com.opencontacts.orm.Contact.class);
-        //da ottimizzare FORSE
-        U.forEach(dbContacts, dbContact -> {
+        Log.i("FOR","Modifcato");
+
+        int dbContactsSize = dbContacts.size();
+        for(int i=0;i<dbContactsSize;i++){
+            opencontacts.open.com.opencontacts.orm.Contact dbContact = dbContacts.get(i);
             dbContact.pinyinName = getPinyinTextFromChinese(dbContact.getFullName());
             dbContact.save();
-        });
+        }
         refreshStoreAsync();
     }
 
@@ -270,7 +278,7 @@ public class ContactsDataStore {
             return favorites;
         updateFavoritesList();
         return favorites;
-    }//da ottimizzare FORSE
+    }
 
     public static void addFavorite(Contact contact) {
         if (getFavorites().contains(contact)) return;
@@ -306,7 +314,7 @@ public class ContactsDataStore {
     public static boolean isFavorite(Contact contact) {
         return getFavorites().contains(contact);
     }
-    //da ottimizzare
+
     public static void mergeContacts(Contact primaryContact, Contact secondaryContact, Context context) throws IOException {
         VCardData primaryVCardData = VCardData.getVCardData(primaryContact.id);
         VCardData secondaryVCardData = VCardData.getVCardData(secondaryContact.id);
@@ -320,7 +328,6 @@ public class ContactsDataStore {
         final Contact firstContact = U.first(contactsToMerge);
         U.chain(contactsToMerge)
             .rest()
-            //da ottimizzare FORSE
             .forEach(contactToMerge -> {
                 try {
                     mergeContacts(firstContact, contactToMerge, context);
@@ -344,11 +351,11 @@ public class ContactsDataStore {
 
     public static List<TemporaryContact> getTemporaryContactDetails() {
         return ContactsDBHelper.getTemporaryContactDetails();
-    }//da ottimizzare
+    }
 
     public static boolean isTemporary(long id) {
         return ContactsDBHelper.isTemporary(id);
     }
-    //da ottimizzare
+
 
 }

@@ -20,6 +20,8 @@ import static opencontacts.open.com.opencontacts.utils.XMLParsingUtils.getText;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
@@ -267,7 +269,7 @@ public class CardDavUtils {
         if (response.isSuccessful()) {
             Document xmlDocument = createXMLDocument(response.body().string());
             NodeList responseNodes = xmlDocument.getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_RESPONSE);
-            //da ottimizzare forse
+            //Da non ottimizzare perchè non è un ArrayList
             U.forEach(new NodeListIterable(responseNodes), node -> {
                 String href = getText(XML_TAG_HREF, XML_NAMESPACE_DAV, node);
                 String status = getText(XML_TAG_STATUS, XML_NAMESPACE_DAV, node);
@@ -309,8 +311,9 @@ public class CardDavUtils {
         final StringBuilder hrefsInRequest = new StringBuilder();
         String hrefTagOpen = "<d:href>";
         String hrefTagClose = "</d:href>";
-        //da ottimizzare
-        U.forEach(hrefs, href -> hrefsInRequest.append(hrefTagOpen + href + hrefTagClose));
+        Log.i("FOR","Modifcato");
+        int hrefsSize = hrefs.size();
+        for(int i=0;i<hrefsSize;i++) hrefsInRequest.append(hrefTagOpen + hrefs.get(i) + hrefTagClose);
         return prefix + hrefsInRequest.toString() + suffix;
     }
 

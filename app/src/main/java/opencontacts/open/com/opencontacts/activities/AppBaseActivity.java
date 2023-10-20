@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -47,9 +49,9 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     }
 
     private void processMenu(Menu menu, int textColorPrimary) {
-        //Da ottimizzare FORSE
-
-        for (int i = 0, totalItems = menu.size(); i < totalItems; i++) {
+        Log.i("FOR","Modificato");
+        int totalItems = menu.size()  ;
+        for (int i = 0; i < totalItems; i++) {
             MenuItem menuItem = menu.getItem(i);
             if (menuItem.hasSubMenu()) processMenu(menuItem.getSubMenu(), textColorPrimary);
             if (menuItem.getIcon() == null) continue;

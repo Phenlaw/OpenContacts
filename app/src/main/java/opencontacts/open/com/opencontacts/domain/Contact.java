@@ -6,6 +6,7 @@ import static opencontacts.open.com.opencontacts.utils.DomainUtils.getNumericKey
 
 import androidx.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.github.underscore.U;
 
@@ -62,9 +63,11 @@ public class Contact implements Serializable {
     public void setT9Text() {
         StringBuilder searchStringBuffer = new StringBuilder();
         String nameForT9 = ContactsDataStore.getT9NameSupplier().apply(this);
-        //da ottimizzare
-        for (PhoneNumber phoneNumber : phoneNumbers)
-            searchStringBuffer.append(phoneNumber.numericPhoneNumber).append(' ');
+        Log.i("FOR","Modifcato");
+        int phoneNumbersSize = phoneNumbers.size();
+        for(int i=0;i<phoneNumbersSize;i++)
+            searchStringBuffer.append(phoneNumbers.get(i).numericPhoneNumber).append(' ');
+
         searchStringBuffer.append(getNumericKeyPadNumberForString(nameForT9));
         t9Text = searchStringBuffer.toString().toUpperCase();
     }
@@ -73,9 +76,10 @@ public class Contact implements Serializable {
         StringBuilder searchStringBuffer = new StringBuilder();
         searchStringBuffer.append(name).append(' ');
         searchStringBuffer.append(replaceAccentedCharactersWithEnglish(name)).append(' ');// helps being able to search name by typing í or i - accented
-        //da ottimizzare
-        for (PhoneNumber phoneNumber : phoneNumbers)
-            searchStringBuffer.append(phoneNumber.numericPhoneNumber).append(' ');
+        Log.i("FOR","Modifcato");
+        int phoneNumbersSize = phoneNumbers.size();
+        for(int i=0;i<phoneNumbersSize;i++)
+            searchStringBuffer.append(phoneNumbers.get(i).numericPhoneNumber).append(' ');
         textSearchTarget = searchStringBuffer.toString().toUpperCase();
     }
 
@@ -89,7 +93,7 @@ public class Contact implements Serializable {
     @NonNull
     private String getName(String firstName, String lastName) {
         return getEmptyStringIfNull(firstName) + " " + getEmptyStringIfNull(lastName);
-    }//da ottimizzare
+    }
 
     public Contact setGroups(String groups) {
         this.groups = groups;
@@ -126,7 +130,7 @@ public class Contact implements Serializable {
     public List<String> getGroupNames() {
         if (TextUtils.isEmpty(groups)) return Collections.emptyList();
         return Arrays.asList(groups.split(GROUPS_SEPERATOR_CHAR));
-    }//da ottimizzare
+    }
 
     public List<String> addGroup(String newGroupName) {
         List<String> groupNames = getGroupNames();
@@ -147,7 +151,6 @@ public class Contact implements Serializable {
     public static String getGroupsNamesCSVString(List<String> groups) {
         return U.join(groups, GROUPS_SEPERATOR_CHAR);
     }
-    //da ottimizzare
 
     @Override
     public int hashCode() {

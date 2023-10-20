@@ -5,6 +5,7 @@ import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStor
 import static opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore.requestResumeUpdates;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.github.underscore.lodash.U;
@@ -28,7 +29,7 @@ public class ContactsAutoMergeUtils {
         merged = 0;
         try {
             requestPauseOnUpdates();
-            //da ottimizzare forse
+            //Già ottimizzato
             Common.forEachIndex(nonEmptyNameContacts.size() - 1, (index) -> {
                 Contact primaryContact = nonEmptyNameContacts.get(index + 1);
                 Contact currentContact = nonEmptyNameContacts.get(index);

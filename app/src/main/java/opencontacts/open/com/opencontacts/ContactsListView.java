@@ -7,6 +7,8 @@ import static opencontacts.open.com.opencontacts.utils.DomainUtils.sortContactsB
 
 import android.content.Context;
 import androidx.appcompat.widget.AppCompatTextView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
@@ -116,9 +118,10 @@ public class ContactsListView extends ListView implements DataStoreChangeListene
     private void moveFavoritesToTop() {
         List<Contact> favorites = ContactsDataStore.getFavorites();
         Collections.sort(favorites, getContactComparatorBasedOnName(context));
-        //Da ottimizzare FORSE
 
-        U.forEach(favorites, contacts::remove);
+        Log.i("FOR","Modificato");
+        int favoritesSize = favorites.size();
+        for(int i=0; i<favoritesSize;i++) contacts.remove(favorites.get(i));
         contacts.addAll(0, favorites);
     }
 

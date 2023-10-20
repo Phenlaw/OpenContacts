@@ -45,25 +45,25 @@ public class TextInputAndSpinnerViewHolder extends FieldViewHolder {
         if (isNumber) ((TextInputLayout) fieldView.findViewById(R.id.text_input_layout)).setHint(hint);
         else ((TextInputLayout) fieldView.findViewById(R.id.text_input_layout_mail)).setHint(hint);
         editText.setInputType(inputType);
-    }        //Da ottimizzare FORSE
+    }
 
 
     public void set(String value, String type) {
         editText.setText(value);
         setItem(type, types, spinner);
-    }        //Da ottimizzare
+    }
 
     @Override
     public String getValue() {
         return editText.getText().toString();
     }
-    //Da ottimizzare
+
 
     @NonNull
     @Override
     public View getView() {
         return fieldView;
-    }         //Da ottimizzare
+    }
 
     public Pair<String, String> getValueAndTypeAsPair() {
         int indexOfSelectedValue = spinner.getListSelection();

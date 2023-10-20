@@ -31,23 +31,22 @@ public class TextViewViewHolder extends FieldViewHolder {
     public String getValue() {
         return contentView.getText().toString();
     }
-    //da ottimizzare
 
     public TextViewViewHolder setValue(Address address) {
         contentView.setText(formatAddressToAMultiLineString(address, inflatedView.getContext()));
         return this;
-    } //da ottimizzare FORSE
+    }
 
     public TextViewViewHolder setTitle(String title) {
         titleView.setText(title);
         return this;
-    } //da ottimizzare FORSE
+    }
 
     @NonNull
     @Override
     public View getView() {
         return inflatedView;
-    }         //Da ottimizzare
+    }
 
     public void setOnEdit(OnClickListener onClickListener) {
         editIcon.setOnClickListener(onClickListener);

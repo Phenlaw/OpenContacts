@@ -32,8 +32,7 @@ public class VCardData extends SugarRecord {
         this.uid = uid;
         this.status = status;
         this.etag = etag;
-    }//da ottimizzare
-
+    }
     public VCardData(Contact contact, VCard vCard, String uid, int status, String etag, String href) {
         VCardUtils.setFormattedNameIfNotPresent(vCard);
         VCardUtils.setUidIfNotPresent(vCard, uid);
@@ -43,7 +42,7 @@ public class VCardData extends SugarRecord {
         this.status = status;
         this.etag = etag;
         this.href = href;
-    }//da ottimizzare
+    }
 
     public VCardData() {
     }

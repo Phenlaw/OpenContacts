@@ -7,12 +7,15 @@ import static opencontacts.open.com.opencontacts.utils.Common.getEmptyStringIfNu
 import static opencontacts.open.com.opencontacts.utils.Common.getPartsThatAreNotPresentCaseInSensitive;
 
 import android.content.Context;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
 import com.github.underscore.U;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -63,9 +66,10 @@ public class VCardUtils {
         String lastName = getEmptyStringIfNull(structuredName.getFamily());
         if (additionalNames.size() > 0) {
             StringBuilder nameBuffer = new StringBuilder();
-            //da ottimizzare
-            for (String additionalName : additionalNames)
-                nameBuffer.append(additionalName).append(" ");
+            Log.i("FOR","Modificato");
+            int additionalNamesSize = additionalNames.size();
+            for (int i =0;i<additionalNamesSize;i++)
+                nameBuffer.append(additionalNames.get(i)).append(" ");
             lastName = nameBuffer.append(lastName).toString();
         }
         return new Pair<>(getEmptyStringIfNull(structuredName.getGiven()), lastName);
@@ -170,14 +174,15 @@ public class VCardUtils {
     }
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, VCard vcard) {
-        //da ottimizzare forse
-        U.forEach(vcard.getTelephoneNumbers(),
-            telephoneNumber -> {
-                if (contact.primaryPhoneNumber.phoneNumber.equals(telephoneNumber.getText()))
-                    telephoneNumber.setPref(PRIMARY_PHONE_NUMBER_PREF);
-                else telephoneNumber.setPref(NON_PRIMARY_PHONE_NUMBER_PREF);
-            }
-        );
+        Log.i("FOR","Modificato");
+        List<Telephone> phoneNumbers = vcard.getTelephoneNumbers();
+        int phoneNumbersSize = phoneNumbers.size();
+        for(int i=0;i<phoneNumbersSize;i++){
+            Telephone telephoneNumber = phoneNumbers.get(i);
+            if (contact.primaryPhoneNumber.phoneNumber.equals(telephoneNumber.getText()))
+                telephoneNumber.setPref(PRIMARY_PHONE_NUMBER_PREF);
+            else telephoneNumber.setPref(NON_PRIMARY_PHONE_NUMBER_PREF);
+        }
     }
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, String vcardData) {
@@ -200,7 +205,7 @@ public class VCardUtils {
 
     public static void setCategories(List<String> categories, VCard vcard) {
         vcard.setCategories(categories.toArray(new String[]{}));
-    }//da ottimizzare
+    }
 
     public static boolean isEmptyAddress(Address address) {
         if (address == null) return true;

@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.github.underscore.U;
@@ -64,12 +65,11 @@ public class SpinnerFieldCollection extends InputFieldCollection<SpinnerFieldHol
     public void set(List<String> options) {
         this.options = options;
     }
-    //DA OTTIMIZZARE
 
     public void addFields(List<String> values) {
-        //Da ottimizzare FORSE
-
-        U.forEach(values, this::addOneMoreView);
+        Log.i("FOR","Modificato");
+        int valuesSize=values.size();
+        for(int i=0;i<valuesSize;i++) addOneMoreView(values.get(i));
     }
 
     public void addOneMoreView(String value) {

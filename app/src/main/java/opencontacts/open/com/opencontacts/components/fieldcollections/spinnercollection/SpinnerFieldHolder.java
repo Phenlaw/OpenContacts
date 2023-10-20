@@ -46,5 +46,5 @@ public class SpinnerFieldHolder extends FieldViewHolder {
     @Override
     public View getView() {
         return fieldView;
-    } //da ottimizzare
+    }
 }

@@ -23,6 +23,8 @@ import android.os.Bundle;
 import androidx.core.util.Pair;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -41,12 +43,14 @@ import ezvcard.property.Address;
 import ezvcard.property.Birthday;
 import ezvcard.property.Email;
 import ezvcard.property.Note;
+import ezvcard.property.Telephone;
 import ezvcard.property.Url;
 import opencontacts.open.com.opencontacts.R;
 import opencontacts.open.com.opencontacts.components.ExpandedList;
 import opencontacts.open.com.opencontacts.components.TintedDrawablesStore;
 import opencontacts.open.com.opencontacts.data.datastore.ContactsDataStore;
 import opencontacts.open.com.opencontacts.domain.Contact;
+import opencontacts.open.com.opencontacts.orm.PhoneNumber;
 import opencontacts.open.com.opencontacts.orm.VCardData;
 import opencontacts.open.com.opencontacts.utils.AndroidUtils;
 import opencontacts.open.com.opencontacts.utils.DomainUtils;
@@ -243,8 +247,12 @@ public class ContactDetailsActivity extends AppBaseActivity {
         }
         findViewById(R.id.phone_card).setVisibility(VISIBLE);
         phoneNumbersLinearLayout.removeAllViews();
-        //Da ottimizzare FORSE
-        U.forEach(vcard.getTelephoneNumbers(), telephone -> {
+        Log.i("FOR","Modificato");
+
+        List<Telephone> telephoneNumbers = vcard.getTelephoneNumbers();
+        int telephoneNumbersSize = telephoneNumbers.size();
+        for (int i=0;i<telephoneNumbersSize;i++){
+            Telephone telephone=telephoneNumbers.get(i);
             View inflatedView = layoutInflater.inflate(R.layout.contact_details_row, phoneNumbersLinearLayout, false);
             String telephoneText = getMobileNumber(telephone);
             ((TextView) inflatedView.findViewById(R.id.textview_phone_number)).setText(telephoneText);
@@ -263,7 +271,7 @@ public class ContactDetailsActivity extends AppBaseActivity {
             inflatedView.setOnLongClickListener(copyPhoneNumberToClipboard);
             inflatedView.setTag(telephoneText);
             phoneNumbersLinearLayout.addView(inflatedView);
-        });
+        }
     }
 
     private void exportToContactsApp() {

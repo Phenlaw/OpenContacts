@@ -76,6 +76,6 @@ public class NetworkUtils {
         if (okHttpClient == null)
             throw new RuntimeException("Initialize okhttp client before requesting for one with creds.");
         return okHttpClient;
-    } //da ottimizzare
+    }
 
 }

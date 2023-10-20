@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
+
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
@@ -50,8 +52,10 @@ public class VCardImporterAsyncTask extends AsyncTask<Void, Object, List<Pair<VC
             publishProgress(PROGRESS_TOTAL_NUMBER_OF_VCARDS, vCards.size());
             int numberOfvCardsImported = 0, numberOfCardsIgnored = 0;
             ContactsDataStore.requestPauseOnUpdates();
-            //da ottimizzare
-            for (VCard vcard : vCards) {
+            Log.i("FOR","Modifcato");
+            int vCardsSize = vCards.size();
+            for(int i=0;i<vCardsSize;i++){
+                VCard vcard = vCards.get(i);
                 try {
                     if (processVCard(vcard)) ++numberOfvCardsImported;
                     else ++numberOfCardsIgnored;
@@ -61,6 +65,7 @@ public class VCardImporterAsyncTask extends AsyncTask<Void, Object, List<Pair<VC
                 }
                 publishProgress(PROGRESS_NUMBER_OF_VCARDS_PROCESSED_UNTIL_NOW, numberOfvCardsImported, numberOfCardsIgnored);
             }
+
             publishProgress(PROGRESS_FINAL_RESULT_OF_IMPORT, numberOfvCardsImported, numberOfCardsIgnored);
             return vcardsAndTheirExceptions;
         } catch (FileNotFoundException e) {

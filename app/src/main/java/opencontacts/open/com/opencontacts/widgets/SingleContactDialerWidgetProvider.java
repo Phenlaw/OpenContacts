@@ -19,7 +19,7 @@ public class SingleContactDialerWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        //da ottimizzare forse
+        //Non da ottimizzare perchè non è una lista
         Common.forEach(appWidgetIds, id -> updateWidgetView(id, context));
     }
 

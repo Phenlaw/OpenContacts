@@ -33,6 +33,7 @@ import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SwitchCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -160,14 +161,14 @@ public class CardDavSyncActivity extends AppCompatActivity {
         if (hrefsDeleted.isEmpty()) return;
         List<VCardData> allVCardDataList = VCardData.listAll(VCardData.class);
         Map<String, VCardData> allVCardsAsHREFMap = getAllVCardsAsHREFMap(allVCardDataList);
-
-        //Da ottimizzare FORSE
-        U.forEach(hrefsDeleted, href -> {
-            VCardData vCardData = allVCardsAsHREFMap.get(href);
+        Log.i("FOR","Modificato");
+        int hrefsDeletedSize = hrefsDeleted.size();
+        for(int i = 0; i<hrefsDeletedSize; i++) {
+            VCardData vCardData = allVCardsAsHREFMap.get(hrefsDeleted.get(i));
             if (vCardData == null) return;
             ContactsDataStore.removeContact(vCardData.contact.getId());
             vCardData.delete();
-        });
+        }
     }
 
     private void fullSync(String urlFromView, String username, String password, String addressBookUrl) throws Exception {
@@ -185,15 +186,17 @@ public class CardDavSyncActivity extends AppCompatActivity {
     private void updateLocal(List<Triplet<String, String, VCard>> hrefEtagAndVCardList, List<VCardData> allVCardDataList) {
         Map<String, VCardData> allVCardsAsHREFMap = getAllVCardsAsHREFMap(allVCardDataList);
 
-        //Da ottimizzare FORSE
-        U.forEach(hrefEtagAndVCardList, hrefEtagAndVCard -> {
+        Log.i("FOR","Modificato");
+        int hrefEtagAndVCardListSize = hrefEtagAndVCardList.size();
+        for(int i =0;i<hrefEtagAndVCardListSize;i++){
+            Triplet<String, String, VCard> hrefEtagAndVCard = hrefEtagAndVCardList.get(i);
             String href = hrefEtagAndVCard.x;
             if (allVCardsAsHREFMap.containsKey(href)) {
                 VCardData vcardDataFromDB = allVCardsAsHREFMap.get(href);
                 if (hrefEtagAndVCard.y.equals(vcardDataFromDB.etag)) return;
                 processExistingVCard(hrefEtagAndVCard, vcardDataFromDB);
             } else createContact(hrefEtagAndVCard);
-        });
+        }
     }
 
     private void createContact(Triplet<String, String, VCard> hrefEtagAndVCard) {
@@ -205,9 +208,12 @@ public class CardDavSyncActivity extends AppCompatActivity {
 
     private void updateServer(List<VCardData> allVCardDataList, boolean syncFromLastCheckPoint, String username, String password, String addressBookUrl) {
         String baseUrl = getStringFromPreferences(BASE_SYNC_URL_SHARED_PREFS_KEY, this);
-        //Da ottimizzare FORSE
+        Log.i("FOR","Modificato");
 
-        U.forEach(allVCardDataList, vcardData -> {
+        int allVCardDataListSize = allVCardDataList.size();
+
+        for(int i=0;i<allVCardDataListSize;i++){
+            VCardData vcardData = allVCardDataList.get(i);
             switch (vcardData.status) {
                 case STATUS_NONE:
                     if (syncFromLastCheckPoint) break;
@@ -231,7 +237,7 @@ public class CardDavSyncActivity extends AppCompatActivity {
                     if (deletionOnServerSuccessful) vcardData.delete();
                     break;
             }
-        });
+        }
     }
 
     private void processExistingVCard(Triplet<String, String, VCard> hrefEtagAndVCard, VCardData vcardDataFromDB) {

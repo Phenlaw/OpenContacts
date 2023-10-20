@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.appcompat.widget.AppCompatTextView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -43,7 +44,7 @@ public class ExpandedList extends LinearLayout {
         this.onItemClickListener = onItemClickListener;
         if (getChildCount() == 0)
             return;
-        //da ottimizzare FORSE
+        //GIA' OTTIMIZZATO
         Common.forEachIndex(getChildCount(), index -> getChildAt(index).setOnClickListener(this::onClick));
     }
 
@@ -51,7 +52,7 @@ public class ExpandedList extends LinearLayout {
         this.onItemLongClickListener = onItemLongClickListener;
         if (getChildCount() == 0)
             return;
-        //da ottimizzare FORSE
+        //GIA' OTIIMIZZATO
         Common.forEachIndex(getChildCount(), index -> getChildAt(index).setOnLongClickListener(this::onLongClick));
     }
 
@@ -62,16 +63,17 @@ public class ExpandedList extends LinearLayout {
 
     public void setItems(List<Pair<String, String>> items) {
         removeAllViews();
-        //da ottimizzare FORSE
-        U.forEachIndexed(items, (index, item) -> {
+        Log.i("FOR","Modificato");
+        int itemSize = items.size();
+        for (int i=0;i<itemSize;i++){
             View inflatedView = layoutInflater.inflate(R.layout.layout_item_title_and_type, this, false);
-            ((AppCompatTextView) inflatedView.findViewById(R.id.textview_content)).setText(item.first);
-            ((AppCompatTextView) inflatedView.findViewById(R.id.textview_type)).setText(item.second);
-            inflatedView.setTag(index);
+            ((AppCompatTextView) inflatedView.findViewById(R.id.textview_content)).setText(items.get(i).first);
+            ((AppCompatTextView) inflatedView.findViewById(R.id.textview_type)).setText(items.get(i).second);
+            inflatedView.setTag(i);
             if (onItemClickListener != null)
                 inflatedView.setOnClickListener(this::onClick);
             addView(inflatedView);
-        });
+        }
     }
 
     public static class Builder {

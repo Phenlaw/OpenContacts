@@ -31,14 +31,14 @@ public class SingleContactWidgetDataStore {
 
     public static void removeSingleContactWidgets(int[] widgetIds, Context context) {
         Map<String, Long> singleContactWidgetIdToContactMap = getSingleContactWidgetIdToContactMap(context);
-        //da ottimizzare FORSE
+        //Non da ottimizzare perchè non ArrayLists
         Common.forEach(widgetIds, id -> singleContactWidgetIdToContactMap.remove(String.valueOf(id)));
         updatePreference(SINGLE_CONTACT_WIDGET_TO_CONTACT_MAPPING, U.toJson(singleContactWidgetIdToContactMap), context);
     }
 
     public static void replaceOldWithNewWidgetIds(int[] oldWidgetIds, int[] newWidgetIds, Context context) {
         Map<String, Long> singleContactWidgetIdToContactMap = getSingleContactWidgetIdToContactMap(context);
-        //da ottimizzare FORSE
+        //Non da ottimizzare perchè non ArrayLists
         Common.forEachIndex(oldWidgetIds.length, index -> {
             String oldWidgetId = String.valueOf(oldWidgetIds[index]);
             Long contactId = singleContactWidgetIdToContactMap.get(oldWidgetId);

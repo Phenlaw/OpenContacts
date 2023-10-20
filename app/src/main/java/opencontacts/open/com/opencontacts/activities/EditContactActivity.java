@@ -22,6 +22,7 @@ import androidx.core.util.Pair;
 
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -211,9 +212,9 @@ public class EditContactActivity extends AppBaseActivity {
             emailsInputCollection.addOneMoreView();
             return;
         }
-        //Da ottimizzare FORSE
-
-        U.forEach(emails, email -> emailsInputCollection.addOneMoreView(email.getValue(), DomainUtils.getEmailTypeTranslatedText(email.getTypes(), EditContactActivity.this)));
+        Log.i("FOR","Modificato");
+        int emailsSize = emails.size();
+        for(int i =0; i<emailsSize;i++)  emailsInputCollection.addOneMoreView(emails.get(i).getValue(), DomainUtils.getEmailTypeTranslatedText(emails.get(i).getTypes(), EditContactActivity.this));
     }
 
     private void fillTelephoneNumbers() {
@@ -223,9 +224,9 @@ public class EditContactActivity extends AppBaseActivity {
             phoneNumbersInputCollection.addOneMoreView(newPhoneNumberToBeAdded, defaultPhoneNumberTypeTranslatedText);
             return;
         }
-        //Da ottimizzare FORSE
-
-        U.forEach(telephoneNumbers, telephoneNumber -> phoneNumbersInputCollection.addOneMoreView(getMobileNumber(telephoneNumber), DomainUtils.getMobileNumberTypeTranslatedText(telephoneNumber.getTypes(), EditContactActivity.this)));
+        Log.i("FOR","Modificato");
+        int telephoneNumbersSize = telephoneNumbers.size();
+        for(int i =0; i<telephoneNumbersSize;i++) phoneNumbersInputCollection.addOneMoreView(getMobileNumber(telephoneNumbers.get(i)), DomainUtils.getMobileNumberTypeTranslatedText(telephoneNumbers.get(i).getTypes(), EditContactActivity.this));
         if (newPhoneNumberToBeAdded != null)
             phoneNumbersInputCollection.addOneMoreView(newPhoneNumberToBeAdded, defaultPhoneNumberTypeTranslatedText);
     }
@@ -301,14 +302,12 @@ public class EditContactActivity extends AppBaseActivity {
 
     private void addAddressFromFieldsToNewVCard(VCard newVCard) {
         if (addressesInputCollection.isEmpty()) return;
-        //Da ottimizzare FORSE
         U.chain(addressesInputCollection.getAllAddresses())
             .forEach(newVCard::addAddress);
     }
 
     private void addEmailsFromFieldsToNewVCard(VCard newVCard) {
         if (emailsInputCollection.isEmpty()) return;
-        //Da ottimizzare FORSe
         U.chain(emailsInputCollection.getValuesAndTypes())
             .map(this::createEmail)
             .forEach(newVCard::addEmail);
@@ -316,8 +315,6 @@ public class EditContactActivity extends AppBaseActivity {
 
     private void addTelephoneNumbersFromFieldsToNewVCard(VCard newVCard) {
         if (phoneNumbersInputCollection.isEmpty()) return;
-        //Da ottimizzare FORSE
-
         U.chain(phoneNumbersInputCollection.getValuesAndTypes())
             .map(this::createTelephone)
             .forEach(newVCard::addTelephoneNumber);

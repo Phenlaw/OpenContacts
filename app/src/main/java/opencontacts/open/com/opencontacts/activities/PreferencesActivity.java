@@ -45,14 +45,17 @@ import androidx.preference.PreferenceGroup;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatEditText;
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Toast;
 
 import com.github.underscore.Supplier;
 import com.github.underscore.U;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Set;
 
 import open.fontscaling.FontScalePreferenceHandler;
 import opencontacts.open.com.opencontacts.R;
@@ -156,13 +159,16 @@ public class PreferencesActivity extends AppBaseActivity {
 
         private void handlePreferenceUpdates() {
             HashMap<String, Preference.OnPreferenceChangeListener> onPreferenceChangeHandlersMap = getIndividualPreferenceHandlersMap();
-            //Da ottimizzare FORSE
+            Log.i("FOR","Modificato");
+            ArrayList<String> preferenceKeys = new ArrayList<>( onPreferenceChangeHandlersMap.keySet());
 
-            U.forEach(onPreferenceChangeHandlersMap.keySet(),
-                preferenceKey -> findPreference(preferenceKey)
+            int size = preferenceKeys.size();
+            for (int i =0;i<size;i++){
+                findPreference(preferenceKeys.get(i))
                     .setOnPreferenceChangeListener(
-                        onPreferenceChangeHandlersMap.get(preferenceKey)
-                    ));
+                        onPreferenceChangeHandlersMap.get(preferenceKeys.get(i)));
+
+            }
         }
 
         @NonNull
