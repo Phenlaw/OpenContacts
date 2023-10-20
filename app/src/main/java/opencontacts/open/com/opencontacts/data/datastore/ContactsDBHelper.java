@@ -18,6 +18,8 @@ import static opencontacts.open.com.opencontacts.utils.VCardUtils.isPrimaryPhone
 import static opencontacts.open.com.opencontacts.utils.VCardUtils.markPrimaryPhoneNumberInVCard;
 
 import android.content.Context;
+import android.util.Log;
+
 import androidx.core.util.Pair;
 
 import com.github.underscore.U;
@@ -55,10 +57,14 @@ public class ContactsDBHelper {
         if (dbContact == null)
             return;
         List<PhoneNumber> dbPhoneNumbers = dbContact.getAllPhoneNumbers();
-        for (PhoneNumber dbPhoneNumber : dbPhoneNumbers)
-            dbPhoneNumber.delete();
+        Log.i("FOR","Modificato");
+        int dbPhoneNumbersSize = dbPhoneNumbers.size();
+        for(int i=0;i<dbPhoneNumbersSize;i++) dbPhoneNumbers.get(i).delete();
         List<CallLogEntry> callLogEntries = getCallLogEntriesFor(contactId);
-        for (CallLogEntry callLogEntry : callLogEntries) {
+        Log.i("FOR","Modificato");
+        int callLogEntriesSize = callLogEntries.size();
+        for(int i=0;i<callLogEntriesSize;i++){
+            CallLogEntry callLogEntry = callLogEntries.get(i);
             callLogEntry.setId((long) -1);
             callLogEntry.save();
         }
@@ -87,11 +93,14 @@ public class ContactsDBHelper {
 
     static void replacePhoneNumbersInDB(Contact dbContact, VCard vcard, String primaryPhoneNumber) {
         List<PhoneNumber> dbPhoneNumbers = dbContact.getAllPhoneNumbers();
-        U.forEach(vcard.getTelephoneNumbers(),
-            telephone -> {
-                String phoneNumberText = VCardUtils.getMobileNumber(telephone);
-                new PhoneNumber(phoneNumberText, dbContact, primaryPhoneNumber.equals(phoneNumberText)).save();
-            });
+        Log.i("FOR","Modificato");
+        List<Telephone> vCardTelephoneNumbers = vcard.getTelephoneNumbers();
+        int vCardTelephoneNumbersSize = vCardTelephoneNumbers.size();
+        for(int i=0;i<vCardTelephoneNumbersSize;i++){
+            Telephone telephone = vCardTelephoneNumbers.get(i);
+            String phoneNumberText = VCardUtils.getMobileNumber(telephone);
+            new PhoneNumber(phoneNumberText, dbContact, primaryPhoneNumber.equals(phoneNumberText)).save();
+        }
         PhoneNumber.deleteInTx(dbPhoneNumbers);
     }
 
@@ -111,7 +120,10 @@ public class ContactsDBHelper {
         List<PhoneNumber> dbPhoneNumbers = PhoneNumber.listAll(PhoneNumber.class);
         HashMap<Long, opencontacts.open.com.opencontacts.domain.Contact> contactsMap = new HashMap<>();
         opencontacts.open.com.opencontacts.domain.Contact tempContact;
-        for (PhoneNumber dbPhoneNumber : dbPhoneNumbers) {
+        Log.i("FOR","Modificato");
+        int dbPhoneNumbersSize = dbPhoneNumbers.size();
+        for (int i=0;i<dbPhoneNumbersSize;i++) {
+            PhoneNumber dbPhoneNumber = dbPhoneNumbers.get(i);
             tempContact = contactsMap.get(dbPhoneNumber.contact.getId());
             if (tempContact == null) {
                 tempContact = createNewDomainContact(dbPhoneNumber.contact, Collections.singletonList(dbPhoneNumber));
@@ -145,7 +157,10 @@ public class ContactsDBHelper {
         List<PhoneNumber> allDbPhoneNumbersOfContact = PhoneNumber.find(PhoneNumber.class, "contact = ?", contact.id + "");
         if (allDbPhoneNumbersOfContact == null)
             return;
-        for (PhoneNumber dbPhoneNumber : allDbPhoneNumbersOfContact) {
+        Log.i("FOR","Modificato");
+        int allDbPhoneNumbersOfContactSize = allDbPhoneNumbersOfContact.size();
+        for(int i=0;i<allDbPhoneNumbersOfContactSize;i++) {
+            PhoneNumber dbPhoneNumber = allDbPhoneNumbersOfContact.get(i);
             if (dbPhoneNumber.phoneNumber.equals(mobileNumber)) {
                 dbPhoneNumber.isPrimaryNumber = !dbPhoneNumber.isPrimaryNumber;
             } else

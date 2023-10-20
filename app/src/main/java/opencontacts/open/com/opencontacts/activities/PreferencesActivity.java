@@ -159,16 +159,13 @@ public class PreferencesActivity extends AppBaseActivity {
 
         private void handlePreferenceUpdates() {
             HashMap<String, Preference.OnPreferenceChangeListener> onPreferenceChangeHandlersMap = getIndividualPreferenceHandlersMap();
-            Log.i("FOR","Modificato");
-            ArrayList<String> preferenceKeys = new ArrayList<>( onPreferenceChangeHandlersMap.keySet());
+            //Non da ottimizzare poiche' non si tratta di un ArrayList
 
-            int size = preferenceKeys.size();
-            for (int i =0;i<size;i++){
-                findPreference(preferenceKeys.get(i))
+            U.forEach(onPreferenceChangeHandlersMap.keySet(),
+                preferenceKey -> findPreference(preferenceKey)
                     .setOnPreferenceChangeListener(
-                        onPreferenceChangeHandlersMap.get(preferenceKeys.get(i)));
-
-            }
+                        onPreferenceChangeHandlersMap.get(preferenceKey)
+                    ));
         }
 
         @NonNull
