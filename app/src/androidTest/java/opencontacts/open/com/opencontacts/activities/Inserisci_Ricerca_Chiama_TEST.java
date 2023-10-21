@@ -1,54 +1,46 @@
 package opencontacts.open.com.opencontacts.activities;
 
 
-import androidx.test.espresso.DataInteraction;
-import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.filters.LargeTest;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.GrantPermissionRule;
-
-import android.app.ActivityManager;
-import android.content.SharedPreferences;
-import android.os.Build;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
-import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static androidx.test.espresso.action.ViewActions.*;
-import static androidx.test.espresso.assertion.ViewAssertions.*;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
-
-import opencontacts.open.com.opencontacts.R;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
-import com.github.underscore.U;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.GrantPermissionRule;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import java.util.Arrays;
 import java.util.List;
+
+import opencontacts.open.com.opencontacts.R;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -95,7 +87,6 @@ public class Inserisci_Ricerca_Chiama_TEST {
             "android.permission.READ_EXTERNAL_STORAGE",
             "android.permission.POST_NOTIFICATIONS");
 
-
     @Test
     public void inserisci_Ricerca_Chiama_TEST() throws InterruptedException {
         ViewInteraction appCompatButton = onView(
@@ -137,11 +128,14 @@ public class Inserisci_Ricerca_Chiama_TEST {
         } catch (NoMatchingViewException e) {
             // View is not in hierarchy
         }
-        int i=0;
-        for(String name: names){
+
+
+        int size=names.size();
+        for(int i=0;i<size;i++){
                     String lastname = lastnames.get(i);
                     String mail = mails.get(i);
                     String number = numbers.get(i);
+                    String name = names.get(i);
 
                     ViewInteraction actionMenuItemView = onView(
                         allOf(withId(R.id.button_new)));
@@ -174,7 +168,6 @@ public class Inserisci_Ricerca_Chiama_TEST {
                                 0),
                             isDisplayed()));
                     actionMenuItemView2.perform(click());
-                 i++;
                 }
 
         ViewInteraction tabView = onView(
@@ -356,7 +349,29 @@ isDisplayed()));
             .atPosition(1);
         selectGroup.perform(click());
 
+        pressBack();
+
+      for(int i=0;i<size;i++){
+
+          ViewInteraction contactToDelete = onView(
+              allOf(withHint("Position0")));
+          contactToDelete.perform(click());
+
+          ViewInteraction overflowMenuButton = onView(
+              allOf(withContentDescription("More options")));
+          overflowMenuButton.perform(click());
+
+          ViewInteraction appCompatTextView = onView(
+              allOf(withId(R.id.title), withText("Delete")));
+         appCompatTextView.perform(click());
+
+
+          ViewInteraction okayButton = onView(
+              allOf(withId(android.R.id.button1), withText("Okay")));
+          okayButton.perform(scrollTo(), click());
+      }
     }
+
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
