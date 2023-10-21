@@ -137,11 +137,14 @@ public class Inserisci_Ricerca_Chiama_TEST {
         } catch (NoMatchingViewException e) {
             // View is not in hierarchy
         }
-        int i=0;
-        for(String name: names){
+
+
+        int size=names.size();
+        for(int i=0;i<size;i++){
                     String lastname = lastnames.get(i);
                     String mail = mails.get(i);
                     String number = numbers.get(i);
+                    String name = names.get(i);
 
                     ViewInteraction actionMenuItemView = onView(
                         allOf(withId(R.id.button_new)));
@@ -174,7 +177,6 @@ public class Inserisci_Ricerca_Chiama_TEST {
                                 0),
                             isDisplayed()));
                     actionMenuItemView2.perform(click());
-                 i++;
                 }
 
         ViewInteraction tabView = onView(
@@ -356,7 +358,29 @@ isDisplayed()));
             .atPosition(1);
         selectGroup.perform(click());
 
+        pressBack();
+
+      for(int i=0;i<size;i++){
+
+          ViewInteraction contactToDelete = onView(
+              allOf(withHint("Position0")));
+          contactToDelete.perform(click());
+
+          ViewInteraction overflowMenuButton = onView(
+              allOf(withContentDescription("More options")));
+          overflowMenuButton.perform(click());
+
+          ViewInteraction appCompatTextView = onView(
+              allOf(withId(R.id.title), withText("Delete")));
+         appCompatTextView.perform(click());
+
+
+          ViewInteraction okayButton = onView(
+              allOf(withId(android.R.id.button1), withText("Okay")));
+          okayButton.perform(scrollTo(), click());
+      }
     }
+
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
