@@ -1,57 +1,46 @@
 package opencontacts.open.com.opencontacts.activities;
 
 
-import androidx.test.espresso.DataInteraction;
-import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.filters.LargeTest;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.GrantPermissionRule;
-
-import android.app.ActivityManager;
-import android.app.Instrumentation;
-import android.content.SharedPreferences;
-import android.os.Build;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
-import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static androidx.test.espresso.action.ViewActions.*;
-import static androidx.test.espresso.assertion.ViewAssertions.*;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
-
-import opencontacts.open.com.opencontacts.R;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
-import com.github.underscore.U;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.GrantPermissionRule;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
+import opencontacts.open.com.opencontacts.R;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -98,12 +87,6 @@ public class Inserisci_Ricerca_Chiama_TEST {
             "android.permission.READ_EXTERNAL_STORAGE",
             "android.permission.POST_NOTIFICATIONS");
 
-    @Before
-    public void deleteInfo(){
-        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
-        instrumentation.getTargetContext().deleteDatabase("your_database_name"); // Cancella il database (se necessario)
-        instrumentation.getUiAutomation().executeShellCommand("pm clear opencontacts.open.com.opencontacts"); // Cancella i dati dell'app
-    }
     @Test
     public void inserisci_Ricerca_Chiama_TEST() throws InterruptedException {
         ViewInteraction appCompatButton = onView(
