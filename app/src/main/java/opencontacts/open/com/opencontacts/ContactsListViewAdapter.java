@@ -105,6 +105,7 @@ public class ContactsListViewAdapter extends ArrayAdapter<Contact> {
         if (convertView == null)
             convertView = layoutInflater.inflate(R.layout.contact, parent, false);
         ((TextView) convertView.findViewById(R.id.textview_full_name)).setText(contact.name);
+        ((TextView) convertView.findViewById(R.id.textview_full_name)).setHint("Position"+position);
         ((TextView) convertView.findViewById(R.id.textview_phone_number)).setText(contact.primaryPhoneNumber.phoneNumber);
         ImageButtonWithTint actionButton1 = convertView.findViewById(R.id.button_action1);
         ImageButtonWithTint actionButton2 = convertView.findViewById(R.id.button_action2);
