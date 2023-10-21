@@ -11,6 +11,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
 import android.app.ActivityManager;
+import android.app.Instrumentation;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
@@ -33,6 +34,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -49,6 +51,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -95,7 +98,12 @@ public class Inserisci_Ricerca_Chiama_TEST {
             "android.permission.READ_EXTERNAL_STORAGE",
             "android.permission.POST_NOTIFICATIONS");
 
-
+    @Before
+    public void deleteInfo(){
+        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+        instrumentation.getTargetContext().deleteDatabase("your_database_name"); // Cancella il database (se necessario)
+        instrumentation.getUiAutomation().executeShellCommand("pm clear opencontacts.open.com.opencontacts"); // Cancella i dati dell'app
+    }
     @Test
     public void inserisci_Ricerca_Chiama_TEST() throws InterruptedException {
         ViewInteraction appCompatButton = onView(
@@ -137,11 +145,14 @@ public class Inserisci_Ricerca_Chiama_TEST {
         } catch (NoMatchingViewException e) {
             // View is not in hierarchy
         }
-        int i=0;
-        for(String name: names){
+
+
+        int size=names.size();
+        for(int i=0;i<size;i++){
                     String lastname = lastnames.get(i);
                     String mail = mails.get(i);
                     String number = numbers.get(i);
+                    String name = names.get(i);
 
                     ViewInteraction actionMenuItemView = onView(
                         allOf(withId(R.id.button_new)));
@@ -174,7 +185,6 @@ public class Inserisci_Ricerca_Chiama_TEST {
                                 0),
                             isDisplayed()));
                     actionMenuItemView2.perform(click());
-                 i++;
                 }
 
         ViewInteraction tabView = onView(
@@ -356,7 +366,29 @@ isDisplayed()));
             .atPosition(1);
         selectGroup.perform(click());
 
+        pressBack();
+
+      for(int i=0;i<size;i++){
+
+          ViewInteraction contactToDelete = onView(
+              allOf(withHint("Position0")));
+          contactToDelete.perform(click());
+
+          ViewInteraction overflowMenuButton = onView(
+              allOf(withContentDescription("More options")));
+          overflowMenuButton.perform(click());
+
+          ViewInteraction appCompatTextView = onView(
+              allOf(withId(R.id.title), withText("Delete")));
+         appCompatTextView.perform(click());
+
+
+          ViewInteraction okayButton = onView(
+              allOf(withId(android.R.id.button1), withText("Okay")));
+          okayButton.perform(scrollTo(), click());
+      }
     }
+
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
