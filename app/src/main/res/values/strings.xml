@@ -203,6 +203,7 @@
     <string name="group_name">Group name</string>
     <string name="add_contacts">Add contacts</string>
     <string name="edit_group">Edit group</string>
+    <string name="more_options">More options</string>
     <string name="Automerge">AutoMerge</string>
     <string name="no_groups_found">No groups found. Add one to start</string>
     <string name="add_group">Add group</string>
