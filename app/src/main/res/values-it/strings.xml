@@ -130,6 +130,7 @@
     <string name="date_of_birth">Data di nascita</string>
     <string name="invalid_url">Url non valido</string>
     <string name="cancel">Annulla</string>
+    <string name="more_options">Altre opzioni</string>
     <string name="call_repeat_text">(%1$d)</string>
     <string name="show_details">Mostra dettagli</string>
     <string name="no_app_found_to_open">Non è stata trovata alcuna app che possa aprire questo oggetto</string>
