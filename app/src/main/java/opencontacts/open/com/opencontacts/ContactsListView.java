@@ -48,7 +48,7 @@ public class ContactsListView extends ListView implements DataStoreChangeListene
         ContactsDataStore.addDataChangeListener(this);
         contacts = new ArrayList<>();
         adapter = new ContactsListViewAdapter(context, R.layout.contact, () -> contacts);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setContactsListActionsListener");
         adapter.contactsListActionsListener = new DefaultContactsListActions(context);
         View headerView = inflate(context, R.layout.contacts_list_header, null);
         addHeaderView(headerView);
