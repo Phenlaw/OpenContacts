@@ -159,7 +159,7 @@ public class ContactsDataStore {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                Log.i("FOR","Modifcato-CDSupdateContactsAccessedDateAsync1");
+                Log.i("FOR","Modificato-CDSupdateContactsAccessedDateAsync1");
                 int newCallLogEntriesSize = newCallLogEntries.size();
                 for (int i=0;i<newCallLogEntriesSize;i++) {
                     CallLogEntry callLogEntry = newCallLogEntries.get(i);

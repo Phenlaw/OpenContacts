@@ -76,7 +76,7 @@ public class Contact implements Serializable {
         StringBuilder searchStringBuffer = new StringBuilder();
         searchStringBuffer.append(name).append(' ');
         searchStringBuffer.append(replaceAccentedCharactersWithEnglish(name)).append(' ');// helps being able to search name by typing í or i - accented
-        Log.i("FOR","Modifcato-CsetTextSearchTarget1");
+        Log.i("FOR","Modificato-CsetTextSearchTarget1");
         int phoneNumbersSize = phoneNumbers.size();
         for(int i=0;i<phoneNumbersSize;i++)
             searchStringBuffer.append(phoneNumbers.get(i).numericPhoneNumber).append(' ');
