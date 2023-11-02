@@ -55,7 +55,7 @@ public class VCardImporterAsyncTask extends AsyncTask<Void, Object, List<Pair<VC
             publishProgress(PROGRESS_TOTAL_NUMBER_OF_VCARDS, vCards.size());
             int numberOfvCardsImported = 0, numberOfCardsIgnored = 0;
             ContactsDataStore.requestPauseOnUpdates();
-            Log.i("FOR","Modifcato");
+            Log.i("FOR","Modificato-VCIATdoInBackground1");
             int vCardsSize = vCards.size();
             for(int i=0;i<vCardsSize;i++){
                 VCard vcard = vCards.get(i);
@@ -93,11 +93,12 @@ public class VCardImporterAsyncTask extends AsyncTask<Void, Object, List<Pair<VC
 
     @NonNull
     private InputStream getPlainTextInputStreamFromZip(InputStream vcardInputStream) throws Exception {
-        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        Log.i("G&S","Modificato-hasEncryptingContactsKey");
+        Log.i("G&S","Modificato-getEncryptingContactsKey");
         if (isEmpty(getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, contextWeakReference.get())))
             throw new NoPasswordFoundException();
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-ZUgetPlainTextInputStreamFromZip");
+        Log.i("G&S","Modificato-getEncryptingContactsKey");
         ZipInputStream zipInputStream = new ZipInputStream(vcardInputStream, getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, contextWeakReference.get()).toCharArray());
         zipInputStream.getNextEntry();
         return zipInputStream;

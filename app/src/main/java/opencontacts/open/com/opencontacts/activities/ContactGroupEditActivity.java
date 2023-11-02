@@ -45,7 +45,7 @@ public class ContactGroupEditActivity extends ContactChooserActivityBase {
     }
 
     private void preselectContactsFromGroup() {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGDSgetGroup");
         ContactGroup group = ContactGroupsDataStore.groupsMap.get(groupNameFromPrevScreen);
         if (group == null) return;
         setSelectedContacts(group.contacts);
@@ -81,7 +81,7 @@ public class ContactGroupEditActivity extends ContactChooserActivityBase {
             return;
         }
         List<Contact> selectedContacts = getSelectedContacts();
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGDSgetGroup");
         ContactGroup group = ContactGroupsDataStore.groupsMap.get(groupNameFromPrevScreen);
         if (group == null) createNewGroup(selectedContacts, groupName);
         else updateGroup(selectedContacts, groupName, group);

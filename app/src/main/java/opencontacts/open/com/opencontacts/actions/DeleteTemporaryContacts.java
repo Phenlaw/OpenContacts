@@ -19,9 +19,9 @@ public class DeleteTemporaryContacts implements ContactsHouseKeepingAction{
 
     @Override
     public void perform(List<Contact> contacts, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetTemporaryContactDetails");
         List<TemporaryContact> contactDetails = ContactsDBHelper.getTemporaryContactDetails();
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-DTCperform1");
         int size = contactDetails.size();
         for(int i=0;i<size;i++){
             if(hasItBeen(30, DAY_OF_MONTH, contactDetails.get(i).markedTemporaryOn.getTime())) ContactsDataStore.removeContact(contactDetails.get(i).contact.getId());

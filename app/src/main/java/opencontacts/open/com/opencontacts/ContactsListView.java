@@ -48,7 +48,7 @@ public class ContactsListView extends ListView implements DataStoreChangeListene
         ContactsDataStore.addDataChangeListener(this);
         contacts = new ArrayList<>();
         adapter = new ContactsListViewAdapter(context, R.layout.contact, () -> contacts);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setContactsListActionsListener");
         adapter.contactsListActionsListener = new DefaultContactsListActions(context);
         View headerView = inflate(context, R.layout.contacts_list_header, null);
         addHeaderView(headerView);
@@ -119,7 +119,7 @@ public class ContactsListView extends ListView implements DataStoreChangeListene
     }
 
     private void moveFavoritesToTop() {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetFavorites");
         List<Contact> favorites = null;
         if (ContactsDataStore.favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
         else ContactsDataStore.updateFavoritesList();
@@ -127,7 +127,7 @@ public class ContactsListView extends ListView implements DataStoreChangeListene
 
         Collections.sort(favorites, getContactComparatorBasedOnName(context));
 
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLVmoveFavoritesToTop1");
         int favoritesSize = favorites.size();
         for(int i=0; i<favoritesSize;i++) contacts.remove(favorites.get(i));
         contacts.addAll(0, favorites);

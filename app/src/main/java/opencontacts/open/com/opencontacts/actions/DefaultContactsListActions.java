@@ -57,7 +57,7 @@ public class DefaultContactsListActions implements ContactsListViewAdapter.Conta
 
     @Override
     public void onLongClick(Contact contact) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isFavorite");
         if (ContactsDataStore.favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
         else ContactsDataStore.updateFavoritesList();
 

@@ -46,7 +46,7 @@ public class Contact implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumbers = phoneNumbers;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CgetName");
         this.name = getEmptyStringIfNull(firstName) + " " + getEmptyStringIfNull(lastName);
         this.lastAccessed = lastAccessed;
         this.primaryPhoneNumber = primaryPhoneNumber;
@@ -56,7 +56,7 @@ public class Contact implements Serializable {
     private Contact(String firstName, String lastName, String number) {
         this.firstName = firstName;
         this.lastName = lastName;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CgetName");
         this.name = getEmptyStringIfNull(firstName) + " " + getEmptyStringIfNull(lastName);
         this.primaryPhoneNumber = new PhoneNumber(number);
         id = -1;
@@ -64,9 +64,9 @@ public class Contact implements Serializable {
 
     public void setT9Text() {
         StringBuilder searchStringBuffer = new StringBuilder();
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetT9NameSupplier");
         String nameForT9 = ContactsDataStore.t9NameSupplier.apply(this);
-        Log.i("FOR","Modifcato");
+        Log.i("FOR","Modificato-CsetT9Text1");
         int phoneNumbersSize = phoneNumbers.size();
         for(int i=0;i<phoneNumbersSize;i++)
             searchStringBuffer.append(phoneNumbers.get(i).numericPhoneNumber).append(' ');
@@ -79,7 +79,7 @@ public class Contact implements Serializable {
         StringBuilder searchStringBuffer = new StringBuilder();
         searchStringBuffer.append(name).append(' ');
         searchStringBuffer.append(replaceAccentedCharactersWithEnglish(name)).append(' ');// helps being able to search name by typing í or i - accented
-        Log.i("FOR","Modifcato");
+        Log.i("FOR","Modifcato-CsetTextSearchTarget1");
         int phoneNumbersSize = phoneNumbers.size();
         for(int i=0;i<phoneNumbersSize;i++)
             searchStringBuffer.append(phoneNumbers.get(i).numericPhoneNumber).append(' ');
@@ -127,27 +127,27 @@ public class Contact implements Serializable {
 
 
     public List<String> addGroup(String newGroupName) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getGroupNames");
         List<String> groupNamesTemp;
         if (TextUtils.isEmpty(groups)) groupNamesTemp = Collections.emptyList();
         else groupNamesTemp = Arrays.asList(groups.split(GROUPS_SEPERATOR_CHAR));
         List<String> groupNames = groupNamesTemp;
         if (groupNames.contains(newGroupName)) return groupNames;
         groupNames = U.concat(groupNames, Collections.singleton(newGroupName));
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getGroupsNamesCSVString");
         this.groups = U.join(groupNames,GROUPS_SEPERATOR_CHAR);
         return groupNames;
     }
 
     public List<String> removeGroup(String groupNameToRemove) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getGroupNames");
         List<String> groupNamesTemp;
         if (TextUtils.isEmpty(groups)) groupNamesTemp = Collections.emptyList();
         else groupNamesTemp = Arrays.asList(groups.split(GROUPS_SEPERATOR_CHAR));
         List<String> groupNames = groupNamesTemp;
         List<String> finalGroupNames = U.reject(groupNames, groupNameToRemove::equals);
         if (finalGroupNames.size() == groupNames.size()) return groupNames;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getGroupsNamesCSVString");
         this.groups = U.join(finalGroupNames,GROUPS_SEPERATOR_CHAR);
         return finalGroupNames;
     }

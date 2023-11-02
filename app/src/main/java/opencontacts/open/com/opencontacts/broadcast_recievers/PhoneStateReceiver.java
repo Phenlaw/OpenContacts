@@ -64,7 +64,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
             if (incomingNumber == null)
                 return; //in pie, two intents are launched one with number and other with not
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CDSgetContact");
             callingContact = ContactsDBHelper.getContactFromDB(incomingNumber);
             if (callingContact == null)
                 callingContact = new Contact(context.getString(R.string.unknown), incomingNumber);
@@ -87,7 +87,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         if (callingContact == null) return; //#98 issue with marshmallow.
         try {
             CallLogEntry callLogEntry = CallLogDataStore.getMostRecentCallLogEntry(context);
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getCallType");
             if (callLogEntry == null || !callLogEntry.callType.equals(String.valueOf(CallLog.Calls.MISSED_TYPE)))
                 return;
         } catch (Exception e) {
@@ -95,8 +95,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         PendingIntent pendingIntentToLaunchApp = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent pendingIntentToCall = PendingIntent.getActivity(context, 0, AndroidUtils.getIntentToCall(incomingNumber, context), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent pendingIntentToMessage = PendingIntent.getActivity(context, 0, AndroidUtils.getIntentToMessage(incomingNumber), PendingIntent.FLAG_UPDATE_CURRENT);
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getMissedcallNotificationTitle");
+        Log.i("G&S","Modificato-shouldAutoCancelMissedCallNotification");
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(context, MISSED_CALLS_CHANEL_ID)
                 .setSmallIcon(R.drawable.ic_phone_missed_black_24dp)
@@ -119,7 +119,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         LayoutInflater layoutinflater = LayoutInflater.from(context);
         drawOverIncomingCallLayout = layoutinflater.inflate(R.layout.draw_over_incoming_call, null);
         TextView contactName = drawOverIncomingCallLayout.findViewById(R.id.name_of_contact);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getFullName");
         contactName.setText(context.getString(R.string.caller_id_text, callingContact.firstName + " " + callingContact.lastName));
         int typeOfWindow;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -136,7 +136,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
             PixelFormat.TRANSLUCENT);
-        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        Log.i("G&S","Modificato-getCallerIdLocationOnScreen");Log.i("G&S","Modificato2-getAppsSharedPreferences");
         Point callerIdLocationOnScreen = new Point(context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getInt(SharedPreferencesUtils.CALLER_ID_X_POSITION_ON_SCREEN_PREFERENCE_KEY, 0), context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getInt(SharedPreferencesUtils.CALLER_ID_Y_POSITION_ON_SCREEN_PREFERENCE_KEY, 100));
         layoutParams.x = callerIdLocationOnScreen.x;
         layoutParams.y = callerIdLocationOnScreen.y;

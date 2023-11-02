@@ -64,7 +64,7 @@ public class VCardUtils {
             String lastName = getEmptyStringIfNull(structuredName.getFamily());
             if (additionalNames.size() > 0) {
                 StringBuilder nameBuffer = new StringBuilder();
-                Log.i("FOR","Modificato");
+                Log.i("FOR","Modificato-VCUgetNameFromStructureNameOfVcard1");
                 int additionalNamesSize = additionalNames.size();
                 for (int i =0;i<additionalNamesSize;i++)
                     nameBuffer.append(additionalNames.get(i)).append(" ");
@@ -82,8 +82,8 @@ public class VCardUtils {
         VCard mergedCard = null;
 
         try {
-            Log.i("G&S","Modificato");
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-writeVCardToString");
+            Log.i("G&S","Modificato-getVCardFromString");
             mergedCard = new VCardReader(write(primaryVCard).caretEncoding(true).go()).readNext();
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,7 +100,7 @@ public class VCardUtils {
         StructuredName finalName = getMergedStructuredName(secondaryVcard, primaryVCard, context);
         mergedCard.setStructuredName(finalName);
         Uid uid = primaryVCard.getUid();
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setUidIfNotPresent");
         Uid existingUid = mergedCard.getUid();
         if (existingUid == null) mergedCard.setUid(new Uid(uid == null ? UUID.randomUUID().toString() : uid.toString()));
         return mergedCard;
@@ -140,7 +140,7 @@ public class VCardUtils {
 
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, VCard vcard) {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-VCUmarkPrimaryPhoneNumberInVCard1");
         List<Telephone> phoneNumbers = vcard.getTelephoneNumbers();
         int phoneNumbersSize = phoneNumbers.size();
         for(int i=0;i<phoneNumbersSize;i++){
@@ -153,9 +153,9 @@ public class VCardUtils {
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, String vcardData) {
         try {
-            Log.i("G&S","Modificato");
-            Log.i("G&S","Modificato");
-            Log.i("FOR","Modificato");
+            Log.i("G&S","Modificato-markPrimaryPhoneNumberInVCard");
+            Log.i("G&S","Modificato-getVCardFromString");
+            Log.i("FOR","Modificato-VCUmarkPrimaryPhoneNumberInVCard2");
             List<Telephone> telephoneNumbers = new VCardReader(vcardData).readNext().getTelephoneNumbers();
             int telephoneNumbersSize = telephoneNumbers.size();
             for(int i=0;i<telephoneNumbersSize;i++){

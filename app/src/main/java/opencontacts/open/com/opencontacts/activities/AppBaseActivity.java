@@ -25,10 +25,10 @@ public abstract class AppBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.i("G&S","Modificato"); Log.i("G&S","Modificato2"); Log.i("G&S","Modificato3");
+        Log.i("G&S","Modificato-applyOptedTheme"); Log.i("G&S","Modificato-getCurrentTheme"); Log.i("G&S","Modificato-isDarkThemeActive");
         this.getTheme().applyStyle(this.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getBoolean(SharedPreferencesUtils.IS_DARK_THEME_ACTIVE_PREFERENCES_KEY, false) ? R.style.Theme_AppCompat_NoActionBar_Customized : R.style.Theme_AppCompat_Light_NoActionBar_Customized, true);
         setCustomFontSizeOnViewCreated(this);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-shouldLockToPortrait");
         if(getBoolean(SharedPreferencesUtils.LOCK_TO_PORTRAIT, true, this))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         else
@@ -36,7 +36,7 @@ public abstract class AppBaseActivity extends AppCompatActivity {
         setContentView(getLayoutResource());
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getSecondaryColor");
         toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.more_overflow_menu));
         setColorFilterUsingColor(toolbar.getOverflowIcon(), getThemeAttributeColor(android.R.attr.textColorSecondary, this));
         AndroidUtils.setBackButtonInToolBar(toolbar, this);
@@ -49,13 +49,13 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!menu.hasVisibleItems())
             return super.onCreateOptionsMenu(menu);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getSecondaryColor");
         processMenu(menu, getThemeAttributeColor(android.R.attr.textColorSecondary, this));
         return super.onCreateOptionsMenu(menu);
     }
 
     private void processMenu(Menu menu, int textColorPrimary) {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-ABAprocessMenu1");
         int totalItems = menu.size()  ;
         for (int i = 0; i < totalItems; i++) {
             MenuItem menuItem = menu.getItem(i);

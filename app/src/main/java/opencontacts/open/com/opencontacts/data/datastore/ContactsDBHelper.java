@@ -54,13 +54,13 @@ public class ContactsDBHelper {
         Contact dbContact = Contact.findById(Contact.class, contactId);
         if (dbContact == null)
             return;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CgetAllPhoneNumbers");
         List<PhoneNumber> dbPhoneNumbers = PhoneNumber.find(PhoneNumber.class, "contact = ?", "" + dbContact.getId());
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHdeleteContactInDB1");
         int dbPhoneNumbersSize = dbPhoneNumbers.size();
         for(int i=0;i<dbPhoneNumbersSize;i++) dbPhoneNumbers.get(i).delete();
         List<CallLogEntry> callLogEntries = getCallLogEntriesFor(contactId);
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHdeleteContactInDB2");
         int callLogEntriesSize = callLogEntries.size();
         for(int i=0;i<callLogEntriesSize;i++){
             CallLogEntry callLogEntry = callLogEntries.get(i);
@@ -83,10 +83,10 @@ public class ContactsDBHelper {
 
     public static Contact getContactFromDB(String phoneNumber) {
         if (isEmpty(phoneNumber)) return null;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getSearchablePhoneNumber");
         String searchablePhoneNumber = DomainUtils.getPhoneNumberWithoutCountryCodeAndFormatting(phoneNumber);
         if (isEmpty(searchablePhoneNumber)) return null;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getMatchingNumbers");
         List<PhoneNumber> matchingPhoneNumbers;
         if(isEmpty(searchablePhoneNumber)) matchingPhoneNumbers = emptyList();
         else matchingPhoneNumbers = PhoneNumber.find(PhoneNumber.class, "numeric_Phone_Number like ?", "%" + searchablePhoneNumber);
@@ -95,14 +95,14 @@ public class ContactsDBHelper {
     }
 
     static void replacePhoneNumbersInDB(Contact dbContact, VCard vcard, String primaryPhoneNumber) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CgetAllPhoneNumbers");
         List<PhoneNumber> dbPhoneNumbers = PhoneNumber.find(PhoneNumber.class, "contact = ?", "" + dbContact.getId());
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHreplacePhoneNumbersInDB1");
         List<Telephone> vCardTelephoneNumbers = vcard.getTelephoneNumbers();
         int vCardTelephoneNumbersSize = vCardTelephoneNumbers.size();
         for(int i=0;i<vCardTelephoneNumbersSize;i++){
                 Telephone telephone = vCardTelephoneNumbers.get(i);
-                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato-VCUgetMobileNumber");
                 String telephoneTextTemp = telephone.getText();
                 String phoneNumberText;
 
@@ -118,14 +118,14 @@ public class ContactsDBHelper {
         Pair<String, String> nameFromVCard = getNameFromVCard(vCard, context);
         dbContact.firstName = nameFromVCard.first;
         dbContact.lastName = nameFromVCard.second;
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getGroupsNamesCSVString");
+        Log.i("G&S","Modificato-VCUgetCategories");
         Categories categoriesTemp = vCard.getCategories();
         List<String> categories;
         if(categoriesTemp == null) categories = Collections.emptyList();
         else categories = categoriesTemp.getValues();
         dbContact.groups = U.join(categories, GROUPS_SEPERATOR_CHAR);
-        Log.i("G&S", "Modificato");
+        Log.i("G&S", "Modificato-getFullName");
         dbContact.pinyinName = getPinyinTextFromChinese(dbContact.firstName + " " + dbContact.lastName);
         dbContact.save();
         replacePhoneNumbersInDB(dbContact, vCard, primaryNumber);
@@ -136,7 +136,7 @@ public class ContactsDBHelper {
         List<PhoneNumber> dbPhoneNumbers = PhoneNumber.listAll(PhoneNumber.class);
         HashMap<Long, opencontacts.open.com.opencontacts.domain.Contact> contactsMap = new HashMap<>();
         opencontacts.open.com.opencontacts.domain.Contact tempContact;
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHgetAllContactsFromDB1");
         int dbPhoneNumbersSize = dbPhoneNumbers.size();
         for (int i=0;i<dbPhoneNumbersSize;i++) {
             PhoneNumber dbPhoneNumber = dbPhoneNumbers.get(i);
@@ -166,7 +166,7 @@ public class ContactsDBHelper {
         opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getDBContactWithId(id);
         if (contact == null)
             return null;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CgetAllPhoneNumbers");
         return createNewDomainContact(contact, PhoneNumber.find(PhoneNumber.class, "contact = ?", "" + contact.getId()));
     }
 
@@ -174,7 +174,7 @@ public class ContactsDBHelper {
         List<PhoneNumber> allDbPhoneNumbersOfContact = PhoneNumber.find(PhoneNumber.class, "contact = ?", contact.id + "");
         if (allDbPhoneNumbersOfContact == null)
             return;
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHtogglePrimaryNumber1");
         int allDbPhoneNumbersOfContactSize = allDbPhoneNumbersOfContact.size();
         for(int i=0;i<allDbPhoneNumbersOfContactSize;i++) {
             PhoneNumber dbPhoneNumber = allDbPhoneNumbersOfContact.get(i);
@@ -216,7 +216,7 @@ public class ContactsDBHelper {
     }
 
     private static void addToFavoritesInCaseIs(VCard vcard, Contact contact) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isFavorite");
         if (vcard.getExtendedProperty(VCardUtils.X_FAVORITE_EXTENDED_VCARD_PROPERTY) != null && vcard.getExtendedProperty(VCardUtils.X_FAVORITE_EXTENDED_VCARD_PROPERTY).getValue().equals(String.valueOf(true))) ContactsDataStore.addFavorite(contact);
     }
 
@@ -259,8 +259,8 @@ public class ContactsDBHelper {
             } catch (Exception e) {
                 continue;
             }
-            Log.i("G&S","Modificato");
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getMobileNumber");
+            Log.i("G&S","Modificato-VCUisPrimaryPhoneNumber");
             String telephoneText =  telephoneNumber.getText();
             Integer telephonePref = telephoneNumber.getPref();
             new PhoneNumber(telephoneText == null ? telephoneNumber.getUri().getNumber() : telephoneText, contact, telephonePref != null && telephonePref == PRIMARY_PHONE_NUMBER_PREF).save();
@@ -270,14 +270,14 @@ public class ContactsDBHelper {
     private static Contact createContactSaveInDBAndReturnIt(VCard vcard, Context context) {
         Pair<String, String> name = getNameFromVCard(vcard, context);
         Contact contact = new Contact(name.first, name.second);
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getGroupsNamesCSVString");
+        Log.i("G&S","Modificato-VCUgetCategories");
         Categories categoriesTemp = vcard.getCategories();
         List<String> categories;
         if(categoriesTemp == null) categories = Collections.emptyList();
         else categories = categoriesTemp.getValues();
         contact.groups = U.join(categories,GROUPS_SEPERATOR_CHAR);
-        Log.i("G&S", "Modificato");
+        Log.i("G&S", "Modificato-getFullName");
         contact.pinyinName = getPinyinTextFromChinese(contact.firstName + " " + contact.lastName);
         contact.save();
         return contact;

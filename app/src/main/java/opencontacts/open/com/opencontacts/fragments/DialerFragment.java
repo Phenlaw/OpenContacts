@@ -91,8 +91,8 @@ public class DialerFragment extends AppBaseFragment implements SelectableTab {
                     hideSearchListAndUpdateUIForRest();
                     return;
                 }
-                Log.i("G&S","Modificato");
-                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato-CLEgetPhoneNumber");
+                Log.i("G&S","Modificato-CLEgetDate");
                 List<Contact> unLabelledCallLogEntriesMatchingText = new U<>(getUnLabelledCallLogEntriesMatching(t9Text))
                     .map(callLogEntry -> createDummyContact(unknownContactString, "", callLogEntry.phoneNumber, callLogEntry.date));
                 List<Contact> contactsMatchingT9 = getContactsMatchingT9(t9Text);
@@ -135,7 +135,7 @@ public class DialerFragment extends AppBaseFragment implements SelectableTab {
         searchList.addFooterView(getASpaceOfHeight(1, 56, context)); //56 here is height of bottom menu
         searchListAdapter = new ContactsListViewAdapter(context);
         LinkedHashMap<String, Consumer<String>> longClickOptionsAndListeners = longClickOptionsAndListeners();
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setContactsListActionsListener");
         searchListAdapter.contactsListActionsListener = new DefaultContactsListActions(context) {
             @Override
             public void onShowDetails(Contact contact) {
@@ -201,7 +201,7 @@ public class DialerFragment extends AppBaseFragment implements SelectableTab {
 
     private boolean performActionIfPhoneNumberIsValidElseShowError(Consumer<String> action) {
         String phoneNumber = dialPadEditText.getText().toString();
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isInvalid");
         if (TextUtils.isEmpty(phoneNumber) || TextUtils.getTrimmedLength(phoneNumber) == 0)
             dialPadEditText.setError(getString(R.string.invalid_number));
         else

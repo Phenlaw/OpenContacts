@@ -130,7 +130,7 @@ public class CardDavSyncActivity extends AppCompatActivity {
             return;
         }
         updatePreference(ADDRESSBOOK_URL_SHARED_PREFS_KEY, addressBookUrl, this);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getBaseURL");
         String baseURL;
         String path = null;
         try {
@@ -169,7 +169,7 @@ public class CardDavSyncActivity extends AppCompatActivity {
         if (hrefsDeleted.isEmpty()) return;
         List<VCardData> allVCardDataList = VCardData.listAll(VCardData.class);
         Map<String, VCardData> allVCardsAsHREFMap = getAllVCardsAsHREFMap(allVCardDataList);
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDSAdeleteContactsLocallyAsTheyWereDeletedOnServer1");
         int hrefsDeletedSize = hrefsDeleted.size();
         for(int i = 0; i<hrefsDeletedSize; i++) {
             VCardData vCardData = allVCardsAsHREFMap.get(hrefsDeleted.get(i));
@@ -194,7 +194,7 @@ public class CardDavSyncActivity extends AppCompatActivity {
     private void updateLocal(List<Triplet<String, String, VCard>> hrefEtagAndVCardList, List<VCardData> allVCardDataList) {
         Map<String, VCardData> allVCardsAsHREFMap = getAllVCardsAsHREFMap(allVCardDataList);
 
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDSAupdateLocal1");
         int hrefEtagAndVCardListSize = hrefEtagAndVCardList.size();
         for(int i =0;i<hrefEtagAndVCardListSize;i++){
             Triplet<String, String, VCard> hrefEtagAndVCard = hrefEtagAndVCardList.get(i);
@@ -216,7 +216,7 @@ public class CardDavSyncActivity extends AppCompatActivity {
 
     private void updateServer(List<VCardData> allVCardDataList, boolean syncFromLastCheckPoint, String username, String password, String addressBookUrl) {
         String baseUrl = getStringFromPreferences(BASE_SYNC_URL_SHARED_PREFS_KEY, this);
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDSAupdateServer1");
 
         int allVCardDataListSize = allVCardDataList.size();
 

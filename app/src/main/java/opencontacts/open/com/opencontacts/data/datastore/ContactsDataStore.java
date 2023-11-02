@@ -153,15 +153,15 @@ public class ContactsDataStore {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                Log.i("FOR","Modifcato");
+                Log.i("FOR","Modifcato-CDSupdateContactsAccessedDateAsync1");
                 int newCallLogEntriesSize = newCallLogEntries.size();
                 for (int i=0;i<newCallLogEntriesSize;i++) {
                     CallLogEntry callLogEntry = newCallLogEntries.get(i);
-                    Log.i("G&S","Modificato");
+                    Log.i("G&S","Modificato-CLEgetContactId");
                     long contactId = callLogEntry.contactId;
                     if (getContactWithId(contactId) == null)
                         continue;
-                    Log.i("G&S","Modificato");
+                    Log.i("G&S","Modificato-CLEgetDate");
                     ContactsDBHelper.updateLastAccessed(contactId, callLogEntry.date);
                 }
                 refreshStoreAsync();
@@ -198,7 +198,7 @@ public class ContactsDataStore {
         if (dataChangeListeners.isEmpty() || pauseUpdates)
             return;
         synchronized (dataChangeListeners) {
-            Log.i("FOR","Modifcato");
+            Log.i("FOR","Modificato-CDSnotifyListeners1");
             int dataChangeListenersSize = dataChangeListeners.size();
             for(int i=0;i<dataChangeListenersSize;i++){
                 DataStoreChangeListener<Contact> listener = dataChangeListeners.get(i);
@@ -237,19 +237,19 @@ public class ContactsDataStore {
     }
 
     public static void updateT9Supplier(Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isT9PinyinEnabled");
         boolean pinyinEnabled = getBoolean(SharedPreferencesUtils.T9_PINYIN_ENABLED_SHARED_PREF_KEY, false, context);
         t9NameSupplier = pinyinEnabled ? pinyinName : defaultName;
     }
 
     public static void writePinyinToDb(Context context) {
         List<opencontacts.open.com.opencontacts.orm.Contact> dbContacts = opencontacts.open.com.opencontacts.orm.Contact.listAll(opencontacts.open.com.opencontacts.orm.Contact.class);
-        Log.i("FOR","Modifcato");
+        Log.i("FOR","Modificato-CDSwritePinyinToDb1");
 
         int dbContactsSize = dbContacts.size();
         for(int i=0;i<dbContactsSize;i++){
             opencontacts.open.com.opencontacts.orm.Contact dbContact = dbContacts.get(i);
-            Log.i("G&S", "Modificato");
+            Log.i("G&S", "Modificato-getFullName");
             dbContact.pinyinName = getPinyinTextFromChinese(dbContact.firstName + " " + dbContact.lastName);
             dbContact.save();
         }
@@ -266,7 +266,7 @@ public class ContactsDataStore {
 
 
     public static void addFavorite(Contact contact) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetFavorites");
         if (favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
         else ContactsDataStore.updateFavoritesList();
         if (favorites.contains(contact)) return;
@@ -278,7 +278,7 @@ public class ContactsDataStore {
 
     private static void markAsFavoriteInVCard(long contactId) {
         try {
-            Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+            Log.i("G&S","Modificato-markFavoriteInVCard");Log.i("G&S","Modificato-getVCardFromString");
             new VCardReader(ContactsDBHelper.getVCard(contactId).vcardDataAsString).readNext()
                 .setExtendedProperty(X_FAVORITE_EXTENDED_VCARD_PROPERTY, String.valueOf(true));
         } catch (IOException e) {
@@ -288,7 +288,7 @@ public class ContactsDataStore {
 
     public static void addFavorite(opencontacts.open.com.opencontacts.orm.Contact contact) {
         Contact dummyContactMatchingId = createDummyContact(contact.getId());
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetFavorites");
         if (favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
         else ContactsDataStore.updateFavoritesList();
         if (favorites.contains(dummyContactMatchingId)) return;
@@ -307,8 +307,9 @@ public class ContactsDataStore {
     public static void mergeContacts(Contact primaryContact, Contact secondaryContact, Context context) throws IOException {
         VCardData primaryVCardData = VCardData.getVCardData(primaryContact.id);
         VCardData secondaryVCardData = VCardData.getVCardData(secondaryContact.id);
-        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-mergeVCardStrings");
+        Log.i("G&S","Modificato-getVCardFromString");
+        Log.i("G&S","Modificato-getVCardFromString");
         VCard mergedVCard = mergeVCards(new VCardReader(secondaryVCardData.vcardDataAsString).readNext(), new VCardReader(primaryVCardData.vcardDataAsString).readNext(), context);
         removeContact(secondaryContact);
         updateContact(primaryContact.id, primaryContact.primaryPhoneNumber.phoneNumber, mergedVCard, context);

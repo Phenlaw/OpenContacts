@@ -61,7 +61,7 @@ public class AddressPopup {
         cityTextInput.setText(address.getLocality());
         stateTextInput.setText(address.getRegion());
         countryTextInput.setText(address.getCountry());
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setItem");
         int indexOfType = types.indexOf(getAddressTypeTranslatedText(address, context));
         if (indexOfType == -1) addressTypeSpinner.setText(getAddressTypeTranslatedText(address, context));
         else addressTypeSpinner.selectItem(indexOfType);
@@ -93,7 +93,7 @@ public class AddressPopup {
     }
 
     private void updateAddressType() {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-DUgetAddressType");
         if (DomainUtils.translatedTextToAddressType == null)
             DomainUtils.translatedTextToAddressType = U.toMap(U.invert(DomainUtils.getAddressTypeToTranslatedTextMap(context)));
         AddressType at = getOrDefault(DomainUtils.translatedTextToAddressType, addressTypeSpinner.getText().toString(), AddressType.get(addressTypeSpinner.getText().toString()));
@@ -128,7 +128,7 @@ public class AddressPopup {
 
     private void setupAddressTypeSpinner() {
         types = asList(context.getResources().getStringArray(R.array.address_types));
-        Log.i("G&S", "Modificato");
+        Log.i("G&S", "Modificato-setupSpinner");
         addressTypeSpinner.setDropDownDrawable(getTintedDrawable(R.drawable.ic_arrow_drop_down_black_24dp, context));
         addressTypeSpinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, types));
         if (types.size() > 0) addressTypeSpinner.selectItem(0);

@@ -62,7 +62,7 @@ public abstract class ContactsListFilter extends Filter {
         }
 
         List<Contact> filteredContacts = filter(searchText, contacts);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-sortFilteredContacts");
         Collections.sort(filteredContacts, getContactComparatorBasedOnLastAccessed());
         return filteredContacts;
     }

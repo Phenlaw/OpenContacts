@@ -88,7 +88,7 @@ public class CardDavUtils {
         Node responseNodeOfAddressbookType = U.firstOrNull(listOfResourceNodesWithAddressBooks);
         if (responseNodeOfAddressbookType == null)
             return null;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-XMLPUgetText");
         return ((Element) responseNodeOfAddressbookType).getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_HREF).item(0).getTextContent();
 
     }
@@ -119,10 +119,9 @@ public class CardDavUtils {
         NodeList responseNodes = xmlDocument.getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_RESPONSE);
         return map(new NodeListIterable(responseNodes), node -> {
             try {
-                Log.i("G&S","Modificato");
-                Log.i("G&S","Modificato");
-                Log.i("G&S","Modificato");
-
+                Log.i("G&S","Modificato-XMLPUgetText");
+                Log.i("G&S","Modificato-XMLPUgetText");
+                Log.i("G&S","Modificato-XMLPUgetText");
                 return new Triplet<>(
 
 
@@ -203,7 +202,7 @@ public class CardDavUtils {
 
     public static boolean areNotValidDetails(String url, String username, String password, boolean shouldIgnoreSSL, CheekyCarddavServerStuff carddavServerType, String addressBookUrl) {
         String addressBookBasedUrl = addressBookUrl == null ? "" : url + addressBookUrl;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getBaseURL");
         String baseURL;
         String path = null;
         try {
@@ -278,8 +277,8 @@ public class CardDavUtils {
             NodeList responseNodes = xmlDocument.getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_RESPONSE);
             //Da non ottimizzare perchè non è un ArrayList
             U.forEach(new NodeListIterable(responseNodes), node -> {
-                Log.i("G&S","Modificato");
-                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato-XMLPUgetText");
+                Log.i("G&S","Modificato-XMLPUgetText");
                 String href = ((Element) node).getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_HREF).item(0).getTextContent();
                 String status = ((Element) node).getElementsByTagNameNS(XML_NAMESPACE_DAV, XML_TAG_STATUS).item(0).getTextContent();
                 if (status.contains(HTTP_STATUS_NOT_FOUND)) deleted.add(href);
@@ -320,7 +319,7 @@ public class CardDavUtils {
         final StringBuilder hrefsInRequest = new StringBuilder();
         String hrefTagOpen = "<d:href>";
         String hrefTagClose = "</d:href>";
-        Log.i("FOR","Modifcato");
+        Log.i("FOR","Modificato-CDUgetRequestBodyToFetchVCardsWithHrefs1");
         int hrefsSize = hrefs.size();
         for(int i=0;i<hrefsSize;i++) hrefsInRequest.append(hrefTagOpen + hrefs.get(i) + hrefTagClose);
         return prefix + hrefsInRequest.toString() + suffix;

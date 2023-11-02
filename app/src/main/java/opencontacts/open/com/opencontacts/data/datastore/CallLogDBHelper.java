@@ -46,7 +46,7 @@ class CallLogDBHelper {
     private Map<String, Integer> simsInfo = null;
 
     public static void removeAllContactsLinking() {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDBHremoveAllContactsLinking1");
         List<CallLogEntry> recentCallLogEntries = getRecentCallLogEntriesFromDB();
         int recentCallLogEntriesSize = recentCallLogEntries.size();
         for(int i =0;i<recentCallLogEntriesSize;i++){
@@ -66,7 +66,7 @@ class CallLogDBHelper {
             //added permission check above using util intellij wasn't able to identify it
             @SuppressLint("MissingPermission") List<PhoneAccountHandle> callCapablePhoneAccounts = telecomManager.getCallCapablePhoneAccounts();
             if (callCapablePhoneAccounts.size() < 2) return;
-            Log.i("FOR","Modificato");
+            Log.i("FOR","Modificato-CLDBHcreateSimsInfo1");
             int callCapablePhoneAccountsSize = callCapablePhoneAccounts.size();
             for(int i=0;i<callCapablePhoneAccountsSize;i++) simsInfo.put(callCapablePhoneAccounts.get(i).getId(), i + 1);
             return;
@@ -75,7 +75,7 @@ class CallLogDBHelper {
             @SuppressLint("MissingPermission") List<SubscriptionInfo> activeSubscriptionInfoList = ((SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE)).getActiveSubscriptionInfoList();
             if (activeSubscriptionInfoList == null)
                 return;
-            Log.i("FOR","Modificato");
+            Log.i("FOR","Modificato-CLDBHcreateSimsInfo2");
             int subscriptionInfoListSize = activeSubscriptionInfoList.size();
             for(int i =0;i<subscriptionInfoListSize;i++)  {
                 SubscriptionInfo subscriptionInfo = activeSubscriptionInfoList.get(i);
@@ -105,7 +105,7 @@ class CallLogDBHelper {
         ArrayList<CallLogEntry> callLogEntries = new ArrayList<>();
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {//TODO: refactor below two if else blocks 90% same
             createSimsInfo(context);
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getLastSavedCallLogDate");
             c = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DURATION, CallLog.Calls.TYPE, CallLog.Calls.DATE, CallLog.Calls.PHONE_ACCOUNT_ID}, CallLog.Calls.DATE + " > ?", new String[]{getStringFromPreferences(SharedPreferencesUtils.LAST_CALL_LOG_READ_TIMESTAMP_SHARED_PREF_KEY, "0", context)}, CallLog.Calls.DATE + " DESC");
             if (c.getCount() == 0)
                 return callLogEntries;
@@ -122,21 +122,21 @@ class CallLogDBHelper {
                 subscriptionIdForCall = c.getString(columnIndexForSubscriptionId);
 
                 if(mobileNumberInvolvedInCall == null) continue;
-                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato-CDSgetContact");
                 opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getContactFromDB(mobileNumberInvolvedInCall);
                 if (contact == null)
                     callLogEntries.add(new CallLogEntry(null, (long) -1, mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, getSimIdOrDefault(subscriptionIdForCall)));
                 else {
-                    Log.i("G&S", "Modificato");
+                    Log.i("G&S", "Modificato-getFullName");
                     callLogEntries.add(new CallLogEntry(contact.firstName + " " + contact.lastName, contact.getId(), mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, getSimIdOrDefault(subscriptionIdForCall)));
                 }
             }
             c.moveToFirst();
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-setLastSavedCallLogDate");
             updatePreference(SharedPreferencesUtils.LAST_CALL_LOG_READ_TIMESTAMP_SHARED_PREF_KEY, c.getString(columnIndexForDate), context);
             c.close();
         } else {
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getLastSavedCallLogDate");
             c = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DURATION, CallLog.Calls.TYPE, CallLog.Calls.DATE}, CallLog.Calls.DATE + " > ?", new String[]{getStringFromPreferences(SharedPreferencesUtils.LAST_CALL_LOG_READ_TIMESTAMP_SHARED_PREF_KEY, "0", context)}, CallLog.Calls.DATE + " DESC");
             if (c.getCount() == 0)
                 return callLogEntries;
@@ -151,17 +151,17 @@ class CallLogDBHelper {
                 callType = c.getString(columnIndexForCallType);// for call type, Incoming or out going
 
                 if(mobileNumberInvolvedInCall == null) continue;
-                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato-CDSgetContact");
                 opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getContactFromDB(mobileNumberInvolvedInCall);
                 if (contact == null)
                     callLogEntries.add(new CallLogEntry(null, (long) -1, mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, 1));
                 else {
-                    Log.i("G&S", "Modificato");
+                    Log.i("G&S", "Modificato-getFullName");
                     callLogEntries.add(new CallLogEntry(contact.firstName + " " + contact.lastName, contact.getId(), mobileNumberInvolvedInCall, durationOfCall, callType, dateOfCall, 1));
                 }
             }
             c.moveToFirst();
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-setLastSavedCallLogDate");
             updatePreference(SharedPreferencesUtils.LAST_CALL_LOG_READ_TIMESTAMP_SHARED_PREF_KEY, c.getString(columnIndexForDate), context);
             c.close();
         }

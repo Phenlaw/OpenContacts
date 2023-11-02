@@ -37,16 +37,16 @@ public class CallScreeningServiceImplementation extends CallScreeningService {
     @Override
     public void onScreenCall(@NonNull Call.Details callDetails) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isCallFilteringEnabled");
         if (callDetails.getCallDirection() == DIRECTION_OUTGOING || !getBoolean(SharedPreferencesUtils.ENABLE_CALL_FILTERING_SHARED_PREF_KEY, false, this)) {
             respondToCall(callDetails, allow);
             return;
         }
         String callingPhonenumber = callDetails.getHandle().getSchemeSpecificPart();
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetContact");
         Contact probableContact = ContactsDBHelper.getContactFromDB(callingPhonenumber);
         if (probableContact == null) {
-            Log.i("G&S", "Modificato");
+            Log.i("G&S", "Modificato-shouldBlockCalls");
             respondToCall(callDetails, getBoolean(SharedPreferencesUtils.CALL_FILTER_REJECT_CALLS_SHARED_PREF_KEY, false, this) ? reject : silence);
         } else respondToCall(callDetails, allow);
     }

@@ -108,7 +108,7 @@ public class DomainUtils {
     public static String STORAGE_DIRECTORY_NAME = DEBUG ? "DOpenContacts" : "OpenContacts";
 
     static {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-DUinitializeT9Mapping");
         characterToIntegerMappingForKeyboardLayout = new HashMap<>();
         int[] numericsMappingForAlphabetsInNumberKeypad = {2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 9, 9, 9, 9};
         for (int i = 0, charCodeForA = 65; i < 26; i++) {
@@ -118,7 +118,7 @@ public class DomainUtils {
         characterToIntegerMappingForKeyboardLayout.put(' ', 0);
         for (int i = 0, numericAsciiCodeStartingCode = 48; i < 10; i++)
             characterToIntegerMappingForKeyboardLayout.put((char) (numericAsciiCodeStartingCode + i), i);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-DUinitPinyinOutputFormat");
         hanyuPinyinOutputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
         hanyuPinyinOutputFormat.setVCharType(HanyuPinyinVCharType.WITH_V);
     }
@@ -150,7 +150,7 @@ public class DomainUtils {
             AndroidUtils.runOnMainDelayed(() -> AndroidUtils.toastFromNonUIThread(R.string.storage_not_mounted, LENGTH_LONG, context), 0);
             return;
         }
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetFavorites");
         List<Contact> favorites = null;
         if (ContactsDataStore.favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
         else ContactsDataStore.updateFavoritesList();
@@ -158,7 +158,8 @@ public class DomainUtils {
         byte[] plainTextExportBytes = getVCFExportBytes(ContactsDataStore.getAllContacts(),favorites);
         createOpenContactsDirectoryIfItDoesNotExist();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH-mm-ss");
-        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        Log.i("G&S","Modificato-hasEncryptingContactsKey");
+        Log.i("G&S","Modificato-getEncryptingContactsKey");
         if (!isEmpty(getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, context)))
             exportAsEncryptedZip(context, plainTextExportBytes, simpleDateFormat);
         else exportAsPlainTextVCFFile(plainTextExportBytes, simpleDateFormat);
@@ -185,7 +186,7 @@ public class DomainUtils {
 
     private static void exportAsEncryptedZip(Context context, byte[] plainTextExportBytes, SimpleDateFormat simpleDateFormat) throws IOException {
         String exportFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + STORAGE_DIRECTORY_NAME + "/Contacts_" + simpleDateFormat.format(new Date()) + ".zip";
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getEncryptingContactsKey");
         ZipUtils.exportZip(getStringFromPreferences(SharedPreferencesUtils.ENCRYPTING_CONTACTS_EXPORT_KEY, context), plainTextExportBytes, exportFilePath);
     }
 
@@ -195,17 +196,17 @@ public class DomainUtils {
         vCardWriter.setCaretEncodingEnabled(true);
         StructuredName structuredName = new StructuredName();
 
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-DUgetVCFExportBytes1");
         int contactsSize = allContacts.size();
         for (int i=0;i<contactsSize;i++) {
             Contact contact = allContacts.get(i);
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CDSgetVCardData");
             VCardData vCardData = ContactsDBHelper.getVCard(contact.id);
             if (vCardData == null)
                 createVCardAndWrite(vCardWriter, structuredName, contact);
             else {
                 try {
-                    Log.i("G&S","Modificato");
+                    Log.i("G&S","Modificato-getVCardFromString");
                     VCard vcard = new VCardReader(vCardData.vcardDataAsString).readNext();
                     vCardWriter.write(vcard);
                 } catch (IOException e) {
@@ -225,7 +226,7 @@ public class DomainUtils {
         structuredName.setFamily(contact.lastName);
         vcard.setStructuredName(structuredName);
 
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-DUcreateVCardAndWrite1");
         int phoneNumbersSize = contact.phoneNumbers.size();
         for (int i =0; i<phoneNumbersSize;i++)
             vcard.addTelephoneNumber(contact.phoneNumbers.get(i).phoneNumber, TelephoneType.CELL);
@@ -290,7 +291,7 @@ public class DomainUtils {
 
     public static String getNumericKeyPadNumberForString(String string) {
         String nonAccentedCharacters = replaceAccentedCharactersWithEnglish(string);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-DUgetInitialsOfEachWord");
         String text="";
         if (!TextUtils.isEmpty(nonAccentedCharacters)) text = U.join(Common.map(text.split(" "), word -> TextUtils.isEmpty(word) ? "" : word.charAt(0)), "");
         String finalString = nonAccentedCharacters + " " + text;
@@ -367,13 +368,13 @@ public class DomainUtils {
 
     @NonNull
     public static SimpleDateFormat getTimestampPattern(Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-is12HourFormatEnabled");
         return new SimpleDateFormat(dateFormatOnlyMonthAndDatePerLocale + (getBoolean(SharedPreferencesUtils.PREFTIMEFORMAT_12_HOURS_SHARED_PREF_KEY, true, context) ? "  hh:mm a" : " HH:mm"), Locale.getDefault());
     }
 
     @NonNull
     public static SimpleDateFormat getFullDateTimestampPattern(Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-is12HourFormatEnabled");
         return new SimpleDateFormat(dateFormatOnlyMonthAndDatePerLocale + (getBoolean(SharedPreferencesUtils.PREFTIMEFORMAT_12_HOURS_SHARED_PREF_KEY, true, context) ? "/yyyy  hh:mm a" : "/yyyy HH:mm"), Locale.getDefault());
     }
 
@@ -382,7 +383,7 @@ public class DomainUtils {
             AndroidUtils.showAlert(context, context.getString(R.string.error), context.getString(R.string.storage_not_mounted));
             return;
         }
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-createCallTypeIntToTextMapping");
         stringValueOfCallTypeIntToTextMapping = new HashMap<>(3);
         stringValueOfCallTypeIntToTextMapping.put(String.valueOf(CallLog.Calls.INCOMING_TYPE), context.getString(R.string.incoming_call));
         stringValueOfCallTypeIntToTextMapping.put(String.valueOf(CallLog.Calls.MISSED_TYPE), context.getString(R.string.missed_call));
@@ -401,7 +402,7 @@ public class DomainUtils {
             SimpleDateFormat callTimeStampFormat = getFullDateTimestampPattern(context);
             List<CallLogEntry> entireCallLog = CallLogEntry.listAll(CallLogEntry.class);
             writeCallLogCSVHeader(csvWriter);
-            Log.i("FOR","Modificato");
+            Log.i("FOR","Modificato-DUexportCallLog1");
             int entireCallLogSize = entireCallLog.size();
             for(int i=0;i<entireCallLogSize;i++)  writeCallLogEntryToFile(entireCallLog.get(i), callTimeStampFormat, finalCsvWriter);
         } finally {
@@ -417,12 +418,12 @@ public class DomainUtils {
     }
 
     private static void writeCallLogEntryToFile(CallLogEntry callLogEntry, SimpleDateFormat callTimeStampFormat, ICSVWriter writer) {
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CLEgetPhoneNumber");
+        Log.i("G&S","Modificato-CLEgetCallType");
+        Log.i("G&S","Modificato-CLEgetCallType");
+        Log.i("G&S","Modificato-CLEgetDate");
+        Log.i("G&S","Modificato-CLEgetDuration");
+        Log.i("G&S","Modificato-CLEgetSimId");
         writer.writeNext(new String[]{
             callLogEntry.name, callLogEntry.phoneNumber,
             getOrDefault(stringValueOfCallTypeIntToTextMapping, callLogEntry.callType, callLogEntry.callType),
@@ -453,7 +454,7 @@ public class DomainUtils {
 
     @NonNull
     public static Comparator<Contact> getContactComparatorBasedOnName(Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-shouldSortUsingFirstName");
         if (getBoolean(SharedPreferencesUtils.SORT_USING_FIRST_NAME, true, context))
             return (contact1, contact2) -> contact1.name.compareToIgnoreCase(contact2.name);
         else
@@ -479,7 +480,7 @@ public class DomainUtils {
     public static List<Contact> filterContactsBasedOnT9Text(CharSequence t9Text, List<Contact> contacts) {
         ArrayList<Contact> filteredContacts = new ArrayList<>();
 
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-filterContactsBasedOnT9Text1");
         int contactsSize = contacts.size();
         for (int i=0;i<contactsSize;i++) {
             Contact contact = contacts.get(i);
@@ -506,13 +507,13 @@ public class DomainUtils {
     }
 
     public static void deleteAllContacts(Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-SPUremoveSyncProgress");
         ContactsDataStore.deleteAllContacts(context);
         AndroidUtils.updatePreference(SharedPreferencesUtils.SYNC_TOKEN_SHARED_PREF_KEY, "", context);
     }
 
     public static void shareContact(long contactId, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetVCardData");
         AndroidUtils.shareContact(ContactsDBHelper.getVCard(contactId).vcardDataAsString, context);
     }
 
@@ -527,7 +528,7 @@ public class DomainUtils {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private static boolean isMissedCallNotification(Context context, StatusBarNotification notification) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getMissedcallNotificationTitle");
         return context.getString(R.string.missed_call).equals(notification.getNotification().extras.getString(EXTRA_TITLE));
     }
 

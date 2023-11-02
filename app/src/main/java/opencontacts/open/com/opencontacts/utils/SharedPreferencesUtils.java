@@ -67,7 +67,7 @@ public class SharedPreferencesUtils {
 
 
     public static void saveCallerIdLocationOnScreen(int x, int y, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putInt(CALLER_ID_X_POSITION_ON_SCREEN_PREFERENCE_KEY, x)
@@ -77,7 +77,7 @@ public class SharedPreferencesUtils {
 
 
     public static void enableSocialappIntegration(String selectedCountryCodeWithPlus, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putString(DEFAULT_SOCIAL_COUNTRY_CODE_PREFERENCES_KEY, selectedCountryCodeWithPlus)
@@ -86,7 +86,7 @@ public class SharedPreferencesUtils {
     }
 
     public static void disableSocialIntegration(Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putBoolean(SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY, false)
@@ -95,7 +95,7 @@ public class SharedPreferencesUtils {
 
 
     public static void setSharedPreferencesChangeListener(SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
     }
 

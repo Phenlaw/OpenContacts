@@ -65,7 +65,7 @@ public class PhoneCallUtils {
     }
 
     public static void handleMultiSimCalling(String number, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getPreferredSim");
         String preferredSim = getStringFromPreferences(SharedPreferencesUtils.SIM_PREFERENCE_SHARED_PREF_KEY, DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT, context);
         if (DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT.equals(preferredSim)) {
             callWithSystemDefaultSim(number, context);

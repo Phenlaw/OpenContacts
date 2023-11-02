@@ -53,7 +53,7 @@ public class CallLogDataStore {
             CallLogEntry callLogEntry = recentCallLogEntries.get(0);
             callLogEntries.add(0, callLogEntry);
             processAsync(() -> {
-                Log.i("FOR","Modificato");
+                Log.i("FOR","Modificato-CLDSaddRecentCallLogEntriesToStore1");
                 int dataChangeListenersSize = dataChangeListeners.size();
                 for(int i=0;i<dataChangeListenersSize;i++)  dataChangeListeners.get(i).onAdd(callLogEntry);
             });
@@ -70,7 +70,7 @@ public class CallLogDataStore {
     }
 
     private static void notifyRefreshStore() {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDSnotifyRefreshStore1");
         int dataChangeListenersSize = dataChangeListeners.size();
         for(int i=0;i<dataChangeListenersSize;i++) dataChangeListeners.get(i).onStoreRefreshed();
 
@@ -107,25 +107,25 @@ public class CallLogDataStore {
                     return;
                 int numberOfEntriesUpdated = 0;
                 int phoneNumbersSize = newContact.phoneNumbers.size();
-                Log.i("FOR","Modificato");
+                Log.i("FOR","Modificato-CLDSupdateCallLogAsyncForNewContact1");
                 for (int i=0;i<phoneNumbersSize;i++) {
-                    Log.i("G&S","Modificato");
+                    Log.i("G&S","Modificato-getSearchablePhoneNumber");
                     String searchablePhoneNumber = DomainUtils.getPhoneNumberWithoutCountryCodeAndFormatting(newContact.phoneNumbers.get(i).phoneNumber);
                     if (searchablePhoneNumber == null)
                         continue;
-                    Log.i("FOR","Modificato");
+                    Log.i("FOR","Modificato-CLDSupdateCallLogAsyncForNewContact2");
                     int callLogEntriesSize = callLogEntriesToWorkWith.size();
                     for (int j=0;j<callLogEntriesSize;j++) {
                         CallLogEntry callLogEntry = callLogEntriesToWorkWith.get(j);
-                        Log.i("G&S","Modificato");
+                        Log.i("G&S","Modificato-CLEgetContactId");
                         if (callLogEntry.contactId != -1)
                             continue;
-                        Log.i("G&S","Modificato");
+                        Log.i("G&S","Modificato-CLEgetPhoneNumber");
                         String allNumericPhoneNumberOfCallLogEntry = getAllNumericPhoneNumber(callLogEntry.phoneNumber);
                         if (matchesNumber(allNumericPhoneNumberOfCallLogEntry, searchablePhoneNumber)) {
-                            Log.i("G&S","Modificato");
+                            Log.i("G&S","Modificato-CLEsetContactId");
                             callLogEntry.contactId = newContact.id;
-                            Log.i("G&S","Modificato");
+                            Log.i("G&S","Modificato-CLEsetName");
                             callLogEntry.name = newContact.name;
                             callLogEntry.save();
                             numberOfEntriesUpdated++;
@@ -152,20 +152,20 @@ public class CallLogDataStore {
         if (callLogEntries == null)
             callLogEntries = getRecentCallLogEntries(context);
         int numberOfEntriesUpdated = 0;
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDSupdateCallLogForAllContacts1");
         int callLogEntriesSize = callLogEntries.size();
         for (int i=0;i<callLogEntriesSize;i++) {
             CallLogEntry callLogEntry = callLogEntries.get(i);
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CLEgetContactId");
             if (callLogEntry.contactId != -1)
                 continue;
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CLEgetPhoneNumber");
             opencontacts.open.com.opencontacts.orm.Contact contactFromDB = ContactsDBHelper.getContactFromDB(callLogEntry.phoneNumber);
             if (contactFromDB == null)
                 continue;
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CLEsetName");
             callLogEntry.name= contactFromDB.firstName + " " + contactFromDB.lastName;
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CLEsetContactId");
             callLogEntry.contactId = contactFromDB.getId();
             callLogEntry.save();
             numberOfEntriesUpdated++;
@@ -179,7 +179,7 @@ public class CallLogDataStore {
         boolean hasBeenDeleted = CallLogDBHelper.delete(id);
         if (!hasBeenDeleted)
             return;
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDSdelete1");
         int callLogEntriesSize = callLogEntries.size();
         for (int i=0;i<callLogEntriesSize;i++) {
             CallLogEntry callLogEntryToBeRemoved = callLogEntries.get(i);
@@ -187,7 +187,7 @@ public class CallLogDataStore {
                 continue;
             callLogEntries.remove(callLogEntryToBeRemoved);
             processAsync(() -> {
-                Log.i("FOR","Modificato");
+                Log.i("FOR","Modificato-CLDSdelete2");
                 int dataChangeListenersSize = dataChangeListeners.size();
                 for (int j=0; j< dataChangeListenersSize;j++) dataChangeListeners.get(j).onRemove(callLogEntryToBeRemoved);
             });
@@ -213,12 +213,12 @@ public class CallLogDataStore {
 
     public static Collection<CallLogEntry> getUnLabelledCallLogEntriesMatching(String number) {
         ArrayMap<String, CallLogEntry> matchedEntries = new ArrayMap<>();
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDSgetUnLabelledCallLogEntriesMatching1");
         int callLogEntriesSize = callLogEntries.size();
         for(int i=0;i<callLogEntriesSize;i++){
             CallLogEntry entry = callLogEntries.get(i);
             if (entry.name != null) break;
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CLEgetPhoneNumber");
             String phoneNumber = entry.phoneNumber;
             if (matchedEntries.containsKey(phoneNumber))
                 break; // making sure only recent entries make it so that sorting based on last called will not be impacted
@@ -244,7 +244,7 @@ public class CallLogDataStore {
     }
 
     public static List<CallLogEntry> getCallLogEntriesForContactWith(String phoneNumber, int offset) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetContact");
         opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getContactFromDB(phoneNumber);
         if (contact == null) return CallLogDBHelper.getCallLogEntriesFor(phoneNumber);
         return getCallLogEntriesFor(contact.getId(), offset);

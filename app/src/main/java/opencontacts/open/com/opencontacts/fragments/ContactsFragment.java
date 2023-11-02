@@ -62,7 +62,7 @@ public class ContactsFragment extends AppBaseFragment implements SelectableTab {
                 contactsListView.clearTextFilter();
             return false;
         });
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isT9SearchEnabled");
         searchView.setInputType(getBoolean(SharedPreferencesUtils.T9_SEARCH_ENABLED_SHARED_PREF_KEY, true, getContext()) ? InputType.TYPE_CLASS_PHONE : InputType.TYPE_CLASS_TEXT);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

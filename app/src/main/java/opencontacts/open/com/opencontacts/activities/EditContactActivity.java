@@ -112,10 +112,10 @@ public class EditContactActivity extends AppBaseActivity {
                 finish();
             }
             toolbar.setTitle(contact.firstName);
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CDSisTemporary");
             isTemporaryContactBefore = ContactsDBHelper.isTemporary(contact.id);
             try {
-                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato-CDSgetVCardData");
                 vcardBeforeEdit = new VCardReader(ContactsDBHelper.getVCard(contact.id).vcardDataAsString).readNext();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -184,18 +184,18 @@ public class EditContactActivity extends AppBaseActivity {
         ArrayAdapter<String> groupsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         groupsSpinner.setAdapter(groupsAdapter, false, selected -> {
         });
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAllGroupNames");
         List<String> allGroups = U.chain(ContactGroupsDataStore.getAllGroups())
             .map(ContactGroup::getName)
             .value();
         groupsAdapter.addAll(allGroups);
         if (contact == null) return;
 
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-SUsetSelection");
         List<String> groupNames;
         if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
         else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getGroupNames");
         boolean[] selectionMatrix = toPrimitiveBools(U.map(allGroups, groupNames::contains));
         groupsSpinner.setSelected(selectionMatrix);
     }
@@ -229,9 +229,9 @@ public class EditContactActivity extends AppBaseActivity {
             emailsInputCollection.addOneMoreView();
             return;
         }
-        //Da ottimizzare FORSE
-
-        U.forEach(emails, email -> emailsInputCollection.addOneMoreView(email.getValue(), DomainUtils.getEmailTypeTranslatedText(email.getTypes(), EditContactActivity.this)));
+        Log.i("FOR","Modificato-ECAfillEmails1");
+        int emailsSize = emails.size();
+        for(int i =0; i<emailsSize;i++)  emailsInputCollection.addOneMoreView(emails.get(i).getValue(), DomainUtils.getEmailTypeTranslatedText(emails.get(i).getTypes(), EditContactActivity.this));
     }
 
     private void fillTelephoneNumbers() {
@@ -241,11 +241,11 @@ public class EditContactActivity extends AppBaseActivity {
             phoneNumbersInputCollection.addOneMoreView(newPhoneNumberToBeAdded, defaultPhoneNumberTypeTranslatedText);
             return;
         }
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-ECAfillTelephoneNumbers1");
         int telephoneNumbersSize = telephoneNumbers.size();
         for(int i =0; i<telephoneNumbersSize;i++) {
             Telephone telephoneNumber = telephoneNumbers.get(i);
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getMobileNumber");
             String telephoneText = telephoneNumber.getText();
             phoneNumbersInputCollection.addOneMoreView(telephoneText == null ? telephoneNumber.getUri().getNumber() : telephoneText, DomainUtils.getMobileNumberTypeTranslatedText(telephoneNumber.getTypes(), EditContactActivity.this)) ;
         }
@@ -297,15 +297,15 @@ public class EditContactActivity extends AppBaseActivity {
     }
 
     private void addGroupsToNewVCard(VCard newVCard) {
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-SUgetSelectedItem");
+        Log.i("G&S","Modificato-getAllGroupNames");
         boolean[] selectionMatrix = groupsSpinner.getSelected();
         List<String> newGroupNames = U.filterIndexed(U.chain(ContactGroupsDataStore.getAllGroups())
             .map(ContactGroup::getName)
             .value(), (index, item) -> selectionMatrix[index]);
 
         if (newGroupNames.isEmpty()) return;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-VCUsetCategories");
         newVCard.setCategories(newGroupNames.toArray(new String[]{}));
     }
 
@@ -360,7 +360,7 @@ public class EditContactActivity extends AppBaseActivity {
     private Address createAddress(int index, Pair<String, String> addressAndTypePair) {
         Address address = U.elementAtOrElse(vcardBeforeEdit.getAddresses(), index, new Address());
         address.setStreetAddress(addressAndTypePair.first);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-DUgetAddressType");
         if (DomainUtils.translatedTextToAddressType == null)
             DomainUtils.translatedTextToAddressType = U.toMap(U.invert(DomainUtils.getAddressTypeToTranslatedTextMap(this)));
         AddressType at = getOrDefault(DomainUtils.translatedTextToAddressType, addressAndTypePair.second, AddressType.get(addressAndTypePair.second));
@@ -370,7 +370,7 @@ public class EditContactActivity extends AppBaseActivity {
 
     private Email createEmail(Pair<String, String> emailAndTypePair) {
         Email email = new Email(emailAndTypePair.first);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-DUgetEmailType");
         if (DomainUtils.translatedTextToEmailType == null)
             DomainUtils.translatedTextToEmailType = U.toMap(U.invert(DomainUtils.getEmailTypeToTranslatedTextMap(this)));
         EmailType et = getOrDefault(DomainUtils.translatedTextToEmailType, emailAndTypePair.second, EmailType.get(emailAndTypePair.second));
@@ -380,7 +380,7 @@ public class EditContactActivity extends AppBaseActivity {
 
     private Telephone createTelephone(Pair<String, String> phoneNumberAndTypePair) {
         Telephone telephone = new Telephone(phoneNumberAndTypePair.first);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-DUgetMobileNumberType");
         if (DomainUtils.translatedTextToMobileNumberType == null)
             DomainUtils.translatedTextToMobileNumberType = U.toMap(U.invert(DomainUtils.getMobileNumberTypeToTranslatedTextMap(this)));
         TelephoneType mobileNumberType = getOrDefault(DomainUtils.translatedTextToMobileNumberType, phoneNumberAndTypePair.second, TelephoneType.get(phoneNumberAndTypePair.second));
