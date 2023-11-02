@@ -45,15 +45,16 @@ public class ContactsListViewAdapter extends ArrayAdapter<Contact> {
 
     private void init(@NonNull Context context) {
         layoutInflater = LayoutInflater.from(context);
-        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        Log.i("G&S","Modificato-isSocialIntegrationEnabled");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         socialAppIntegrationEnabled = context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .getBoolean(SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY, false);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-shouldToggleContactActions");
         shouldToggleContactActions = getBoolean(SharedPreferencesUtils.TOGGLE_CONTACT_ACTIONS, false, context);
     }
 
     public void createContactsListFilter(ContactsListFilter.AllContactsHolder allContactsHolder) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isT9SearchEnabled");
         contactsListFilter = getBoolean(SharedPreferencesUtils.T9_SEARCH_ENABLED_SHARED_PREF_KEY, true, getContext()) ? new ContactsListT9Filter(this, allContactsHolder)
             : new ContactsListTextFilter(this, allContactsHolder);
     }

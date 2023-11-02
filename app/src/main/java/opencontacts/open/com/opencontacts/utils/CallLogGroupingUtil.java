@@ -46,17 +46,17 @@ public class CallLogGroupingUtil {
     private static boolean canBeGrouped(GroupedCallLogEntryWithCache groupedCallLogEntryWithCache, CallLogEntry callLogEntry) {
         if (callLogEntry.contactId != -1 && groupedCallLogEntryWithCache.groupedCallLogEntry.latestCallLogEntry.contactId != callLogEntry.contactId)
             return false;
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CLEgetPhoneNumber");
+        Log.i("G&S","Modificato-CLEgetPhoneNumber");
         if (callLogEntry.contactId == -1 && !U.isEqual(groupedCallLogEntryWithCache.groupedCallLogEntry.latestCallLogEntry.phoneNumber, callLogEntry.phoneNumber))
             return false;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CLEgetDate");
         return (Common.getCalendarInstanceAt(Long.parseLong(callLogEntry.date)).after(groupedCallLogEntryWithCache.groupingTimeOffsetCalendarInstance));
     }
 
     private static GroupedCallLogEntryWithCache createGroupedCallLogEntryWithCache(CallLogEntry callLogEntry) {
         GroupedCallLogEntry groupedCallLogEntry = new GroupedCallLogEntry(Collections.singletonList(callLogEntry), callLogEntry);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CLEgetDate");
         Calendar hourOffsetCalendarInstance = Common.getCalendarOffset(-OFFSET_TIME_IN_MINUTES_FOR_GROUPING, MINUTE, new Date(Long.parseLong(callLogEntry.date)));
 
         return new GroupedCallLogEntryWithCache(groupedCallLogEntry, hourOffsetCalendarInstance);

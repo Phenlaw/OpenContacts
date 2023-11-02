@@ -130,7 +130,7 @@ public class CardDavSyncActivity extends AppCompatActivity {
             return;
         }
         updatePreference(ADDRESSBOOK_URL_SHARED_PREFS_KEY, addressBookUrl, this);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getBaseURL");
         String baseURL;
         String path = null;
         try {

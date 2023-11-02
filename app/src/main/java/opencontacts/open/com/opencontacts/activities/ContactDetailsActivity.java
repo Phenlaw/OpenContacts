@@ -99,7 +99,7 @@ public class ContactDetailsActivity extends AppBaseActivity {
         contactId = intent.getLongExtra(MainActivity.INTENT_EXTRA_LONG_CONTACT_ID, -1);
         if (contactId == -1) showInvalidContactErrorAndExit();
         contact = ContactsDataStore.getContactWithId(contactId);
-        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        Log.i("G&S","Modificato-isSocialIntegrationEnabled");Log.i("G&S","Modificato-getAppsSharedPreferences");
         shouldShowSocialAppIcon = this.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .getBoolean(SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY, false);
     }
@@ -114,7 +114,7 @@ public class ContactDetailsActivity extends AppBaseActivity {
         super.onResume();
         invalidateOptionsMenu();
         contact = ContactsDataStore.getContactWithId(contactId);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetVCardData");
         VCardData vcardData = ContactsDBHelper.getVCard(contactId);
         if (contact == null) {
             showInvalidContactErrorAndExit();
@@ -155,7 +155,7 @@ public class ContactDetailsActivity extends AppBaseActivity {
     }
 
     private void fillGroups() {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-VCUgetCategories");
         Categories categoriesTemp = vcard.getCategories();
         List<String> categories;
         if(categoriesTemp == null) categories = Collections.emptyList();
@@ -167,7 +167,7 @@ public class ContactDetailsActivity extends AppBaseActivity {
         }
         groupsCard.setVisibility(VISIBLE);
         AppCompatTextView groupsTextView = groupsCard.findViewById(R.id.text_view);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CgetGroupsNameCSVString");
         groupsTextView.setText(U.join(categories, GROUPS_SEPERATOR_CHAR).replaceAll(",", ", "));
         groupsTextView.setOnClickListener(v -> startActivity(new Intent(this, GroupsActivity.class)));
     }
@@ -260,7 +260,7 @@ public class ContactDetailsActivity extends AppBaseActivity {
         //Da ottimizzare FORSE
         U.forEach(vcard.getTelephoneNumbers(), telephone -> {
             View inflatedView = layoutInflater.inflate(R.layout.contact_details_row, phoneNumbersLinearLayout, false);
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getMobileNumber");
             String telephoneTextTemp = telephone.getText();
             String telephoneText;
 
@@ -302,7 +302,7 @@ public class ContactDetailsActivity extends AppBaseActivity {
             return true;
         });
         menu.findItem(R.id.image_button_delete_contact).setOnMenuItemClickListener(getMenuItemClickHandlerFor(this::deleteContactAfterConfirmation));
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isFavorite");
         if (ContactsDataStore.favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
         else ContactsDataStore.updateFavoritesList();
         boolean isFavorite = ContactsDataStore.favorites.contains(contact);

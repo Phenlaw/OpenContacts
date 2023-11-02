@@ -27,8 +27,8 @@ public class CallLogFragment extends AppBaseFragment implements SelectableTab {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setOnEnteringMultiSelectMode");
+        Log.i("G&S","Modificato-setOnExitingMultiSelectMode");
         callLogListView = new CallLogListView(getContext(), editNumberBeforeCallHandler);
         callLogListView.onEnteringMultiSelectMode =  () -> ((MainActivity) getActivity()).hideBottomMenu();
         callLogListView.onExitingMultiSelectMode = () -> ((MainActivity) getActivity()).showBottomMenu();
@@ -47,7 +47,7 @@ public class CallLogFragment extends AppBaseFragment implements SelectableTab {
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-shouldAutoCancelMissedCallNotification");
         if( getBoolean(SharedPreferencesUtils.SHOULD_AUTO_CANCEL_MISSED_CALL_NOTIF_SHARED_PREF_KEY, false, getContext())) processAsync(() -> removeAnyMissedCallNotifications(getContext()));
     }
 
@@ -69,7 +69,7 @@ public class CallLogFragment extends AppBaseFragment implements SelectableTab {
 
     @Override
     public boolean handleBackPress() {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isInSelectionMode");
         if (!callLogListView.inSelectionMode) return false;
         callLogListView.exitSelectionMode();
         return true;
@@ -78,7 +78,7 @@ public class CallLogFragment extends AppBaseFragment implements SelectableTab {
     public void setEditNumberBeforeCallHandler(EditNumberBeforeCallHandler editNumberBeforeCallHandler) {
         this.editNumberBeforeCallHandler = editNumberBeforeCallHandler;
         if (callLogListView != null){
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-setEditNumberBeforeCallHandler");
             callLogListView.editNumberBeforeCallHandler = editNumberBeforeCallHandler;
 
         }

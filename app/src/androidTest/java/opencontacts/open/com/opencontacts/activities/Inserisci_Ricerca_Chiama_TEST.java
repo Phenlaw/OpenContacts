@@ -239,13 +239,7 @@ isDisplayed()));
         groupButton.perform(click());
 
         ViewInteraction addGroupButton = onView(
-            allOf(withContentDescription(R.string.add_group),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.toolbar),
-                        2),
-                    0),
-                isDisplayed()));
+            allOf(withContentDescription(R.string.add_group)));
         addGroupButton.perform(click());
 
         ViewInteraction appCompatCheckedTextView = onView(

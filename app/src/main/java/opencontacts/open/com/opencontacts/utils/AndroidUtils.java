@@ -163,7 +163,8 @@ public class AndroidUtils {
     }
 
     public static void openSocialApp(String number, Context context) {
-        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        Log.i("G&S","Modificato-defaultSocialAppEnabled");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         String socialApp = context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_APP, TELEGRAM);;
         if(socialApp.equals(TELEGRAM)) telegram(number, context);
@@ -210,11 +211,11 @@ public class AndroidUtils {
 
     @NonNull
     private static Intent getSignalIntent(String number, Context context) {
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getDefaultSocialCountryCode");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         String numberWithCountryCode = number.contains("+") ? number : context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_COUNTRY_CODE_PREFERENCES_KEY, "") + number;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-removeSpacesIfAny");
         return new Intent(ACTION_VIEW, Uri.parse(
             context.getString(R.string.signal_uri_with_phone_number_placeholder, numberWithCountryCode.replaceAll(" ", ""))
         ));
@@ -222,22 +223,22 @@ public class AndroidUtils {
 
     @NonNull
     private static Intent getTelegramIntent(String number, Context context) {
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getDefaultSocialCountryCode");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         String numberWithCountryCode = number.contains("+") ? number : context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_COUNTRY_CODE_PREFERENCES_KEY, "") + number;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-removeSpacesIfAny");
         return new Intent(ACTION_VIEW, Uri.parse(
             context.getString(R.string.telegram_uri_with_phone_number_placeholder, numberWithCountryCode.replaceAll(" ", ""))
         ));
     }
     @NonNull
     private static Intent getWhatsappIntent(String number, Context context) {
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getDefaultSocialCountryCode");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         String numberWithCountryCode = number.contains("+") ? number : context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_COUNTRY_CODE_PREFERENCES_KEY, "") + number;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-removeSpacesIfAny");
         return new Intent(ACTION_VIEW, Uri.parse(
             context.getString(R.string.whatsapp_uri_with_phone_number_placeholder, numberWithCountryCode.replaceAll(" ", ""))
         ));
@@ -254,7 +255,7 @@ public class AndroidUtils {
             callIntent = new Intent(Intent.ACTION_DIAL, numberUri);
             callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-shouldUseSystemCallingApp");
         if (getBoolean(SharedPreferencesUtils.SHOULD_USE_SYSTEM_PHONE_APP, false, context)) {
             ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(callIntent, PackageManager.MATCH_SYSTEM_ONLY);
             ActivityInfo targetActivityInfo = resolveInfo.activityInfo;
@@ -380,7 +381,7 @@ public class AndroidUtils {
         Drawable navigationIcon = toolBar.getNavigationIcon();
         if (navigationIcon == null)
             return;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getPrimaryColor");
         setColorFilterUsingColor(navigationIcon, getThemeAttributeColor(android.R.attr.textColorPrimary, appCompatActivity));
     }
 
@@ -503,17 +504,17 @@ public class AndroidUtils {
     }
 
     public static String getStringFromPreferences(String key, String defaultValue, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         return context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getString(key, defaultValue);
     }
 
     public static float getFloatFromPreferences(String key, float defaultValue, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         return context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getFloat(key, defaultValue);
     }
 
     public static void updatePreference(String key, String value, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putString(key, value)
@@ -521,7 +522,7 @@ public class AndroidUtils {
     }
 
     public static void updatePreference(String key, boolean value, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putBoolean(key, value)
@@ -529,7 +530,7 @@ public class AndroidUtils {
     }
 
     public static void updatePreference(String key, long value, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putLong(key, value)
@@ -537,7 +538,7 @@ public class AndroidUtils {
     }
 
     public static void updatePreference(String key, float value, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .edit()
             .putFloat(key, value)
@@ -545,17 +546,17 @@ public class AndroidUtils {
     }
 
     public static boolean getBoolean(String key, boolean defaultValue, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         return context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getBoolean(key, defaultValue);
     }
 
     public static long getLong(String key, long defaultValue, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         return context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getLong(key, defaultValue);
     }
 
     public static void toggleBoolean(String key, boolean defaultValue, Context context) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getAppsSharedPreferences");
         updatePreference(key
             , !context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getBoolean(key, defaultValue)
             , context);

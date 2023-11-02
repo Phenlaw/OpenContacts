@@ -40,7 +40,7 @@ public class TextInputAndSpinnerViewHolder extends FieldViewHolder {
         this.types = types;
         this.fieldView = fieldView;
         setupTextInput(hint, inputType, fieldView);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setupSpinner");
         spinner.setDropDownDrawable(getTintedDrawable(R.drawable.ic_arrow_drop_down_black_24dp, context));
         spinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, types));
         if (types.size() > 0) spinner.selectItem(0);
@@ -55,7 +55,7 @@ public class TextInputAndSpinnerViewHolder extends FieldViewHolder {
 
     public void set(String value, String type) {
         editText.setText(value);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setItem");
         int indexOfType = types.indexOf(type);
         if (indexOfType == -1) spinner.setText(type);
         else spinner.selectItem(indexOfType);

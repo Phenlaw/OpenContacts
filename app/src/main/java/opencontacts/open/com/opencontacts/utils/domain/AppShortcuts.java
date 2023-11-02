@@ -38,7 +38,7 @@ public class AppShortcuts {
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     private static void addDynamicShortcuts(Context context) {
         ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(Context.SHORTCUT_SERVICE);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-dynamicShortcutsAddedAlready");
         if (BuildConfig.VERSION_NAME.equals(getStringFromPreferences(SharedPreferencesUtils.SHORTCUTS_ADDED_IN_VERSION_SHARED_PREF_KEY, context))) return;
         shortcutManager.addDynamicShortcuts(
             Arrays.asList(
@@ -46,7 +46,7 @@ public class AppShortcuts {
                 getDialerShortcut(context)
             )
         );
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-markAddedDynamicShortcuts");
         updatePreference(SharedPreferencesUtils.SHORTCUTS_ADDED_IN_VERSION_SHARED_PREF_KEY, BuildConfig.VERSION_NAME, context);
     }
 

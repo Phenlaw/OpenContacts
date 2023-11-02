@@ -12,7 +12,7 @@ public class ContactGroup {
     public String t9Name;
 
     public ContactGroup(String name) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGupdateName");
         this.name = name;
         this.t9Name = DomainUtils.getNumericKeyPadNumberForString(name);
     }

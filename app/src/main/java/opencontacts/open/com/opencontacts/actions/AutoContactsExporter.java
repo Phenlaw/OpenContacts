@@ -25,15 +25,16 @@ public class AutoContactsExporter implements ContactsHouseKeepingAction {
 
     @Override
     public void perform(List<Contact> contacts, Context context) {
-        Log.i("G&S","Modificato");
-        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        Log.i("G&S","Modificato-shouldExportContactsEveryWeek");
+        Log.i("G&S","Modificato-hasItBeenAWeekSinceLastExportOfContacts");
+        Log.i("G&S","Modificato2-getAppsSharedPrefenences");
         long lastExportTimeStamp = context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE).getLong(SharedPreferencesUtils.LAST_EXPORT_TIME_STAMP, 0);
         boolean hasItBeenAWeekSinceLastExportOfContacts = hasItBeen(SharedPreferencesUtils.WEEKS_TIME_IN_HOURS, HOUR, lastExportTimeStamp);
         if (!(getBoolean(SharedPreferencesUtils.EXPORT_CONTACTS_EVERY_WEEK_SHARED_PREF_KEY, true, context) && hasItBeenAWeekSinceLastExportOfContacts)) return;
         if (!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, context)) return;
         try {
             DomainUtils.exportAllContacts(context);
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-markAutoExportComplete");
             updatePreference(SharedPreferencesUtils.LAST_EXPORT_TIME_STAMP, new Date().getTime(), context);
         } catch (Exception e) {
             e.printStackTrace();

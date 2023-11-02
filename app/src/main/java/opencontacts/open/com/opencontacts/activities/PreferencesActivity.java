@@ -104,7 +104,7 @@ public class PreferencesActivity extends AppBaseActivity {
             if (hasMultipleSims(getContext())) addSimPreference();
             enablePreferenceIf(SHOULD_USE_SYSTEM_PHONE_APP, () -> android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N);
             enablePreferenceIf(CALL_FILTERING_PREF_GROUP, () -> android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q);
-            Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+            Log.i("G&S","Modificato-isSocialIntegrationEnabled");Log.i("G&S","Modificato2-getAppsSharedPreferences");
             enablePreferenceIf(DEFAULT_SOCIAL_APP, () -> getContext().getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
                 .getBoolean(SOCIAL_INTEGRATION_ENABLED_PREFERENCE_KEY, false));
             handlePreferenceUpdates();
@@ -127,7 +127,7 @@ public class PreferencesActivity extends AppBaseActivity {
         }
 
         private boolean hasNoPreferredSim() {
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getPreferredSim");
             return U.contains(Arrays.asList(DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT, DEFAULT_SIM_SELECTION_ALWAYS_ASK),getStringFromPreferences(SIM_PREFERENCE_SHARED_PREF_KEY, DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT, getContext()));
         }
 
@@ -139,7 +139,7 @@ public class PreferencesActivity extends AppBaseActivity {
             String[] simNames = getSimNames(getContext());
             simSelectionTitles[2] = simNames[0];
             simSelectionTitles[3] = simNames[1];
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getPreferredSim");
             String simSelectionSummary = hasNoPreferredSim() ? "%s" : simNames[Integer.valueOf(getStringFromPreferences(SIM_PREFERENCE_SHARED_PREF_KEY, DEFAULT_SIM_SELECTION_SYSTEM_DEFAULT, getContext()))];
             listPreference.setEntries(simSelectionTitles);
             listPreference.setTitle(R.string.default_sim_calls_preference_title);
@@ -246,8 +246,8 @@ public class PreferencesActivity extends AppBaseActivity {
 
         private void showSetDefaultCountryCodeDialog(Context context) {
             AppCompatEditText countryCodeEditText = new AppCompatEditText(context);
-            Log.i("G&S","Modificato");
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getDefaultSocialCountryCode");
+            Log.i("G&S","Modificato-getAppsSharedPreferences");
             countryCodeEditText.setText(context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_COUNTRY_CODE_PREFERENCES_KEY, ""));
             countryCodeEditText.setInputType(InputType.TYPE_CLASS_PHONE);
@@ -273,7 +273,7 @@ public class PreferencesActivity extends AppBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_TO_BECOMING_CALL_SCREENER) {
             if (resultCode != Activity.RESULT_OK) return;
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-enableCallFiltering");
             updatePreference(ENABLE_CALL_FILTERING_SHARED_PREF_KEY, true, this);
             recreate();
         }

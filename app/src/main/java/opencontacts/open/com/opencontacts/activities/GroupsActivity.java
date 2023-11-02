@@ -67,8 +67,8 @@ public class GroupsActivity extends AppBaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ContactGroup selectedItem = (ContactGroup) groupNameSpinner.getSelectedItem();
                 if (selectedItem == null) return;
-                Log.i("G&S","Modificato");
-                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato-setLastVisitedGroup");
+                Log.i("G&S","Modificato-CGgetName");
                 updatePreference(SharedPreferencesUtils.LAST_VISITED_GROUP_SHARED_PREF_KEY, selectedItem.name, GroupsActivity.this);
                 showContactsListOfSelectedGroup(position);
             }
@@ -101,10 +101,10 @@ public class GroupsActivity extends AppBaseActivity {
     }
 
     private int getSelectedGroupIndex() {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getLastVistedGroup");
         String lastVisitedGroupName = getStringFromPreferences(SharedPreferencesUtils.LAST_VISITED_GROUP_SHARED_PREF_KEY, "", this);
         if (isEmpty(lastVisitedGroupName)) return 0;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGgetName");
         int selectedGroupIndex = U.findIndex(allGroups, group -> group.name.equals(lastVisitedGroupName));
         return selectedGroupIndex == -1 ? 0 : selectedGroupIndex;
     }
@@ -124,7 +124,7 @@ public class GroupsActivity extends AppBaseActivity {
         contactsListAdapter = new ContactsListViewAdapter(this);
         contactsListAdapter.createContactsListFilter(this::getCurrentGroupContacts);
         contactsListView.setAdapter(contactsListAdapter);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setContactsListActionsListener");
         contactsListAdapter.contactsListActionsListener = new DefaultContactsListActions(this){
             @Override
             public void onLongClick(Contact contact){
@@ -182,7 +182,7 @@ public class GroupsActivity extends AppBaseActivity {
             .setIcon(R.drawable.edit)
             .setOnMenuItemClickListener(item -> {
                 ContactGroup selectedGroup = (ContactGroup) groupNameSpinner.getSelectedItem();
-                Log.i("G&S","Modificato");
+                Log.i("G&S","Modificato-CGgetName");
                 startActivity(
                     new Intent(GroupsActivity.this, ContactGroupEditActivity.class)
                         .putExtra(GROUP_NAME_INTENT_EXTRA, selectedGroup == null ? "" : selectedGroup.name)
@@ -221,7 +221,7 @@ public class GroupsActivity extends AppBaseActivity {
 
     private void bindSearchViewToContacts(SearchView searchView) {
         if (contactsListView == null) return;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isT9SearchEnabled");
         searchView.setInputType(getBoolean(SharedPreferencesUtils.T9_SEARCH_ENABLED_SHARED_PREF_KEY, true, this) ? InputType.TYPE_CLASS_PHONE : InputType.TYPE_CLASS_TEXT);
         searchView.setOnCloseListener(() -> {
             contactsListView.clearTextFilter();

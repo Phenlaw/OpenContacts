@@ -17,8 +17,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/app_name"
-            android:minHeight="?attr/actionBarSize" />
+            android:minHeight="?attr/actionBarSize"
+            app:collapseContentDescription="Collapse"
+            app:title="@string/app_name" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"

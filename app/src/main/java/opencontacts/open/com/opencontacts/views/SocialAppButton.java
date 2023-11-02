@@ -24,7 +24,8 @@ public class SocialAppButton extends ImageButtonWithTint {
 
     public SocialAppButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        Log.i("G&S","Modificato");Log.i("G&S","Modificato2");
+        Log.i("G&S","Modificato-defaultSocialAppEnabled");
+        Log.i("G&S","Modificato-removeSpaceIfAny");
         String defaultSocialApp = context.getSharedPreferences(SharedPreferencesUtils.COMMON_SHARED_PREFS_FILE_NAME, MODE_PRIVATE)
             .getString(SharedPreferencesUtils.DEFAULT_SOCIAL_APP, TELEGRAM);
         if (defaultSocialApp.equalsIgnoreCase(TELEGRAM)) setImageResource(R.drawable.ic_telegram);

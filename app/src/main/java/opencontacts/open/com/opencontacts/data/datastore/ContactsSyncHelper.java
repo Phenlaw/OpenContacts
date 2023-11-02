@@ -45,11 +45,11 @@ public class ContactsSyncHelper {
         Pair<String, String> nameFromVCard = getNameFromVCard(mergedCard, context);
         dbContact.firstName = nameFromVCard.first;
         dbContact.lastName = nameFromVCard.second;
-        Log.i("G&S", "Modificato");
+        Log.i("G&S", "Modificato-getFullName");
         dbContact.pinyinName = getPinyinTextFromChinese(dbContact.firstName + " " + dbContact.lastName);
         dbContact.save();
         replacePhoneNumbersInDB(dbContact, hrefEtagAndVCard.z, getContact(vCardData.contact.getId()).primaryPhoneNumber.phoneNumber);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-writeVCardToString");
         vCardData.vcardDataAsString = write(mergedCard).caretEncoding(true).go();
         vCardData.etag = hrefEtagAndVCard.y;
         vCardData.href = hrefEtagAndVCard.x;

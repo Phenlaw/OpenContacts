@@ -63,7 +63,7 @@ public abstract class InputFieldCollection<H extends FieldViewHolder> extends Li
     private void consumeAttributes(Context context, @Nullable AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.InputFieldCollection);
         String title = typedArray.getString(R.styleable.InputFieldCollection_android_title);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setupTitle");
         if (!TextUtils.isEmpty(title)) {
             AppCompatTextView titleTextView = findViewById(R.id.title);
             titleTextView.setText(title);

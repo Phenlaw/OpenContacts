@@ -28,7 +28,7 @@ public class TintedDrawablesStore {
     private static Drawable getDrawableFor(@DrawableRes int drawableRes, Context context) {
         Drawable drawable = ContextCompat.getDrawable(context, drawableRes);
         if (drawable == null) return null;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getPrimaryColor");
         AndroidUtils.setColorFilterUsingColor(drawable, getThemeAttributeColor(android.R.attr.textColorPrimary, context));
         tintedDrawables.put(drawableRes, drawable);
         return drawable;
@@ -36,7 +36,7 @@ public class TintedDrawablesStore {
 
     public static void setDrawableForFAB(@DrawableRes int drawableRes, FloatingActionButton fab, Context context) {
         fab.setImageDrawable(getTintedDrawable(drawableRes, context));
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getBackgroundFloatingColor");
         fab.setBackgroundTintList(ColorStateList.valueOf((Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ? getThemeAttributeColor(android.R.attr.colorBackgroundFloating, context) : getThemeAttributeColor(android.R.attr.colorBackground, context)));
     }
 

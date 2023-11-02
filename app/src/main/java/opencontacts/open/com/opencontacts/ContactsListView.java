@@ -119,7 +119,7 @@ public class ContactsListView extends ListView implements DataStoreChangeListene
     }
 
     private void moveFavoritesToTop() {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetFavorites");
         List<Contact> favorites = null;
         if (ContactsDataStore.favorites.size() != 0 || Favorite.count(Favorite.class) == 0);
         else ContactsDataStore.updateFavoritesList();

@@ -80,8 +80,8 @@ public class VCardUtils {
         VCard mergedCard = null;
 
         try {
-            Log.i("G&S","Modificato");
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-writeVCardToString");
+            Log.i("G&S","Modificato-getVCardFromString");
             mergedCard = new VCardReader(write(primaryVCard).caretEncoding(true).go()).readNext();
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,7 +98,7 @@ public class VCardUtils {
         StructuredName finalName = getMergedStructuredName(secondaryVcard, primaryVCard, context);
         mergedCard.setStructuredName(finalName);
         Uid uid = primaryVCard.getUid();
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-setUidIfNotPresent");
         Uid existingUid = mergedCard.getUid();
         if (existingUid == null) mergedCard.setUid(new Uid(uid == null ? UUID.randomUUID().toString() : uid.toString()));
         return mergedCard;
@@ -150,8 +150,8 @@ public class VCardUtils {
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, String vcardData) {
         try {
-            Log.i("G&S","Modificato");
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-markPrimaryPhoneNumberInVCard");
+            Log.i("G&S","Modificato-getVCardFromString");
             U.forEach(new VCardReader(vcardData).readNext().getTelephoneNumbers(),
                 telephoneNumber -> {
                     if (contact.primaryPhoneNumber.phoneNumber.equals(telephoneNumber.getText()))

@@ -44,7 +44,7 @@ public class ContactGroupsDataStore {
         groupsMap = new HashMap<>();
         //da ottimizzare
         for (Contact contact : allContacts) {
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getGroupNames");
             List<String> groupNames;
             if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
             else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
@@ -53,7 +53,7 @@ public class ContactGroupsDataStore {
                 .map(group -> group.addContact(contact))
                 //da ottimizzare FORSE
                 .forEach(group -> {
-                    Log.i("G&S","Modificato");
+                    Log.i("G&S","Modificato-CGgetName");
                     groupsMap.put(group.name, group);
                 });
         }
@@ -88,7 +88,7 @@ public class ContactGroupsDataStore {
     }
 
     public static void updateGroup(List<Contact> newContacts, String newGroupName, ContactGroup group) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGgetName");
         if (!newGroupName.equals(group.name)) {
             destroyGroup(group);
             createNewGroup(newContacts, newGroupName);
@@ -99,7 +99,7 @@ public class ContactGroupsDataStore {
         U.forEach(removedContacts, removedContact -> removeContactFromGroup(group, removedContact));
 
         //removing based on group name hence it should happen first
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGupdateName");
         group.name = newGroupName;
         group.t9Name = DomainUtils.getNumericKeyPadNumberForString(newGroupName);
 
@@ -114,13 +114,13 @@ public class ContactGroupsDataStore {
         //da ottimizzare FORSE
         U.chain(group.contacts)
             .forEach(contact -> removeContactFromGroup(group, contact));
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGgetName");
         groupsMap.remove(group.name);
     }
 
     private static void addContactToGroup(ContactGroup group, Contact contact) {
         group.addContact(contact);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGgetName");
         List<String> allGroupsOfContact = contact.addGroup(group.name);
         updateContactTable(contact);
         updateVCardTable(contact, allGroupsOfContact);
@@ -128,7 +128,7 @@ public class ContactGroupsDataStore {
 
     private static void removeContactFromGroup(ContactGroup group, Contact contact) {
         group.removeContact(contact);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGgetName");
         List<String> allGroupsOfContact = contact.removeGroup(group.name);
         updateContactTable(contact);
         updateVCardTable(contact, allGroupsOfContact);
@@ -137,10 +137,10 @@ public class ContactGroupsDataStore {
     private static void updateVCardTable(Contact contact, List<String> allGroupsOfContact) {
         try {
             VCardData vCardData = ContactsDBHelper.getVCard(contact.id);
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-VCUgetVCardFromString");
             VCard vcard = new VCardReader(vCardData.vcardDataAsString).readNext();
             vcard.setCategories(allGroupsOfContact.toArray(new String[]{}));
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-writeVCardToString");
             vCardData.vcardDataAsString = write(vcard).caretEncoding(true).go();
             vCardData.save();
         } catch (IOException e) {
@@ -163,27 +163,27 @@ public class ContactGroupsDataStore {
     }
 
     public static void handleContactUpdate(Contact contact) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getGroupNames");
         List<String> groupNames;
         if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
         else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
         List<String> newGroupAssociations = groupNames;
         //da ottimizzare FORSE
         U.forEach(groupsMap.values(), group -> {
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CGgetName");
             if (newGroupAssociations.contains(group.name)) group.addContact(contact);
             else group.removeContact(contact);
         });
     }
 
     public static void handleNewContactAddition(Contact contact) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getGroupNames");
         List<String> groupNames;
         if (TextUtils.isEmpty(contact.groups)) groupNames = Collections.emptyList();
         else groupNames = Arrays.asList(contact.groups.split(GROUPS_SEPERATOR_CHAR));
         List<String> groupAssociations = groupNames;
         if (groupAssociations.isEmpty()) return;
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGgetName");
         U.chain(groupsMap.values())
             .filter(group -> groupAssociations.contains(group.name))
             //da ottimizzare FORSE
@@ -193,7 +193,7 @@ public class ContactGroupsDataStore {
     public static void PROCESS_INTENSIVE_delete(ContactGroup selectedGroup, Context context) {
         //da ottimizzare FORSE
         U.forEach(new ArrayList<>(selectedGroup.contacts), contact -> removeContactFromGroup(selectedGroup, contact));
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CGgetName");
         groupsMap.remove(selectedGroup.name);
         toastFromNonUIThread(R.string.group_deleted, Toast.LENGTH_SHORT, context);
     }

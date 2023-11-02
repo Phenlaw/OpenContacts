@@ -133,7 +133,7 @@ public class MainActivity extends AppBaseActivity {
     protected void onResume() {
         super.onResume();
         refresh();
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificat-shouldLaunchDefaultTab");
         boolean shouldLaunchDefaultTab = hasItBeen(5, MINUTE, getLong(SharedPreferencesUtils.LAST_DEFAULT_TAB_LAUNCH_TIME_SHARED_PREF_KEY, 0, this));
         updatePreference(SharedPreferencesUtils.LAST_DEFAULT_TAB_LAUNCH_TIME_SHARED_PREF_KEY, new Date().getTime(), this);
         if (shouldLaunchDefaultTab) gotoDefaultTab();
@@ -144,7 +144,7 @@ public class MainActivity extends AppBaseActivity {
         // affecting the fragments order etc resulting in cast exception when recreating activity while reusing fragments
         runOnMainDelayed(() -> {
             if (viewPager == null) return;
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-getDefaultTab");
             viewPager.setCurrentItem(Integer.parseInt(getStringFromPreferences(SharedPreferencesUtils.DEFAULT_TAB_SHARED_PREF_KEY, "0", this)));
         }, 100);
     }
@@ -152,43 +152,43 @@ public class MainActivity extends AppBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-shouldAskForPermissions");
         if (getBoolean(SharedPreferencesUtils.SHOULD_ASK_FOR_PERMISSIONS, true, this)) {
             AndroidUtils.askForPermissionsIfNotGranted(this);
             View startButton = findViewById(R.id.start_button);
             startButton.setVisibility(VISIBLE);
             startButton.setOnClickListener(x -> this.recreate());
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-markPermissionsAksed");
             updatePreference(SharedPreferencesUtils.SHOULD_ASK_FOR_PERMISSIONS, false, this);
             return;
         } else {
             setupTabs();
             setupBottomMenu();
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-shouldKeyboardResizeViews");
             if (getBoolean(SharedPreferencesUtils.KEYBOARD_RESIZE_VIEWS_SHARED_PREF_KEY, false, this))
                 getWindow().setSoftInputMode(SOFT_INPUT_ADJUST_RESIZE);
             if (handleIntent(getIntent())) ;
             else gotoDefaultTab();
         }
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-markPermissionsAksed");
         updatePreference(SharedPreferencesUtils.SHOULD_ASK_FOR_PERMISSIONS, false, this);
     }
 
     private void setupBottomMenu() {
         bottomMenu = findViewById(R.id.bottom_menu);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-shouldShowBottomMenu");
         if (!getBoolean(SharedPreferencesUtils.SHOULD_SHOW_BOTTOM_MENU_SHARED_PREF_KEY, true, this)) {
             bottomMenu.setVisibility(GONE);
             bottomMenu = null;
             return;
         }
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getPrimaryColor");
         ExpandedMenuItem searchItem = new ExpandedMenuItem(R.drawable.ic_search_black_24dp, "Search", getThemeAttributeColor(android.R.attr.textColorPrimary, this));
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getPrimaryColor");
         ExpandedMenuItem groupItem = new ExpandedMenuItem(R.drawable.ic_group_merge_contacts_24dp, "Groups", getThemeAttributeColor(android.R.attr.textColorPrimary, this));
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getPrimaryColor");
         ExpandedMenuItem dialpadItem = new ExpandedMenuItem(R.drawable.dial_pad, "Dial", getThemeAttributeColor(android.R.attr.textColorPrimary, this));
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-getPrimaryColor");
         ExpandedMenuItem addContactItem = new ExpandedMenuItem(R.drawable.ic_add_circle_outline_24dp, "Add contact", getThemeAttributeColor(android.R.attr.textColorPrimary, this));
         bottomMenu.setIcons(searchItem, groupItem, addContactItem, dialpadItem);
         bottomMenu.setOnItemClickListener(i -> {
@@ -207,7 +207,7 @@ public class MainActivity extends AppBaseActivity {
                     break;
             }
         });
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-shouldBottomMenuOpenByDefault");
         if (getBoolean(SharedPreferencesUtils.BOTTOM_MENU_OPEN_DEFAULT_SHARED_PREF_KEY, true, this)) bottomMenu.expandMenu();
         else bottomMenu.collapseMenu();
     }
@@ -421,7 +421,7 @@ public class MainActivity extends AppBaseActivity {
     }
 
     public void showBottomMenu() {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-shouldShowBottomMenu");
         if (bottomMenu == null || !getBoolean(SharedPreferencesUtils.SHOULD_SHOW_BOTTOM_MENU_SHARED_PREF_KEY, true, this)) return;
         bottomMenu.setVisibility(VISIBLE);
     }

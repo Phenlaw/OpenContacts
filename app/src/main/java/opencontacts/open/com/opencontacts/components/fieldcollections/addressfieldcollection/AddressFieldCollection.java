@@ -52,7 +52,7 @@ public class AddressFieldCollection extends TextViewFieldCollection {
     }
 
     private void removeFieldIfEmptyAddress(int fieldIndex) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isEmptyAddress");
         Address address = addresses.get(fieldIndex);
         boolean isEmptyAddress;
         if (addresses.get(fieldIndex) == null)  isEmptyAddress = true;
@@ -68,7 +68,7 @@ public class AddressFieldCollection extends TextViewFieldCollection {
 
     private void onSave(int indexOfAddressToEdit, Address newAddress) {
         TextViewViewHolder field = fieldViewHoldersList.get(indexOfAddressToEdit);
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-isEmptyAddress");
         boolean isEmptyAddress;
         if (newAddress == null)  isEmptyAddress = true;
         else {

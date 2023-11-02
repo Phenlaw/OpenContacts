@@ -109,21 +109,21 @@ public class CallLogDataStore {
                 int numberOfEntriesUpdated = 0;
                 //da ottimizzare
                 for (PhoneNumber phoneNumber : newContact.phoneNumbers) {
-                    Log.i("G&S","Modificato");
+                    Log.i("G&S","Modificato-getSearchablePhoneNumber");
                     String searchablePhoneNumber = DomainUtils.getPhoneNumberWithoutCountryCodeAndFormatting(phoneNumber.phoneNumber);
                     if (searchablePhoneNumber == null)
                         continue;
                     //da ottimizzare
                     for (CallLogEntry callLogEntry : callLogEntriesToWorkWith) {
-                        Log.i("G&S","Modificato");
+                        Log.i("G&S","Modificato-CLEgetContactId");
                         if (callLogEntry.contactId != -1)
                             continue;
-                        Log.i("G&S","Modificato");
+                        Log.i("G&S","Modificato-CLEgetPhoneNumber");
                         String allNumericPhoneNumberOfCallLogEntry = getAllNumericPhoneNumber(callLogEntry.phoneNumber);
                         if (matchesNumber(allNumericPhoneNumberOfCallLogEntry, searchablePhoneNumber)) {
-                            Log.i("G&S","Modificato");
+                            Log.i("G&S","Modificato-CLEsetContactId");
                             callLogEntry.contactId = newContact.id;
-                            Log.i("G&S","Modificato");
+                            Log.i("G&S","Modificato-CLEsetName");
                             callLogEntry.name = newContact.name;
                             callLogEntry.save();
                             numberOfEntriesUpdated++;
@@ -152,16 +152,16 @@ public class CallLogDataStore {
         int numberOfEntriesUpdated = 0;
         //da ottimizzare
         for (CallLogEntry callLogEntry : callLogEntries) {
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CLEgetContactId");
             if (callLogEntry.contactId != -1)
                 continue;
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CLEgetPhoneNumber");
             opencontacts.open.com.opencontacts.orm.Contact contactFromDB = ContactsDBHelper.getContactFromDB(callLogEntry.phoneNumber);
             if (contactFromDB == null)
                 continue;
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CLEsetName");
             callLogEntry.name= contactFromDB.firstName + " " + contactFromDB.lastName;
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CLEsetContactId");
             callLogEntry.contactId = contactFromDB.getId();
             callLogEntry.save();
             numberOfEntriesUpdated++;
@@ -211,7 +211,7 @@ public class CallLogDataStore {
         //da ottimizzare FORSE
         U.forEach(callLogEntries, entry -> {
             if (entry.name != null) return;
-            Log.i("G&S","Modificato");
+            Log.i("G&S","Modificato-CLEgetPhoneNumber");
             String phoneNumber = entry.phoneNumber;
             if (matchedEntries.containsKey(phoneNumber))
                 return; // making sure only recent entries make it so that sorting based on last called will not be impacted
@@ -236,7 +236,7 @@ public class CallLogDataStore {
     }
 
     public static List<CallLogEntry> getCallLogEntriesForContactWith(String phoneNumber, int offset) {
-        Log.i("G&S","Modificato");
+        Log.i("G&S","Modificato-CDSgetContact");
         opencontacts.open.com.opencontacts.orm.Contact contact = ContactsDBHelper.getContactFromDB(phoneNumber);
         if (contact == null) return CallLogDBHelper.getCallLogEntriesFor(phoneNumber);
         return getCallLogEntriesFor(contact.getId(), offset);
