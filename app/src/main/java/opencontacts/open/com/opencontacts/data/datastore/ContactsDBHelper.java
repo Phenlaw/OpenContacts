@@ -248,7 +248,7 @@ public class ContactsDBHelper {
     }
 
     private static void createMobileNumbersAndSaveInDB(VCard vcard, Contact contact) {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHcreateMobileNumbersAndSaveInDB1");
         List<Telephone> vcardTelephoneNumbers = vcard.getTelephoneNumbers();
         int vCardTelephoneNumbersSize = vcardTelephoneNumbers.size();
         for (int i=0;i<vCardTelephoneNumbersSize;i++) {
@@ -292,7 +292,7 @@ public class ContactsDBHelper {
     }
 
     public static void unmarkContactAsTemporary(long id) {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHunmarkContactAsTemporary1");
         List<TemporaryContact> temporaryContactList =TemporaryContact.find(TemporaryContact.class, "contact = ?", "" + id);
         int temporaryContactListSize = temporaryContactList.size();
         for(int i=0;i<temporaryContactListSize;i++) temporaryContactList.get(i).delete();
