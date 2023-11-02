@@ -63,7 +63,7 @@ public class ExpandedList extends LinearLayout {
 
     public void setItems(List<Pair<String, String>> items) {
         removeAllViews();
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-ELsetItems1");
         int itemSize = items.size();
         for (int i=0;i<itemSize;i++){
             View inflatedView = layoutInflater.inflate(R.layout.layout_item_title_and_type, this, false);

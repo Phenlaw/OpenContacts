@@ -302,7 +302,7 @@ public class AndroidUtils {
         Intent exportToContactsAppIntent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
 
         ArrayList<ContentValues> data = new ArrayList<>();
-        Log.i("FOR","Modifcato");
+        Log.i("FOR","Modificato-AUgetIntentToExportContactToNativeContactsApp1");
         int phoneNumbersSize = contact.phoneNumbers.size();
         for(int i=0;i<phoneNumbersSize;i++){
             ContentValues row = new ContentValues();

@@ -159,7 +159,7 @@ public class ContactsDataStore {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                Log.i("FOR","Modifcato");
+                Log.i("FOR","Modifcato-CDSupdateContactsAccessedDateAsync1");
                 int newCallLogEntriesSize = newCallLogEntries.size();
                 for (int i=0;i<newCallLogEntriesSize;i++) {
                     CallLogEntry callLogEntry = newCallLogEntries.get(i);
@@ -202,7 +202,7 @@ public class ContactsDataStore {
         if (dataChangeListeners.isEmpty() || pauseUpdates)
             return;
         synchronized (dataChangeListeners) {
-            Log.i("FOR","Modifcato");
+            Log.i("FOR","Modificato-CDSnotifyListeners1");
             int dataChangeListenersSize = dataChangeListeners.size();
             for(int i=0;i<dataChangeListenersSize;i++){
                 DataStoreChangeListener<Contact> listener = dataChangeListeners.get(i);
@@ -254,7 +254,7 @@ public class ContactsDataStore {
 
     public static void writePinyinToDb(Context context) {
         List<opencontacts.open.com.opencontacts.orm.Contact> dbContacts = opencontacts.open.com.opencontacts.orm.Contact.listAll(opencontacts.open.com.opencontacts.orm.Contact.class);
-        Log.i("FOR","Modifcato");
+        Log.i("FOR","Modificato-CDSwritePinyinToDb1");
 
         int dbContactsSize = dbContacts.size();
         for(int i=0;i<dbContactsSize;i++){

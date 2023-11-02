@@ -19,7 +19,7 @@ public class DeleteTemporaryContacts implements ContactsHouseKeepingAction{
 
     @Override
     public void perform(List<Contact> contacts, Context context) {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-DTCperform1");
         int size= ContactsDataStore.getTemporaryContactDetails().size();
         List<TemporaryContact> contactDetails = ContactsDataStore.getTemporaryContactDetails();
         for(int i=0;i<size;i++){

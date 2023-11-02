@@ -47,7 +47,7 @@ class CallLogDBHelper {
     private Map<String, Integer> simsInfo = null;
 
     public static void removeAllContactsLinking() {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDBHremoveAllContactsLinking1");
         List<CallLogEntry> recentCallLogEntries = getRecentCallLogEntriesFromDB();
         int recentCallLogEntriesSize = recentCallLogEntries.size();
         for(int i =0;i<recentCallLogEntriesSize;i++){
@@ -67,7 +67,7 @@ class CallLogDBHelper {
             //added permission check above using util intellij wasn't able to identify it
             @SuppressLint("MissingPermission") List<PhoneAccountHandle> callCapablePhoneAccounts = telecomManager.getCallCapablePhoneAccounts();
             if (callCapablePhoneAccounts.size() < 2) return;
-            Log.i("FOR","Modificato");
+            Log.i("FOR","Modificato-CLDBHcreateSimsInfo1");
             int callCapablePhoneAccountsSize = callCapablePhoneAccounts.size();
             for(int i=0;i<callCapablePhoneAccountsSize;i++) simsInfo.put(callCapablePhoneAccounts.get(i).getId(), i + 1);
             return;
@@ -76,7 +76,7 @@ class CallLogDBHelper {
             @SuppressLint("MissingPermission") List<SubscriptionInfo> activeSubscriptionInfoList = ((SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE)).getActiveSubscriptionInfoList();
             if (activeSubscriptionInfoList == null)
                 return;
-            Log.i("FOR","Modificato");
+            Log.i("FOR","Modificato-CLDBHcreateSimsInfo2");
             int subscriptionInfoListSize = activeSubscriptionInfoList.size();
             for(int i =0;i<subscriptionInfoListSize;i++)  {
                 SubscriptionInfo subscriptionInfo = activeSubscriptionInfoList.get(i);

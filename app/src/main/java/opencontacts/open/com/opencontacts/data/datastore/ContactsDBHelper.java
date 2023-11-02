@@ -57,11 +57,11 @@ public class ContactsDBHelper {
         if (dbContact == null)
             return;
         List<PhoneNumber> dbPhoneNumbers = dbContact.getAllPhoneNumbers();
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHdeleteContactInDB1");
         int dbPhoneNumbersSize = dbPhoneNumbers.size();
         for(int i=0;i<dbPhoneNumbersSize;i++) dbPhoneNumbers.get(i).delete();
         List<CallLogEntry> callLogEntries = getCallLogEntriesFor(contactId);
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHdeleteContactInDB2");
         int callLogEntriesSize = callLogEntries.size();
         for(int i=0;i<callLogEntriesSize;i++){
             CallLogEntry callLogEntry = callLogEntries.get(i);
@@ -93,7 +93,7 @@ public class ContactsDBHelper {
 
     static void replacePhoneNumbersInDB(Contact dbContact, VCard vcard, String primaryPhoneNumber) {
         List<PhoneNumber> dbPhoneNumbers = dbContact.getAllPhoneNumbers();
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHreplacePhoneNumbersInDB1");
         List<Telephone> vCardTelephoneNumbers = vcard.getTelephoneNumbers();
         int vCardTelephoneNumbersSize = vCardTelephoneNumbers.size();
         for(int i=0;i<vCardTelephoneNumbersSize;i++){
@@ -120,7 +120,7 @@ public class ContactsDBHelper {
         List<PhoneNumber> dbPhoneNumbers = PhoneNumber.listAll(PhoneNumber.class);
         HashMap<Long, opencontacts.open.com.opencontacts.domain.Contact> contactsMap = new HashMap<>();
         opencontacts.open.com.opencontacts.domain.Contact tempContact;
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHgetAllContactsFromDB1");
         int dbPhoneNumbersSize = dbPhoneNumbers.size();
         for (int i=0;i<dbPhoneNumbersSize;i++) {
             PhoneNumber dbPhoneNumber = dbPhoneNumbers.get(i);
@@ -157,7 +157,7 @@ public class ContactsDBHelper {
         List<PhoneNumber> allDbPhoneNumbersOfContact = PhoneNumber.find(PhoneNumber.class, "contact = ?", contact.id + "");
         if (allDbPhoneNumbersOfContact == null)
             return;
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDBHtogglePrimaryNumber1");
         int allDbPhoneNumbersOfContactSize = allDbPhoneNumbersOfContact.size();
         for(int i=0;i<allDbPhoneNumbersOfContactSize;i++) {
             PhoneNumber dbPhoneNumber = allDbPhoneNumbersOfContact.get(i);

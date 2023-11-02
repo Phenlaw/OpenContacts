@@ -212,7 +212,7 @@ public class EditContactActivity extends AppBaseActivity {
             emailsInputCollection.addOneMoreView();
             return;
         }
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-ECAfillEmails1");
         int emailsSize = emails.size();
         for(int i =0; i<emailsSize;i++)  emailsInputCollection.addOneMoreView(emails.get(i).getValue(), DomainUtils.getEmailTypeTranslatedText(emails.get(i).getTypes(), EditContactActivity.this));
     }
@@ -224,7 +224,7 @@ public class EditContactActivity extends AppBaseActivity {
             phoneNumbersInputCollection.addOneMoreView(newPhoneNumberToBeAdded, defaultPhoneNumberTypeTranslatedText);
             return;
         }
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-ECAfillTelephoneNumbers1");
         int telephoneNumbersSize = telephoneNumbers.size();
         for(int i =0; i<telephoneNumbersSize;i++) phoneNumbersInputCollection.addOneMoreView(getMobileNumber(telephoneNumbers.get(i)), DomainUtils.getMobileNumberTypeTranslatedText(telephoneNumbers.get(i).getTypes(), EditContactActivity.this));
         if (newPhoneNumberToBeAdded != null)

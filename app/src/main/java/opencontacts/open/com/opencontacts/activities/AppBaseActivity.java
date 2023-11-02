@@ -49,7 +49,7 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     }
 
     private void processMenu(Menu menu, int textColorPrimary) {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-ABAprocessMenu1");
         int totalItems = menu.size()  ;
         for (int i = 0; i < totalItems; i++) {
             MenuItem menuItem = menu.getItem(i);

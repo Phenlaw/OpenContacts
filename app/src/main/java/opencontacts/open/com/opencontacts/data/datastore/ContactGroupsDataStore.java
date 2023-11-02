@@ -36,7 +36,7 @@ public class ContactGroupsDataStore {
     public static void COMPUTE_INTENSIVE_computeGroups() {
         List<Contact> allContacts = ContactsDataStore.getAllContacts();
         groupsMap = new HashMap<>();
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CGDScomputeGroups1");
         int contactsSize = allContacts.size();
         for(int i=0;i<contactsSize;i++){
             Contact contact = allContacts.get(i);
@@ -77,7 +77,7 @@ public class ContactGroupsDataStore {
     public static void createNewGroup(List<Contact> contacts, String groupName) {
         ContactGroup newContactGroup = new ContactGroup(groupName);
         groupsMap.put(groupName, newContactGroup);
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDBHcreateNewGroup1");
         int contactsSize = contacts.size();
         for(int i=0;i<contactsSize;i++) addContactToGroup(newContactGroup,contacts.get(i));
     }
@@ -168,7 +168,7 @@ public class ContactGroupsDataStore {
     }
 
     public static void PROCESS_INTENSIVE_delete(ContactGroup selectedGroup, Context context) {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CGDSdelete1");
         ArrayList<Contact> selectedContactsfromSelectedGroup = new ArrayList<>(selectedGroup.contacts);
         int size = selectedContactsfromSelectedGroup.size();
         for(int i =0;i<size; i++) removeContactFromGroup(selectedGroup,selectedContactsfromSelectedGroup.get(i));

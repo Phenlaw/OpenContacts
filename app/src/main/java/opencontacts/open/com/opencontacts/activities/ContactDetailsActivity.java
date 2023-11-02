@@ -247,7 +247,7 @@ public class ContactDetailsActivity extends AppBaseActivity {
         }
         findViewById(R.id.phone_card).setVisibility(VISIBLE);
         phoneNumbersLinearLayout.removeAllViews();
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CDAfillPhoneNumbers1");
 
         List<Telephone> telephoneNumbers = vcard.getTelephoneNumbers();
         int telephoneNumbersSize = telephoneNumbers.size();

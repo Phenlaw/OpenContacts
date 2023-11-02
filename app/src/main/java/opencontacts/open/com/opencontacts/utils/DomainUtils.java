@@ -203,7 +203,7 @@ public class DomainUtils {
         vCardWriter.setCaretEncodingEnabled(true);
         StructuredName structuredName = new StructuredName();
 
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-DUgetVCFExportBytes1");
         int contactsSize = allContacts.size();
         for (int i=0;i<contactsSize;i++) {
             Contact contact = allContacts.get(i);
@@ -231,7 +231,7 @@ public class DomainUtils {
         structuredName.setFamily(contact.lastName);
         vcard.setStructuredName(structuredName);
 
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-DUcreateVCardAndWrite1");
         int phoneNumbersSize = contact.phoneNumbers.size();
         for (int i =0; i<phoneNumbersSize;i++)
             vcard.addTelephoneNumber(contact.phoneNumbers.get(i).phoneNumber, TelephoneType.CELL);
@@ -420,7 +420,7 @@ public class DomainUtils {
             SimpleDateFormat callTimeStampFormat = getFullDateTimestampPattern(context);
             List<CallLogEntry> entireCallLog = CallLogEntry.listAll(CallLogEntry.class);
             writeCallLogCSVHeader(csvWriter);
-            Log.i("FOR","Modificato");
+            Log.i("FOR","Modificato-DUexportCallLog1");
             int entireCallLogSize = entireCallLog.size();
             for(int i=0;i<entireCallLogSize;i++)  writeCallLogEntryToFile(entireCallLog.get(i), callTimeStampFormat, finalCsvWriter);
         } finally {
@@ -491,7 +491,7 @@ public class DomainUtils {
     public static List<Contact> filterContactsBasedOnT9Text(CharSequence t9Text, List<Contact> contacts) {
         ArrayList<Contact> filteredContacts = new ArrayList<>();
 
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-filterContactsBasedOnT9Text1");
         int contactsSize = contacts.size();
         for (int i=0;i<contactsSize;i++) {
             Contact contact = contacts.get(i);

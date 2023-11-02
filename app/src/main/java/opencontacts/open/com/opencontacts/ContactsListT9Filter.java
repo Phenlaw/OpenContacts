@@ -20,7 +20,7 @@ public class ContactsListT9Filter extends ContactsListFilter {
 
     public void createDataMapping(List<Contact> contacts) {
         List<Contact> threadSafeContacts = new ArrayList<>(contacts);
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLT9FcreateDataMapping1");
         int threadSafeContactsSize = threadSafeContacts.size();
         for (int i =0;i<threadSafeContactsSize;i++) {
             threadSafeContacts.get(i).setT9Text();

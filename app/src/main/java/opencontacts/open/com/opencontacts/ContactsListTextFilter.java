@@ -21,7 +21,7 @@ public class ContactsListTextFilter extends ContactsListFilter {
     @Override
     public void createDataMapping(List<Contact> contacts) {
         List<Contact> threadSafeContacts = new ArrayList<>(contacts);
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLTFcreateDataMapping1");
         int threadSafeContactsSize = threadSafeContacts.size();
         for (int i =0;i<threadSafeContactsSize;i++) {
             threadSafeContacts.get(i).setTextSearchTarget();
@@ -31,7 +31,7 @@ public class ContactsListTextFilter extends ContactsListFilter {
     @Override
     public List<Contact> filter(CharSequence searchText, List<Contact> contacts) {
         ArrayList<Contact> filteredContacts = new ArrayList<>();
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLTFfilter1");
         int contactsSize = contacts.size();
         for (int i =0;i<contactsSize;i++) {
             Contact contact = contacts.get(i);

@@ -54,7 +54,7 @@ public class CallLogDataStore {
             CallLogEntry callLogEntry = recentCallLogEntries.get(0);
             callLogEntries.add(0, callLogEntry);
             processAsync(() -> {
-                Log.i("FOR","Modificato");
+                Log.i("FOR","Modificato-CLDSaddRecentCallLogEntriesToStore1");
                 int dataChangeListenersSize = dataChangeListeners.size();
                 for(int i=0;i<dataChangeListenersSize;i++)  dataChangeListeners.get(i).onAdd(callLogEntry);
             });
@@ -71,7 +71,7 @@ public class CallLogDataStore {
     }
 
     private static void notifyRefreshStore() {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDSnotifyRefreshStore1");
         int dataChangeListenersSize = dataChangeListeners.size();
         for(int i=0;i<dataChangeListenersSize;i++) dataChangeListeners.get(i).onStoreRefreshed();
 
@@ -108,13 +108,13 @@ public class CallLogDataStore {
                     return;
                 int numberOfEntriesUpdated = 0;
                 int phoneNumbersSize = newContact.phoneNumbers.size();
-                Log.i("FOR","Modificato");
+                Log.i("FOR","Modificato-CLDSupdateCallLogAsyncForNewContact1");
                 for (int i=0;i<phoneNumbersSize;i++) {
                     PhoneNumber phoneNumber=newContact.phoneNumbers.get(i);
                     String searchablePhoneNumber = getSearchablePhoneNumber(phoneNumber.phoneNumber);
                     if (searchablePhoneNumber == null)
                         continue;
-                    Log.i("FOR","Modificato");
+                    Log.i("FOR","Modificato-CLDSupdateCallLogAsyncForNewContact2");
                     int callLogEntriesSize = callLogEntriesToWorkWith.size();
                     for (int j=0;j<callLogEntriesSize;j++) {
                         CallLogEntry callLogEntry = callLogEntriesToWorkWith.get(j);
@@ -149,7 +149,7 @@ public class CallLogDataStore {
         if (callLogEntries == null)
             callLogEntries = getRecentCallLogEntries(context);
         int numberOfEntriesUpdated = 0;
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDSupdateCallLogForAllContacts1");
         int callLogEntriesSize = callLogEntries.size();
         for (int i=0;i<callLogEntriesSize;i++) {
             CallLogEntry callLogEntry = callLogEntries.get(i);
@@ -172,7 +172,7 @@ public class CallLogDataStore {
         boolean hasBeenDeleted = CallLogDBHelper.delete(id);
         if (!hasBeenDeleted)
             return;
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDSdelete1");
         int callLogEntriesSize = callLogEntries.size();
         for (int i=0;i<callLogEntriesSize;i++) {
             CallLogEntry callLogEntryToBeRemoved = callLogEntries.get(i);
@@ -180,7 +180,7 @@ public class CallLogDataStore {
                 continue;
             callLogEntries.remove(callLogEntryToBeRemoved);
             processAsync(() -> {
-                Log.i("FOR","Modificato");
+                Log.i("FOR","Modificato-CLDSdelete2");
                 int dataChangeListenersSize = dataChangeListeners.size();
                 for (int j=0; j< dataChangeListenersSize;j++) dataChangeListeners.get(j).onRemove(callLogEntryToBeRemoved);
             });
@@ -206,7 +206,7 @@ public class CallLogDataStore {
 
     public static Collection<CallLogEntry> getUnLabelledCallLogEntriesMatching(String number) {
         ArrayMap<String, CallLogEntry> matchedEntries = new ArrayMap<>();
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLDSgetUnLabelledCallLogEntriesMatching1");
         int callLogEntriesSize = callLogEntries.size();
         for(int i=0;i<callLogEntriesSize;i++){
             CallLogEntry entry = callLogEntries.get(i);

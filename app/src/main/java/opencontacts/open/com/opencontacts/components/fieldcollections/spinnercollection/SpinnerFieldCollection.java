@@ -67,7 +67,7 @@ public class SpinnerFieldCollection extends InputFieldCollection<SpinnerFieldHol
     }
 
     public void addFields(List<String> values) {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-SFCaddFields1");
         int valuesSize=values.size();
         for(int i=0;i<valuesSize;i++) addOneMoreView(values.get(i));
     }

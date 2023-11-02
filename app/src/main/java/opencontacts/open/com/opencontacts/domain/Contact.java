@@ -63,7 +63,7 @@ public class Contact implements Serializable {
     public void setT9Text() {
         StringBuilder searchStringBuffer = new StringBuilder();
         String nameForT9 = ContactsDataStore.getT9NameSupplier().apply(this);
-        Log.i("FOR","Modifcato");
+        Log.i("FOR","Modificato-CsetT9Text1");
         int phoneNumbersSize = phoneNumbers.size();
         for(int i=0;i<phoneNumbersSize;i++)
             searchStringBuffer.append(phoneNumbers.get(i).numericPhoneNumber).append(' ');
@@ -76,7 +76,7 @@ public class Contact implements Serializable {
         StringBuilder searchStringBuffer = new StringBuilder();
         searchStringBuffer.append(name).append(' ');
         searchStringBuffer.append(replaceAccentedCharactersWithEnglish(name)).append(' ');// helps being able to search name by typing í or i - accented
-        Log.i("FOR","Modifcato");
+        Log.i("FOR","Modifcato-CsetTextSearchTarget1");
         int phoneNumbersSize = phoneNumbers.size();
         for(int i=0;i<phoneNumbersSize;i++)
             searchStringBuffer.append(phoneNumbers.get(i).numericPhoneNumber).append(' ');

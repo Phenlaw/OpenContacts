@@ -75,14 +75,14 @@ public class AddressFieldCollection extends TextViewFieldCollection {
     }
 
     public void setAddresses(List<Address> addresses) {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-AFCsetAddresses1");
         int fieldViewHoldersListSize = fieldViewHoldersList.size();
         for(int i=0;i<fieldViewHoldersListSize;i++)  fieldsHolderLayout.removeView(fieldsHolderLayout);
         if (addresses.isEmpty()) {
             addOneMoreView();
             return;
         }
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-AFCsetAddresses2");
         int addressesSize = addresses.size();
         for(int i=0;i<addressesSize;i++) addOneMoreView(addresses.get(i));
     }

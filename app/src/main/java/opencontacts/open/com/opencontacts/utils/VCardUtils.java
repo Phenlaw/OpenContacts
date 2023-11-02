@@ -66,7 +66,7 @@ public class VCardUtils {
         String lastName = getEmptyStringIfNull(structuredName.getFamily());
         if (additionalNames.size() > 0) {
             StringBuilder nameBuffer = new StringBuilder();
-            Log.i("FOR","Modificato");
+            Log.i("FOR","Modificato-VCUgetNameFromStructureNameOfVcard1");
             int additionalNamesSize = additionalNames.size();
             for (int i =0;i<additionalNamesSize;i++)
                 nameBuffer.append(additionalNames.get(i)).append(" ");
@@ -174,7 +174,7 @@ public class VCardUtils {
     }
 
     public static void markPrimaryPhoneNumberInVCard(Contact contact, VCard vcard) {
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-VCUmarkPrimaryPhoneNumberInVCard1");
         List<Telephone> phoneNumbers = vcard.getTelephoneNumbers();
         int phoneNumbersSize = phoneNumbers.size();
         for(int i=0;i<phoneNumbersSize;i++){

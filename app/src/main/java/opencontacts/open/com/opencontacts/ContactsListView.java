@@ -119,7 +119,7 @@ public class ContactsListView extends ListView implements DataStoreChangeListene
         List<Contact> favorites = ContactsDataStore.getFavorites();
         Collections.sort(favorites, getContactComparatorBasedOnName(context));
 
-        Log.i("FOR","Modificato");
+        Log.i("FOR","Modificato-CLVmoveFavoritesToTop1");
         int favoritesSize = favorites.size();
         for(int i=0; i<favoritesSize;i++) contacts.remove(favorites.get(i));
         contacts.addAll(0, favorites);

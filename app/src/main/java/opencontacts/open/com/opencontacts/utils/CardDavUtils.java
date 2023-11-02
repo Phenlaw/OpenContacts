@@ -311,7 +311,7 @@ public class CardDavUtils {
         final StringBuilder hrefsInRequest = new StringBuilder();
         String hrefTagOpen = "<d:href>";
         String hrefTagClose = "</d:href>";
-        Log.i("FOR","Modifcato");
+        Log.i("FOR","Modificato-CDUgetRequestBodyToFetchVCardsWithHrefs1");
         int hrefsSize = hrefs.size();
         for(int i=0;i<hrefsSize;i++) hrefsInRequest.append(hrefTagOpen + hrefs.get(i) + hrefTagClose);
         return prefix + hrefsInRequest.toString() + suffix;
