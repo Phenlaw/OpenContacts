@@ -220,9 +220,22 @@ isDisplayed()));
         contactToSearch.perform(click());
 
         pressBack();
-        ViewInteraction collapseButton = onView(
-            allOf(withContentDescription("Collapse")));
-        collapseButton.perform(click());
+        try {
+            ViewInteraction collapseButton = onView(
+                withContentDescription("Collapse"));
+            collapseButton.perform(click());
+        }catch (NoMatchingViewException noMatchingViewException){
+            ViewInteraction searchAutoCompleteDel = onView(
+                allOf(withId(pro.midev.expandedmenulibrary.R.id.search_src_text),
+                    childAtPosition(
+                        allOf(withId(pro.midev.expandedmenulibrary.R.id.search_plate),
+                            childAtPosition(
+                                withId(pro.midev.expandedmenulibrary.R.id.search_edit_frame),
+                                1)),
+                        0),
+                    isDisplayed()));
+            searchAutoCompleteDel.perform(replaceText(""), closeSoftKeyboard());
+        }
 
         ViewInteraction moreOptions = onView(
             allOf(withContentDescription(R.string.more_options)));
@@ -239,7 +252,13 @@ isDisplayed()));
         groupButton.perform(click());
 
         ViewInteraction addGroupButton = onView(
-            allOf(withContentDescription(R.string.add_group)));
+            allOf(withContentDescription(R.string.add_group),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.toolbar),
+                        2),
+                    0),
+                isDisplayed()));
         addGroupButton.perform(click());
 
         ViewInteraction appCompatCheckedTextView = onView(
