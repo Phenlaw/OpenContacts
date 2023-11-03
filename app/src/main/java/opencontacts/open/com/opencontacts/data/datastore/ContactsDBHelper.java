@@ -230,7 +230,11 @@ public class ContactsDBHelper {
     }
 
     private static void createMobileNumbersAndSaveInDB(VCard vcard, Contact contact) {
-        for (Telephone telephoneNumber : vcard.getTelephoneNumbers()) {
+        Log.i("FOR","Modificato-CDBHcreateMobileNumbersAndSaveInDB1");
+        List<Telephone> vcardTelephoneNumbers = vcard.getTelephoneNumbers();
+        int vCardTelephoneNumbersSize = vcardTelephoneNumbers.size();
+        for (int i=0;i<vCardTelephoneNumbersSize;i++) {
+            Telephone telephoneNumber = vcardTelephoneNumbers.get(i);
             try {//try block here to check if telephoneNumber.getUri is null. Do not want to check a lot of null combos. so try catch would help
                 if (isEmpty(telephoneNumber.getText()) && isEmpty(telephoneNumber.getUri().getNumber()))
                     continue;
@@ -259,9 +263,11 @@ public class ContactsDBHelper {
     }
 
     public static void unmarkContactAsTemporary(long id) {
-        U.forEach(TemporaryContact.find(TemporaryContact.class, "contact = ?", "" + id),
-            tempContact -> tempContact.delete()
-        );
+        Log.i("FOR","Modificato-CDBHunmarkContactAsTemporary1");
+        List<TemporaryContact> temporaryContactList =TemporaryContact.find(TemporaryContact.class, "contact = ?", "" + id);
+        int temporaryContactListSize = temporaryContactList.size();
+        for(int i=0;i<temporaryContactListSize;i++) temporaryContactList.get(i).delete();
+
     }
 
     public static boolean isTemporary(long id){
